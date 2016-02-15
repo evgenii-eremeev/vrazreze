@@ -1,0 +1,23 @@
+{
+  "name": "petrovich2",
+  "version": "0.0.1",
+  "description": "интернет магазин чертежей",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaycrypto/petrovich2.git"
+  },
+  "author": "jay",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jaycrypto/petrovich2/issues"
+  },
+  "homepage": "https://github.com/jaycrypto/petrovich2#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "mongoose": "^4.4.3"
+  }
+}
