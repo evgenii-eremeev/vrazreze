@@ -8,6 +8,7 @@ var userSchema = new Schema({
     pwd_hash: { type: String, required },
     register_date: { type: Date, default: Date.now },
     updated: { type: Date, default: Date.now },
+    role: { type: String, maxlength: 255, default: 'user' },
     rating: { type: Number, default: 0 },
     education: { type: String, maxlength: 255 },
     software: { type: String, maxlength: 255 },
