@@ -14,7 +14,7 @@ var drawingSchema = new Schema({
     rating: { type: Number, default: 0 },
     tags: [String],
     picture: String,
-    archive_link: String,
+    archive: String,
     site: String,
     views: { type: Number, default: 0 },
     other: Schema.Types.Mixed

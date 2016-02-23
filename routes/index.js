@@ -46,4 +46,8 @@ router.get('/ping', function (req, res) {
     res.status(200).send('pong!');
 });
 
+router.get('/new', function (req, res) {
+    res.render('newDrawing');
+});
+
 module.exports = router;
