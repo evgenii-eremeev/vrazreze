@@ -6,12 +6,25 @@ block content
         p.lead Заполните по порядку данные поля
         form(role='form', action="/new", method="post", style='max-width: 500px;')
             .form-group
-                input.form-control(type='text', name="title", placeholder='Заголовок')
+                label Заголовок
+                input.form-control(type='text', name="title" required)
             .form-group
-                input.form-control(type='password', name="password", placeholder='Password')
-            button.btn.btn-default(type='submit') Submit
+                label Категория
+                input.form-control(type='text', name="category")
             .form-group
-                textarea.form-control
+                label Описание
+                textarea.form-control(name="description")
+            .form-group
+                label Состав Работы
+                input.form-control(type='text', name="drawing_composition")
+            .form-group
+                label Tags
+                input.form-control(type='text', name="tags")
+            .form-group
+                label Picture
+                input(type='file', name="picture")
+
+            button.btn.btn-default(type='submit') Добавить
             &nbsp;
             a(href='/')
-                button.btn.btn-danger(type="button") Cancel
+                button.btn.btn-danger(type="button") Отменить
