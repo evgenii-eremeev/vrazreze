@@ -36,7 +36,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 //mongoose
-mongoose.connect('mongodb://localhost/petrovich2');
+mongoose.connect('mongodb://localhost:27017/petrovich2');
 
 var port = process.env.PORT || 8080;
 app.listen(port, () => {
