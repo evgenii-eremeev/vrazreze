@@ -4,6 +4,23 @@ var User = require('../server/models/user');
 var Drawing = require('../server/models/drawing');
 var router = express.Router();
 
+//multer
+var multer  = require('multer')
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+
+var upload = multer({ 
+  storage: storage,
+  limits: { fileSize: 3000000 }
+});
+
 
 router.get('/', function(req, res) {
     res.render('index', { user: req.user });
@@ -51,24 +68,21 @@ router.get('/new', function (req, res) {
     res.render('newDrawing');
 });
 
-router.post('/new', function (req, res) {
+router.post('/new', upload.single('picture'), function (req, res) {
     var drawing = new Drawing({
         title: req.body.title,
         author: req.user ? req.user.username : 'anonymous',
         description: req.body.description,
         category: req.body.category,
         drawing_composition: req.body.drawing_composition.split(','),
-        tags: req.body.tags.split(','),
-        other: {
-            foo: 'bar',
-            baz: 42
-        }
+        tags: req.body.tags.split(',')
     });
     drawing.save(function (err, drawing) {
         if (err) { throw err; }
-        console.log(drawing);
-        res.send('Success');
+        console.log(req.file.path);
+        res.redirect('/');
     });
 });
+
 
 module.exports = router;

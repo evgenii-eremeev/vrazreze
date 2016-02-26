@@ -4,16 +4,16 @@ block content
     .container
         h1 Новый чертеж
         p.lead Заполните по порядку данные поля
-        form(role='form', action="/new", method="post", style='max-width: 500px;')
+        form(role='form', action="/new", method="post", enctype="multipart/form-data" style='max-width: 500px;')
             .form-group
                 label Заголовок
                 input.form-control(type='text', name="title" required)
             .form-group
                 label Категория
-                input.form-control(type='text', name="category")
+                input.form-control(type='text', name="category" required)
             .form-group
                 label Описание
-                textarea.form-control(name="description")
+                textarea.form-control(name="description" required)
             .form-group
                 label Состав Работы
                 input.form-control(type='text', name="drawing_composition")
@@ -25,6 +25,6 @@ block content
                 input(type='file', name="picture")
 
             button.btn.btn-default(type='submit') Добавить
-            &nbsp;
+             &nbsp;
             a(href='/')
                 button.btn.btn-danger(type="button") Отменить
