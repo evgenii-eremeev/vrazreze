@@ -4,7 +4,7 @@ block content
     .container
         h1 Новый чертеж
         p.lead Заполните по порядку данные поля
-        form(role='form', action="/new", method="post", enctype="multipart/form-data" style='max-width: 500px;')
+        form(role='form', action="/new_drawing", method="post", enctype="multipart/form-data" style='max-width: 500px;')
             .form-group
                 label Заголовок
                 input.form-control(type='text', name="title" required)
