@@ -13,12 +13,12 @@ var newDrawing = {
             description: req.body.description,
             category: req.body.category,
             drawing_composition: req.body.drawing_composition.split(','),
-            tags: req.body.tags.split(',')
+            tags: req.body.tags.split(','),
+            picture: req.file ? req.file.path : ''
         });
         drawing.save(function (err, drawing) {
             if (err) { throw err; }
-            // console.log(req.file.path);
-            console.log('success');
+            console.log(req.file || 'no file');
             res.redirect('/');
         });
     }
