@@ -7,19 +7,20 @@ var newDrawingCtrl = require('../server/controllers/newDrawingCtrl.js');
 var multer  = require('multer');
 
 var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './uploads');
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + 
-             Date.now() + '.' + 
-             file.originalname.split('.').slice(-1));
-  }
+    destination: function (req, file, cb) {
+        cb(null, './uploads');
+    },
+    filename: function (req, file, cb) {
+        var filename = file.fieldname + '-';
+        filename += Date.now() + '.'; 
+        filename += file.originalname.split('.').slice(-1);
+        cb(null, filename);
+    }
 });
 
 var upload = multer({ 
-  storage: storage,
-  limits: { fileSize: 3000000 }
+    storage: storage,
+    limits: { fileSize: 3000000 }
 });
 
 // new_drawing

@@ -18,7 +18,6 @@ var newDrawing = {
         });
         drawing.save(function (err, drawing) {
             if (err) { throw err; }
-            console.log(req.file || 'no file');
             res.redirect('/');
         });
     }
