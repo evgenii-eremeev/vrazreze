@@ -14,6 +14,7 @@ var newDrawing = {
             category: req.body.category,
             drawing_composition: req.body.drawing_composition.split(','),
             tags: req.body.tags.split(','),
+            price: req.body.price,
             picture: req.file ? req.file.path : ''
         });
         drawing.save(function (err, drawing) {

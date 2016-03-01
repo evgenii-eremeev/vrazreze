@@ -12,6 +12,7 @@ var drawingSchema = new Schema({
     drawing_composition: [String],
     software: String,
     rating: { type: Number, default: 0 },
+    price: { type: Number, default: 0},
     tags: [String],
     picture: String,
     archive: String,

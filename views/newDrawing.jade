@@ -10,13 +10,24 @@ block content
                 input.form-control(type='text', name="title" required)
             .form-group
                 label Категория
-                input.form-control(type='text', name="category" required)
+                select.form-control(name="category")
+                    option(value="Прочее") Прочее
+                    option(value="Машиностроение") Машиностроение
+                    option(value="Сельское хозяйство") Сельское хозяйство
+                    option(value="Промышленность") Промышленность
+                    option(value="Строительство") Строительство
+                    option(value="Схемы") Схемы
+                    option(value="Транспорт") Транспорт
+                    option(value="Станки") Станки
             .form-group
                 label Описание
                 textarea.form-control(name="description" required)
             .form-group
                 label Состав Работы
                 input.form-control(type='text', name="drawing_composition")
+            .form-group
+                label Цена
+                input.form-control(type='number' name="price")
             .form-group
                 label Tags
                 input.form-control(type='text', name="tags")
@@ -25,6 +36,6 @@ block content
                 input(type='file', name="picture")
 
             button.btn.btn-default(type='submit') Добавить
-            &nbsp;
+            | &nbsp;
             a(href='/')
                 button.btn.btn-danger(type="button") Отменить
