@@ -6,7 +6,7 @@ var router = express.Router();
 var newDrawingRouter = require('./newDrawingRouter');
 
 // import controllers
-var registerCtrl = require('../server/controllers/registerCtrl');
+var registerCtrl = require('../controllers/registerCtrl');
 
 // new_drawing
 router.use('/new_drawing', newDrawingRouter);

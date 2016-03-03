@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var newDrawingCtrl = require('../server/controllers/newDrawingCtrl.js');
+var newDrawingCtrl = require('../controllers/newDrawingCtrl.js');
 
 // multer
 var multer  = require('multer');
