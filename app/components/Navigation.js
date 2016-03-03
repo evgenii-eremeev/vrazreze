@@ -1,18 +1,22 @@
 import React, { PropTypes } from 'react';
 import { Navbar, Nav, NavItem, MenuItem, NavDropdown } from 'react-bootstrap';
-import { Link } from 'react-router';
+import { IndexLink } from 'react-router';
+import { LinkContainer } from 'react-router-bootstrap';
+
 
 const navbarInstance = (
   <Navbar inverse>
     <Navbar.Header>
       <Navbar.Brand>
-        <Link to='/'>Чертежи</Link>
+        <IndexLink to='/'>Чертежи</IndexLink>
       </Navbar.Brand>
       <Navbar.Toggle />
     </Navbar.Header>
     <Navbar.Collapse>
       <Nav>
-        <NavItem eventKey={1} href="#">Добавить</NavItem>
+        <LinkContainer to='new_drawing'>
+            <NavItem eventKey={1}>Добавить</NavItem>
+        </LinkContainer>
         <NavDropdown eventKey={3} title="Категории" id="basic-nav-dropdown">
           <MenuItem eventKey={3.1}>Машиностроение</MenuItem>
           <MenuItem eventKey={3.2}>Сельское хозяйство</MenuItem>
@@ -25,8 +29,12 @@ const navbarInstance = (
         </NavDropdown>
       </Nav>
       <Nav pullRight>
-        <li><Link to='/login' eventKey={1}>Вход</Link></li>
-        <li><Link to='/register' eventKey={2}>Регистрация</Link></li>
+        <LinkContainer to='/login'>
+            <NavItem eventKey={1}>Вход</NavItem>
+        </LinkContainer>
+        <LinkContainer to='/register'>
+            <NavItem eventKey={2}>Регистрация</NavItem>
+        </LinkContainer>
       </Nav>
     </Navbar.Collapse>
   </Navbar>

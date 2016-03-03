@@ -64,6 +64,10 @@
 
 	var _Home2 = _interopRequireDefault(_Home);
 
+	var _NewDrawing = __webpack_require__(466);
+
+	var _NewDrawing2 = _interopRequireDefault(_NewDrawing);
+
 	var _Login = __webpack_require__(405);
 
 	var _Login2 = _interopRequireDefault(_Login);
@@ -74,9 +78,6 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	// import components
-
-
 	_reactDom2.default.render(_react2.default.createElement(
 	    _reactRouter.Router,
 	    { history: _reactRouter.browserHistory },
@@ -84,10 +85,12 @@
 	        _reactRouter.Route,
 	        { path: '/', component: _App2.default },
 	        _react2.default.createElement(_reactRouter.IndexRoute, { component: _Home2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: '/new_drawing', component: _NewDrawing2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _Login2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: '/register', component: _Register2.default })
 	    )
 	), document.getElementById('root'));
+	// import components
 
 /***/ },
 /* 1 */
@@ -19750,6 +19753,8 @@
 
 	var _reactRouter = __webpack_require__(407);
 
+	var _reactRouterBootstrap = __webpack_require__(463);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var navbarInstance = _react2.default.createElement(
@@ -19762,7 +19767,7 @@
 	      _reactBootstrap.Navbar.Brand,
 	      null,
 	      _react2.default.createElement(
-	        _reactRouter.Link,
+	        _reactRouter.IndexLink,
 	        { to: '/' },
 	        'Чертежи'
 	      )
@@ -19776,9 +19781,13 @@
 	      _reactBootstrap.Nav,
 	      null,
 	      _react2.default.createElement(
-	        _reactBootstrap.NavItem,
-	        { eventKey: 1, href: '#' },
-	        'Добавить'
+	        _reactRouterBootstrap.LinkContainer,
+	        { to: 'new_drawing' },
+	        _react2.default.createElement(
+	          _reactBootstrap.NavItem,
+	          { eventKey: 1 },
+	          'Добавить'
+	        )
 	      ),
 	      _react2.default.createElement(
 	        _reactBootstrap.NavDropdown,
@@ -19829,20 +19838,20 @@
 	      _reactBootstrap.Nav,
 	      { pullRight: true },
 	      _react2.default.createElement(
-	        'li',
-	        null,
+	        _reactRouterBootstrap.LinkContainer,
+	        { to: '/login' },
 	        _react2.default.createElement(
-	          _reactRouter.Link,
-	          { to: '/login', eventKey: 1 },
+	          _reactBootstrap.NavItem,
+	          { eventKey: 1 },
 	          'Вход'
 	        )
 	      ),
 	      _react2.default.createElement(
-	        'li',
-	        null,
+	        _reactRouterBootstrap.LinkContainer,
+	        { to: '/register' },
 	        _react2.default.createElement(
-	          _reactRouter.Link,
-	          { to: '/register', eventKey: 2 },
+	          _reactBootstrap.NavItem,
+	          { eventKey: 2 },
 	          'Регистрация'
 	        )
 	      )
@@ -36956,10 +36965,15 @@
 	    displayName: 'Login',
 	    onLoginSubmit: function onLoginSubmit(e) {
 	        e.preventDefault();
-	        var xhr = new XMLHttpRequest();
-	        xhr.open('POST', '/login');
-	        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-	        xhr.send($("#loginForm").serialize());
+	        $.ajax({
+	            type: "POST",
+	            url: '/login',
+	            data: $("#loginForm").serialize(),
+	            success: function success(data) {
+	                console.log("Login!");
+	                $("#loginForm")[0].reset();
+	            }
+	        });
 	    },
 	    render: function render() {
 	        return _react2.default.createElement(
@@ -36973,7 +36987,7 @@
 	            _react2.default.createElement('br', null),
 	            _react2.default.createElement(
 	                'form',
-	                { id: 'loginForm', method: 'post', style: { maxWidth: '300' }, onSubmit: this.onLoginSubmit },
+	                { role: 'form', id: 'loginForm', method: 'post', style: { maxWidth: 300 }, onSubmit: this.onLoginSubmit },
 	                _react2.default.createElement(_reactBootstrap.Input, { type: 'text', name: 'username', label: 'Имя пользователя' }),
 	                _react2.default.createElement(_reactBootstrap.Input, { type: 'password', name: 'password', label: 'Пароль' }),
 	                _react2.default.createElement(
@@ -37010,18 +37024,15 @@
 	    displayName: 'Register',
 	    onRegisterSubmit: function onRegisterSubmit(e) {
 	        e.preventDefault();
-	        // $.ajax({
-	        //     type: "POST",
-	        //     url: '/register',
-	        //     data: $("#registerForm").serialize(),
-	        //     success: function (data) {
-	        //         console.log("Registered!");
-	        //     }
-	        // });
-	        var xhr = new XMLHttpRequest();
-	        xhr.open('POST', '/register');
-	        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-	        xhr.send($("#registerForm").serialize());
+	        $.ajax({
+	            type: "POST",
+	            url: '/register',
+	            data: $("#registerForm").serialize(),
+	            success: function success(data) {
+	                console.log("Registered!");
+	                $("#registerForm")[0].reset();
+	            }
+	        });
 	    },
 	    render: function render() {
 	        return _react2.default.createElement(
@@ -37035,7 +37046,7 @@
 	            _react2.default.createElement('br', null),
 	            _react2.default.createElement(
 	                'form',
-	                { id: 'registerForm', method: 'post', onSubmit: this.onRegisterSubmit, style: { maxWidth: '300' } },
+	                { role: 'form', id: 'registerForm', method: 'post', onSubmit: this.onRegisterSubmit, style: { maxWidth: '300' } },
 	                _react2.default.createElement(_reactBootstrap.Input, { type: 'text', name: 'username', label: 'Имя пользователя' }),
 	                _react2.default.createElement(_reactBootstrap.Input, { type: 'password', name: 'password', label: 'Пароль' }),
 	                _react2.default.createElement(
@@ -41978,6 +41989,310 @@
 	});
 
 	exports.default = Home;
+
+/***/ },
+/* 463 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _IndexLinkContainer2 = __webpack_require__(464);
+
+	var _IndexLinkContainer3 = _interopRequireDefault(_IndexLinkContainer2);
+
+	exports.IndexLinkContainer = _IndexLinkContainer3['default'];
+
+	var _LinkContainer2 = __webpack_require__(465);
+
+	var _LinkContainer3 = _interopRequireDefault(_LinkContainer2);
+
+	exports.LinkContainer = _LinkContainer3['default'];
+
+/***/ },
+/* 464 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _LinkContainer = __webpack_require__(465);
+
+	var _LinkContainer2 = _interopRequireDefault(_LinkContainer);
+
+	var IndexLinkContainer = (function (_React$Component) {
+	  _inherits(IndexLinkContainer, _React$Component);
+
+	  function IndexLinkContainer() {
+	    _classCallCheck(this, IndexLinkContainer);
+
+	    _get(Object.getPrototypeOf(IndexLinkContainer.prototype), 'constructor', this).apply(this, arguments);
+	  }
+
+	  _createClass(IndexLinkContainer, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2['default'].createElement(_LinkContainer2['default'], _extends({}, this.props, { onlyActiveOnIndex: true }));
+	    }
+	  }]);
+
+	  return IndexLinkContainer;
+	})(_react2['default'].Component);
+
+	exports['default'] = IndexLinkContainer;
+	module.exports = exports['default'];
+
+/***/ },
+/* 465 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// This is largely taken from react-router/lib/Link.
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(407);
+
+	var LinkContainer = (function (_React$Component) {
+	  _inherits(LinkContainer, _React$Component);
+
+	  function LinkContainer(props, context) {
+	    _classCallCheck(this, LinkContainer);
+
+	    _get(Object.getPrototypeOf(LinkContainer.prototype), 'constructor', this).call(this, props, context);
+
+	    this.onClick = this.onClick.bind(this);
+	  }
+
+	  _createClass(LinkContainer, [{
+	    key: 'onClick',
+	    value: function onClick(event) {
+	      if (this.props.disabled) {
+	        event.preventDefault();
+	        return;
+	      }
+
+	      if (this.props.children.props.onClick) {
+	        this.props.children.props.onClick(event);
+	      }
+
+	      _reactRouter.Link.prototype.handleClick.call(this, event);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var router = this.context.router;
+	      var _props = this.props;
+	      var onlyActiveOnIndex = _props.onlyActiveOnIndex;
+	      var to = _props.to;
+	      var children = _props.children;
+
+	      var props = _objectWithoutProperties(_props, ['onlyActiveOnIndex', 'to', 'children']);
+
+	      props.onClick = this.onClick;
+
+	      // Ignore if rendered outside Router context; simplifies unit testing.
+	      if (router) {
+	        props.href = router.createHref(to);
+
+	        if (props.active == null) {
+	          props.active = router.isActive(to, onlyActiveOnIndex);
+	        }
+	      }
+
+	      return _react2['default'].cloneElement(_react2['default'].Children.only(children), props);
+	    }
+	  }]);
+
+	  return LinkContainer;
+	})(_react2['default'].Component);
+
+	exports['default'] = LinkContainer;
+
+	LinkContainer.propTypes = {
+	  onlyActiveOnIndex: _react2['default'].PropTypes.bool.isRequired,
+	  to: _react2['default'].PropTypes.oneOfType([_react2['default'].PropTypes.string, _react2['default'].PropTypes.object]).isRequired,
+	  onClick: _react2['default'].PropTypes.func,
+	  active: _react2['default'].PropTypes.bool,
+	  disabled: _react2['default'].PropTypes.bool.isRequired,
+	  children: _react2['default'].PropTypes.node.isRequired
+	};
+
+	LinkContainer.contextTypes = {
+	  router: _react2['default'].PropTypes.object
+	};
+
+	LinkContainer.defaultProps = {
+	  onlyActiveOnIndex: false,
+	  disabled: false
+	};
+	module.exports = exports['default'];
+
+/***/ },
+/* 466 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactBootstrap = __webpack_require__(161);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var NewDrawing = _react2.default.createClass({
+	    displayName: 'NewDrawing',
+	    onNewDrawingSubmit: function onNewDrawingSubmit(e) {
+	        e.preventDefault();
+	        var form = document.getElementById('newDrawingForm');
+	        var formData = new FormData(form);
+
+	        $.ajax({
+	            url: '/new_drawing',
+	            type: 'POST',
+	            data: formData,
+	            async: true,
+	            cache: false,
+	            contentType: false,
+	            processData: false,
+	            success: function success(data) {
+	                console.log("Submitted!");
+	                form.reset();
+	            },
+	            error: function error(xhr, message, err) {
+	                console.error(err);
+	            }
+	        });
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement(
+	                'h1',
+	                { style: { textAlign: 'center' } },
+	                'Новый чертеж'
+	            ),
+	            _react2.default.createElement('br', null),
+	            _react2.default.createElement(
+	                'form',
+	                { role: 'form',
+	                    id: 'newDrawingForm',
+	                    method: 'post',
+	                    enctype: 'multipart/form-data',
+	                    style: { maxWidth: 500, margin: '0 auto' },
+	                    onSubmit: this.onNewDrawingSubmit
+	                },
+	                _react2.default.createElement(_reactBootstrap.Input, { type: 'text', name: 'title', label: 'Название', required: true }),
+	                _react2.default.createElement(
+	                    _reactBootstrap.Input,
+	                    { type: 'select', name: 'category', label: 'Категория' },
+	                    _react2.default.createElement(
+	                        'option',
+	                        { value: 'Прочее' },
+	                        'Прочее'
+	                    ),
+	                    _react2.default.createElement(
+	                        'option',
+	                        { value: 'Машиностроение' },
+	                        'Машиностроение'
+	                    ),
+	                    _react2.default.createElement(
+	                        'option',
+	                        { value: 'Сельское хозяйство' },
+	                        'Сельское хозяйство'
+	                    ),
+	                    _react2.default.createElement(
+	                        'option',
+	                        { value: 'Промышленность' },
+	                        'Промышленность'
+	                    ),
+	                    _react2.default.createElement(
+	                        'option',
+	                        { value: 'Строительство' },
+	                        'Строительство'
+	                    ),
+	                    _react2.default.createElement(
+	                        'option',
+	                        { value: 'Схемы' },
+	                        'Схемы'
+	                    ),
+	                    _react2.default.createElement(
+	                        'option',
+	                        { value: 'Транспорт' },
+	                        'Транспорт'
+	                    ),
+	                    _react2.default.createElement(
+	                        'option',
+	                        { value: 'Станки' },
+	                        'Станки'
+	                    )
+	                ),
+	                _react2.default.createElement(_reactBootstrap.Input, { type: 'textarea',
+	                    name: 'description',
+	                    label: 'Описание',
+	                    rows: 4,
+	                    required: true }),
+	                _react2.default.createElement(_reactBootstrap.Input, { type: 'text', name: 'drawing_composition', label: 'Состав работы' }),
+	                _react2.default.createElement(_reactBootstrap.Input, { type: 'number', name: 'price', label: 'Цена' }),
+	                _react2.default.createElement(_reactBootstrap.Input, { type: 'text', name: 'tags', label: 'Ключевые слова' }),
+	                _react2.default.createElement(_reactBootstrap.Input, { type: 'file', name: 'picture', label: 'Изображение', help: 'Форматы: .jpg .png .gif' }),
+	                _react2.default.createElement(_reactBootstrap.ButtonInput, { type: 'submit', value: 'Добавить', bsStyle: 'primary' })
+	            )
+	        );
+	    }
+	});
+
+	exports.default = NewDrawing;
 
 /***/ }
 /******/ ]);

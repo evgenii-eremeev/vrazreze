@@ -8,7 +8,7 @@ var newDrawingRouter = require('./newDrawingRouter');
 // import controllers
 var registerCtrl = require('../controllers/registerCtrl');
 
-// new_drawing
+// new_drawing (post)
 router.use('/new_drawing', newDrawingRouter);
 
 // 'any uri, because we use react-router'
