@@ -12,8 +12,8 @@ var routes = require('./routes/index');
 var app = express();
 
 // view engine setup
-app.set('views', process.cwd() + '/views');
-app.set('view engine', 'jade');
+// app.set('views', process.cwd() + '/views');
+// app.set('view engine', 'jade');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

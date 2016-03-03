@@ -1,11 +1,7 @@
 var Drawing = require('../models/drawing');
 
 var newDrawing = {
-    
-    get(req, res) {
-        res.render('newDrawing');  
-    },
-    
+
     post(req, res) {
         var drawing = new Drawing({
             title: req.body.title,

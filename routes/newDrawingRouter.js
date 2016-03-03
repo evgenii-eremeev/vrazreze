@@ -3,7 +3,7 @@ var router = express.Router();
 
 var newDrawingCtrl = require('../server/controllers/newDrawingCtrl.js');
 
-//multer
+// multer
 var multer  = require('multer');
 
 var storage = multer.diskStorage({
@@ -12,20 +12,18 @@ var storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         var filename = file.fieldname + '-';
-        filename += Date.now() + '.'; 
+        filename += Date.now() + '.';
         filename += file.originalname.split('.').slice(-1);
         cb(null, filename);
     }
 });
 
-var upload = multer({ 
+var upload = multer({
     storage: storage,
     limits: { fileSize: 3000000 }
 });
 
 // new_drawing
-router.get('/', newDrawingCtrl.get);
-
 router.post('/', upload.single('picture'), newDrawingCtrl.post);
 
 module.exports = router;

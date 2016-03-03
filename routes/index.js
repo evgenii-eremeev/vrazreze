@@ -8,35 +8,29 @@ var newDrawingRouter = require('./newDrawingRouter');
 // import controllers
 var registerCtrl = require('../server/controllers/registerCtrl');
 
-
 // new_drawing
 router.use('/new_drawing', newDrawingRouter);
 
-// '/'
-router.get('/', function(req, res) {
-    res.render('index', { user: req.user });
+// 'any uri, because we use react-router'
+router.get('*', function(req, res) {
+    res.sendFile(process.cwd() + '/public/index.html');
 });
 
 // register
-router.get('/register', registerCtrl.get);
 router.post('/register', registerCtrl.post);
-
-// login
-router.get('/login', function(req, res) {
-    res.render('login', { user: req.user });
-});
 
 router.post('/login',
             passport.authenticate('local'),
             function(req, res) {
+                console.log(req.user.username + " is logged in");
                 res.redirect('/');
 });
 
 // logout
-router.get('/logout', function(req, res) {
-    req.logout();
-    res.redirect('/');
-});
+// router.get('/logout', function(req, res) {
+//     req.logout();
+//     res.redirect('/');
+// });
 
 
 module.exports = router;
