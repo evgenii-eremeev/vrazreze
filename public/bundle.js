@@ -41984,10 +41984,25 @@
 
 	var _reactBootstrap = __webpack_require__(218);
 
+	var _Category = __webpack_require__(470);
+
+	var _Category2 = _interopRequireDefault(_Category);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var SideNav = _react2.default.createClass({
 	    displayName: 'SideNav',
+	    getInitialState: function getInitialState() {
+	        return {
+	            drawings: []
+	        };
+	    },
+	    componentWillMount: function componentWillMount() {
+	        var that = this;
+	        $.getJSON('api/drawings', function (drawings) {
+	            that.setState({ drawings: drawings });
+	        });
+	    },
 	    render: function render() {
 	        return _react2.default.createElement(
 	            _reactBootstrap.Tabs,
@@ -41995,42 +42010,42 @@
 	            _react2.default.createElement(
 	                _reactBootstrap.Tab,
 	                { eventKey: 1, title: 'Машиностроение' },
-	                'Машиностроение content '
+	                _react2.default.createElement(_Category2.default, { name: 'Машиностроение', drawings: this.state.drawings })
 	            ),
 	            _react2.default.createElement(
 	                _reactBootstrap.Tab,
 	                { eventKey: 2, title: 'Сельское хозяйство' },
-	                'Сельское хозяйство content'
+	                _react2.default.createElement(_Category2.default, { name: 'Сельское хозяйство', drawings: this.state.drawings })
 	            ),
 	            _react2.default.createElement(
 	                _reactBootstrap.Tab,
 	                { eventKey: 3, title: 'Промышленность' },
-	                'Промышленность content'
+	                _react2.default.createElement(_Category2.default, { name: 'Промышленность', drawings: this.state.drawings })
 	            ),
 	            _react2.default.createElement(
 	                _reactBootstrap.Tab,
 	                { eventKey: 4, title: 'Строительсво' },
-	                'Строительсво content'
+	                _react2.default.createElement(_Category2.default, { name: 'Строительсво', drawings: this.state.drawings })
 	            ),
 	            _react2.default.createElement(
 	                _reactBootstrap.Tab,
 	                { eventKey: 5, title: 'Схемы' },
-	                'Схемы content'
+	                _react2.default.createElement(_Category2.default, { name: 'Схемы', drawings: this.state.drawings })
 	            ),
 	            _react2.default.createElement(
 	                _reactBootstrap.Tab,
 	                { eventKey: 6, title: 'Транспорт' },
-	                'Транспорт content'
+	                _react2.default.createElement(_Category2.default, { name: 'Транспорт', drawings: this.state.drawings })
 	            ),
 	            _react2.default.createElement(
 	                _reactBootstrap.Tab,
 	                { eventKey: 7, title: 'Станки' },
-	                'Станки content'
+	                _react2.default.createElement(_Category2.default, { name: 'Станки', drawings: this.state.drawings })
 	            ),
 	            _react2.default.createElement(
 	                _reactBootstrap.Tab,
 	                { eventKey: 8, title: 'Прочее' },
-	                'Прочее content'
+	                _react2.default.createElement(_Category2.default, { name: 'Прочее', drawings: this.state.drawings })
 	            )
 	        );
 	    }
@@ -42072,7 +42087,7 @@
 	            contentType: false,
 	            processData: false,
 	            success: function success(data) {
-	                console.log("Submitted!");
+	                console.log(data);
 	                form.reset();
 	            },
 	            error: function error(xhr, message, err) {
@@ -42325,7 +42340,7 @@
 	        this.setState({
 	            username: ""
 	        });
-	        $.post('/logout', function (data) {
+	        $.get('/logout', function (data) {
 	            console.log(data);
 	        });
 	    },
@@ -42381,6 +42396,38 @@
 	});
 
 	exports.default = NavRight;
+
+/***/ },
+/* 470 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Category = _react2.default.createClass({
+	    displayName: 'Category',
+	    render: function render() {
+	        var filtrated = this.props.drawings.filter(function (drawing) {
+	            return drawing.category === this.props.name;
+	        }, this);
+	        return _react2.default.createElement(
+	            'div',
+	            null,
+	            JSON.stringify(filtrated)
+	        );
+	    }
+	});
+
+	exports.default = Category;
 
 /***/ }
 /******/ ]);

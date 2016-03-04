@@ -5,12 +5,12 @@ var newDrawing = {
     post(req, res) {
         console.log(req.user);
         if (!req.user) {
-            res.redirect('/login');
+            res.send('Please, login');
             return;
         }
         var drawing = new Drawing({
             title: req.body.title,
-            author: req.user ? req.user.username : 'anonymous',
+            author: req.user.username,
             description: req.body.description,
             category: req.body.category,
             drawing_composition: req.body.drawing_composition.split(','),
@@ -20,7 +20,7 @@ var newDrawing = {
         });
         drawing.save(function (err, drawing) {
             if (err) { throw err; }
-            res.redirect('/');
+            res.json(drawing);
         });
     }
 };

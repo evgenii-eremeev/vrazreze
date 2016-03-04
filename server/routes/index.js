@@ -7,18 +7,15 @@ var newDrawingRouter = require('./newDrawingRouter');
 
 // import controllers
 var registerCtrl = require('../controllers/registerCtrl');
+var apiCtrl = require('../controllers/apiCtrl');
 
 // new_drawing (post)
 router.use('/new_drawing', newDrawingRouter);
 
-// 'any uri, because we use react-router'
-router.get('*', function(req, res) {
-    res.sendFile(process.cwd() + '/public/index.html');
-});
-
 // register
 router.post('/register', registerCtrl.post);
 
+// login
 router.post('/login',
             passport.authenticate('local'),
             function(req, res) {
@@ -27,9 +24,18 @@ router.post('/login',
 });
 
 // logout
-router.post('/logout', function(req, res) {
+router.get('/logout', function(req, res) {
     req.logout();
     res.send("Logout successfully!")
+});
+
+// api/drawings
+router.get('/api/drawings', apiCtrl.drawings);
+
+// 'any uri, because we use react-router'
+// Should be placed at the very end for the rest 'get' requests work
+router.get('*', function(req, res) {
+    res.sendFile(process.cwd() + '/public/index.html');
 });
 
 

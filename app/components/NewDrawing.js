@@ -17,7 +17,7 @@ const NewDrawing = React.createClass({
             contentType: false,
             processData: false,
             success: function (data) {
-                console.log("Submitted!");
+                console.log(data);
                 form.reset();
             },
             error: function (xhr, message, err) {
