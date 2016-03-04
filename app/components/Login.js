@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-
+import { browserHistory } from 'react-router';
 import { Input, Button } from 'react-bootstrap';
 
 const Login = React.createClass({
@@ -9,9 +9,12 @@ const Login = React.createClass({
             type: "POST",
             url: '/login',
             data: $("#loginForm").serialize(),
-            success: function (data) {
+            success: function (user) {
                 console.log("Login!");
+                sessionStorage.username = user.username;
+                sessionStorage._id = user._id;
                 $("#loginForm")[0].reset();
+                browserHistory.push('/');
             }
         });
     },

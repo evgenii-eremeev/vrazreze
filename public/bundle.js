@@ -19742,7 +19742,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _react = __webpack_require__(1);
@@ -19757,113 +19757,123 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var navbarInstance = _react2.default.createElement(
-	  _reactBootstrap.Navbar,
-	  { inverse: true },
-	  _react2.default.createElement(
-	    _reactBootstrap.Navbar.Header,
-	    null,
-	    _react2.default.createElement(
-	      _reactBootstrap.Navbar.Brand,
-	      null,
-	      _react2.default.createElement(
-	        _reactRouter.IndexLink,
-	        { to: '/' },
-	        'Чертежи'
-	      )
-	    ),
-	    _react2.default.createElement(_reactBootstrap.Navbar.Toggle, null)
-	  ),
-	  _react2.default.createElement(
-	    _reactBootstrap.Navbar.Collapse,
-	    null,
-	    _react2.default.createElement(
-	      _reactBootstrap.Nav,
-	      null,
-	      _react2.default.createElement(
-	        _reactRouterBootstrap.LinkContainer,
-	        { to: 'new_drawing' },
-	        _react2.default.createElement(
-	          _reactBootstrap.NavItem,
-	          { eventKey: 1 },
-	          'Добавить'
-	        )
-	      ),
-	      _react2.default.createElement(
-	        _reactBootstrap.NavDropdown,
-	        { eventKey: 3, title: 'Категории', id: 'basic-nav-dropdown' },
-	        _react2.default.createElement(
-	          _reactBootstrap.MenuItem,
-	          { eventKey: 3.1 },
-	          'Машиностроение'
-	        ),
-	        _react2.default.createElement(
-	          _reactBootstrap.MenuItem,
-	          { eventKey: 3.2 },
-	          'Сельское хозяйство'
-	        ),
-	        _react2.default.createElement(
-	          _reactBootstrap.MenuItem,
-	          { eventKey: 3.3 },
-	          'Промышленность'
-	        ),
-	        _react2.default.createElement(
-	          _reactBootstrap.MenuItem,
-	          { eventKey: 3.3 },
-	          'Строительсво'
-	        ),
-	        _react2.default.createElement(
-	          _reactBootstrap.MenuItem,
-	          { eventKey: 3.4 },
-	          'Схемы'
-	        ),
-	        _react2.default.createElement(
-	          _reactBootstrap.MenuItem,
-	          { eventKey: 3.5 },
-	          'Транспорт'
-	        ),
-	        _react2.default.createElement(
-	          _reactBootstrap.MenuItem,
-	          { eventKey: 3.6 },
-	          'Станки'
-	        ),
-	        _react2.default.createElement(
-	          _reactBootstrap.MenuItem,
-	          { eventKey: 3.7 },
-	          'Прочее'
-	        )
-	      )
-	    ),
-	    _react2.default.createElement(
-	      _reactBootstrap.Nav,
-	      { pullRight: true },
-	      _react2.default.createElement(
-	        _reactRouterBootstrap.LinkContainer,
-	        { to: '/login' },
-	        _react2.default.createElement(
-	          _reactBootstrap.NavItem,
-	          { eventKey: 1 },
-	          'Вход'
-	        )
-	      ),
-	      _react2.default.createElement(
-	        _reactRouterBootstrap.LinkContainer,
-	        { to: '/register' },
-	        _react2.default.createElement(
-	          _reactBootstrap.NavItem,
-	          { eventKey: 2 },
-	          'Регистрация'
-	        )
-	      )
-	    )
-	  )
-	);
-
 	var Navigation = _react2.default.createClass({
-	  displayName: 'Navigation',
-	  render: function render() {
-	    return navbarInstance;
-	  }
+	    displayName: 'Navigation',
+	    render: function render() {
+	        var username = sessionStorage.username;
+	        var addButton = _react2.default.createElement(
+	            _reactRouterBootstrap.LinkContainer,
+	            { to: 'new_drawing' },
+	            _react2.default.createElement(
+	                _reactBootstrap.NavItem,
+	                { eventKey: 1 },
+	                'Добавить'
+	            )
+	        );
+	        var authRight = _react2.default.createElement(
+	            _reactBootstrap.Nav,
+	            { pullRight: true },
+	            _react2.default.createElement(
+	                _reactRouterBootstrap.LinkContainer,
+	                { to: '/login' },
+	                _react2.default.createElement(
+	                    _reactBootstrap.NavItem,
+	                    { eventKey: 1 },
+	                    'Вход'
+	                )
+	            ),
+	            _react2.default.createElement(
+	                _reactRouterBootstrap.LinkContainer,
+	                { to: '/register' },
+	                _react2.default.createElement(
+	                    _reactBootstrap.NavItem,
+	                    { eventKey: 2 },
+	                    'Регистрация'
+	                )
+	            )
+	        );
+	        var logoutRight = _react2.default.createElement(
+	            _reactBootstrap.Nav,
+	            { pullRight: true },
+	            _react2.default.createElement(
+	                _reactBootstrap.Navbar.Text,
+	                { eventKey: 1 },
+	                username
+	            )
+	        );
+	        return _react2.default.createElement(
+	            _reactBootstrap.Navbar,
+	            { inverse: true },
+	            _react2.default.createElement(
+	                _reactBootstrap.Navbar.Header,
+	                null,
+	                _react2.default.createElement(
+	                    _reactBootstrap.Navbar.Brand,
+	                    null,
+	                    _react2.default.createElement(
+	                        _reactRouter.IndexLink,
+	                        { to: '/' },
+	                        'Чертежи'
+	                    )
+	                ),
+	                _react2.default.createElement(_reactBootstrap.Navbar.Toggle, null)
+	            ),
+	            _react2.default.createElement(
+	                _reactBootstrap.Navbar.Collapse,
+	                null,
+	                _react2.default.createElement(
+	                    _reactBootstrap.Nav,
+	                    null,
+	                    username ? addButton : "",
+	                    _react2.default.createElement(
+	                        _reactBootstrap.NavDropdown,
+	                        { eventKey: 3, title: 'Категории', id: 'basic-nav-dropdown' },
+	                        _react2.default.createElement(
+	                            _reactBootstrap.MenuItem,
+	                            { eventKey: 3.1 },
+	                            'Машиностроение'
+	                        ),
+	                        _react2.default.createElement(
+	                            _reactBootstrap.MenuItem,
+	                            { eventKey: 3.2 },
+	                            'Сельское хозяйство'
+	                        ),
+	                        _react2.default.createElement(
+	                            _reactBootstrap.MenuItem,
+	                            { eventKey: 3.3 },
+	                            'Промышленность'
+	                        ),
+	                        _react2.default.createElement(
+	                            _reactBootstrap.MenuItem,
+	                            { eventKey: 3.3 },
+	                            'Строительсво'
+	                        ),
+	                        _react2.default.createElement(
+	                            _reactBootstrap.MenuItem,
+	                            { eventKey: 3.4 },
+	                            'Схемы'
+	                        ),
+	                        _react2.default.createElement(
+	                            _reactBootstrap.MenuItem,
+	                            { eventKey: 3.5 },
+	                            'Транспорт'
+	                        ),
+	                        _react2.default.createElement(
+	                            _reactBootstrap.MenuItem,
+	                            { eventKey: 3.6 },
+	                            'Станки'
+	                        ),
+	                        _react2.default.createElement(
+	                            _reactBootstrap.MenuItem,
+	                            { eventKey: 3.7 },
+	                            'Прочее'
+	                        )
+	                    )
+	                ),
+	                username ? logoutRight : authRight
+	            )
+	        );
+	    }
 	});
 
 	exports.default = Navigation;
@@ -36957,6 +36967,8 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRouter = __webpack_require__(407);
+
 	var _reactBootstrap = __webpack_require__(161);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -36969,9 +36981,12 @@
 	            type: "POST",
 	            url: '/login',
 	            data: $("#loginForm").serialize(),
-	            success: function success(data) {
+	            success: function success(user) {
 	                console.log("Login!");
+	                sessionStorage.username = user.username;
+	                sessionStorage._id = user._id;
 	                $("#loginForm")[0].reset();
+	                _reactRouter.browserHistory.push('/');
 	            }
 	        });
 	    },
@@ -37016,6 +37031,8 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRouter = __webpack_require__(407);
+
 	var _reactBootstrap = __webpack_require__(161);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -37028,9 +37045,12 @@
 	            type: "POST",
 	            url: '/register',
 	            data: $("#registerForm").serialize(),
-	            success: function success(data) {
+	            success: function success(user) {
 	                console.log("Registered!");
+	                sessionStorage.username = user.username;
+	                sessionStorage._id = user._id;
 	                $("#registerForm")[0].reset();
+	                _reactRouter.browserHistory.push('/');
 	            }
 	        });
 	    },

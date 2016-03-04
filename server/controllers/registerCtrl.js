@@ -13,7 +13,7 @@ var registerCtrl = {
 
                 passport.authenticate('local')(req, res, function () {
                     console.log(req.user.username + " is registered");
-                    res.redirect('/');
+                    res.json(req.user);
                 });
             }
         ); // end User.register

@@ -23,7 +23,7 @@ router.post('/login',
             passport.authenticate('local'),
             function(req, res) {
                 console.log(req.user.username + " is logged in");
-                res.redirect('/');
+                res.json(req.user);
 });
 
 // logout

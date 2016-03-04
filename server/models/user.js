@@ -7,7 +7,6 @@ var passportLocalMongoose = require('passport-local-mongoose');
 var userSchema = new Schema({
     username: { type: String, maxlength: 255, required: true, unique: true },
     register_date: { type: Date, default: Date.now },
-    updated: { type: Date, default: Date.now },
     role: { type: String, maxlength: 255, default: 'user' },
     rating: { type: Number, default: 0 },
     education: { type: String, maxlength: 255 },
