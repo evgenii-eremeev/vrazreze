@@ -14,7 +14,9 @@ const Register = React.createClass({
                 sessionStorage.username = user.username;
                 sessionStorage._id = user._id;
                 $("#registerForm")[0].reset();
-                browserHistory.push('/');
+                window.location = '/';
+                // use this than redux will be added
+                // browserHistory.push('/');
             }
         });
     },

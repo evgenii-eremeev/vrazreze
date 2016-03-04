@@ -27,10 +27,10 @@ router.post('/login',
 });
 
 // logout
-// router.get('/logout', function(req, res) {
-//     req.logout();
-//     res.redirect('/');
-// });
+router.post('/logout', function(req, res) {
+    req.logout();
+    res.send("Logout successfully!")
+});
 
 
 module.exports = router;

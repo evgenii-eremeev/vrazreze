@@ -1,0 +1,13 @@
+/* Active tab background in SideNav component*/
+.nav-pills>li.active>a,
+.nav-pills>li.active>a:focus,
+.nav-pills>li.active>a:hover {
+  background-color: #222;
+}
+
+@media screen and (max-width: 600px) {
+  #sidenav > ul {
+    width: 100%;
+    padding: 0;
+  }
+}

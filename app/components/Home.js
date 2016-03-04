@@ -1,9 +1,10 @@
-import React, { PropTypes } from 'react'
+import React, { PropTypes } from 'react';
+import SideNav from './SideNav';
 
 const Home = React.createClass({
     render () {
         return (
-            <h1>Hello world</h1>
+            <SideNav />
         );
     }
 });
