@@ -24770,9 +24770,9 @@
 
 	var _reactRouter = __webpack_require__(159);
 
-	var _NavLeft = __webpack_require__(463);
+	var _NavRight = __webpack_require__(469);
 
-	var _NavLeft2 = _interopRequireDefault(_NavLeft);
+	var _NavRight2 = _interopRequireDefault(_NavRight);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -24799,7 +24799,7 @@
 	            _react2.default.createElement(
 	                _reactBootstrap.Navbar.Collapse,
 	                null,
-	                _react2.default.createElement(_NavLeft2.default, null)
+	                _react2.default.createElement(_NavRight2.default, null)
 	            )
 	        );
 	    }
@@ -41939,95 +41939,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 463 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactBootstrap = __webpack_require__(218);
-
-	var _reactRouterBootstrap = __webpack_require__(460);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var NavLeft = _react2.default.createClass({
-	    displayName: 'NavLeft',
-	    getInitialState: function getInitialState() {
-	        return {
-	            username: sessionStorage.username
-	        };
-	    },
-	    onLogoutClick: function onLogoutClick() {
-	        sessionStorage.clear();
-	        this.setState({
-	            username: ""
-	        });
-	        $.post('/logout', function (data) {
-	            console.log(data);
-	        });
-	    },
-	    render: function render() {
-	        var beforeLogin = _react2.default.createElement(
-	            _reactBootstrap.Nav,
-	            { pullRight: true },
-	            _react2.default.createElement(
-	                _reactRouterBootstrap.LinkContainer,
-	                { to: '/login' },
-	                _react2.default.createElement(
-	                    _reactBootstrap.NavItem,
-	                    { eventKey: 1 },
-	                    'Вход'
-	                )
-	            ),
-	            _react2.default.createElement(
-	                _reactRouterBootstrap.LinkContainer,
-	                { to: '/register' },
-	                _react2.default.createElement(
-	                    _reactBootstrap.NavItem,
-	                    { eventKey: 2 },
-	                    'Регистрация'
-	                )
-	            )
-	        );
-
-	        var afterLogin = _react2.default.createElement(
-	            _reactBootstrap.Nav,
-	            { pullRight: true },
-	            _react2.default.createElement(
-	                _reactRouterBootstrap.LinkContainer,
-	                { to: 'new_drawing' },
-	                _react2.default.createElement(
-	                    _reactBootstrap.NavItem,
-	                    { eventKey: 1 },
-	                    'Добавить'
-	                )
-	            ),
-	            _react2.default.createElement(
-	                _reactBootstrap.NavItem,
-	                { eventKey: 1 },
-	                this.state.username
-	            ),
-	            _react2.default.createElement(
-	                _reactBootstrap.NavItem,
-	                { eventKey: 2, onClick: this.onLogoutClick },
-	                'Выйти'
-	            )
-	        );
-	        return this.state.username ? afterLogin : beforeLogin;
-	    }
-	});
-
-	exports.default = NavLeft;
-
-/***/ },
+/* 463 */,
 /* 464 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -42380,6 +42292,95 @@
 	});
 
 	exports.default = Register;
+
+/***/ },
+/* 469 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactBootstrap = __webpack_require__(218);
+
+	var _reactRouterBootstrap = __webpack_require__(460);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var NavRight = _react2.default.createClass({
+	    displayName: 'NavRight',
+	    getInitialState: function getInitialState() {
+	        return {
+	            username: sessionStorage.username
+	        };
+	    },
+	    onLogoutClick: function onLogoutClick() {
+	        sessionStorage.clear();
+	        this.setState({
+	            username: ""
+	        });
+	        $.post('/logout', function (data) {
+	            console.log(data);
+	        });
+	    },
+	    render: function render() {
+	        var beforeLogin = _react2.default.createElement(
+	            _reactBootstrap.Nav,
+	            { pullRight: true },
+	            _react2.default.createElement(
+	                _reactRouterBootstrap.LinkContainer,
+	                { to: '/login' },
+	                _react2.default.createElement(
+	                    _reactBootstrap.NavItem,
+	                    { eventKey: 1 },
+	                    'Вход'
+	                )
+	            ),
+	            _react2.default.createElement(
+	                _reactRouterBootstrap.LinkContainer,
+	                { to: '/register' },
+	                _react2.default.createElement(
+	                    _reactBootstrap.NavItem,
+	                    { eventKey: 2 },
+	                    'Регистрация'
+	                )
+	            )
+	        );
+
+	        var afterLogin = _react2.default.createElement(
+	            _reactBootstrap.Nav,
+	            { pullRight: true },
+	            _react2.default.createElement(
+	                _reactRouterBootstrap.LinkContainer,
+	                { to: 'new_drawing' },
+	                _react2.default.createElement(
+	                    _reactBootstrap.NavItem,
+	                    { eventKey: 1 },
+	                    'Добавить'
+	                )
+	            ),
+	            _react2.default.createElement(
+	                _reactBootstrap.NavItem,
+	                { eventKey: 1 },
+	                this.state.username
+	            ),
+	            _react2.default.createElement(
+	                _reactBootstrap.NavItem,
+	                { eventKey: 2, onClick: this.onLogoutClick },
+	                'Выйти'
+	            )
+	        );
+	        return this.state.username ? afterLogin : beforeLogin;
+	    }
+	});
+
+	exports.default = NavRight;
 
 /***/ }
 /******/ ]);

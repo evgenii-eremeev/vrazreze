@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Navbar } from 'react-bootstrap';
 import { IndexLink } from 'react-router';
-import NavLeft from './NavLeft';
+import NavRight from './NavRight';
 
 const Navigation = React.createClass({
     render () {
@@ -14,7 +14,7 @@ const Navigation = React.createClass({
                     <Navbar.Toggle />
                 </Navbar.Header>
                 <Navbar.Collapse>
-                    <NavLeft />
+                    <NavRight />
                 </Navbar.Collapse>
             </Navbar>
         );
