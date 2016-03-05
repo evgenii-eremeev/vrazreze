@@ -42411,23 +42411,105 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _Drawing = __webpack_require__(471);
+
+	var _Drawing2 = _interopRequireDefault(_Drawing);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Category = _react2.default.createClass({
 	    displayName: 'Category',
 	    render: function render() {
-	        var filtrated = this.props.drawings.filter(function (drawing) {
-	            return drawing.category === this.props.name;
+	        var filtrated = this.props.drawings.map(function (drawing, index) {
+	            if (drawing.category === this.props.name) {
+	                return _react2.default.createElement(_Drawing2.default, { key: index,
+	                    title: drawing.title,
+	                    description: drawing.description,
+	                    picture: drawing.picture,
+	                    drawing_composition: drawing.drawing_composition,
+	                    price: drawing.price,
+	                    tags: drawing.tags,
+	                    created: drawing.created });
+	            }
 	        }, this);
 	        return _react2.default.createElement(
 	            'div',
 	            null,
-	            JSON.stringify(filtrated)
+	            filtrated
 	        );
 	    }
 	});
 
 	exports.default = Category;
+
+/***/ },
+/* 471 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Drawing = function Drawing(_ref) {
+	    var title = _ref.title;
+	    var description = _ref.description;
+	    var price = _ref.price;
+	    var drawing_composition = _ref.drawing_composition;
+	    var tags = _ref.tags;
+	    var created = _ref.created;
+	    var picture = _ref.picture;
+
+	    return _react2.default.createElement(
+	        "div",
+	        null,
+	        _react2.default.createElement(
+	            "h1",
+	            null,
+	            title
+	        ),
+	        _react2.default.createElement("img", { src: "uploads/" + picture }),
+	        _react2.default.createElement(
+	            "p",
+	            null,
+	            description
+	        ),
+	        _react2.default.createElement(
+	            "p",
+	            null,
+	            "Состав: ",
+	            drawing_composition
+	        ),
+	        _react2.default.createElement(
+	            "p",
+	            null,
+	            "Цена: ",
+	            price,
+	            " руб."
+	        ),
+	        _react2.default.createElement(
+	            "p",
+	            null,
+	            "Ключевые слова: ",
+	            tags
+	        ),
+	        _react2.default.createElement(
+	            "p",
+	            null,
+	            "Дата: ",
+	            created
+	        )
+	    );
+	};
+
+	exports.default = Drawing;
 
 /***/ }
 /******/ ]);
