@@ -3,11 +3,6 @@ var Drawing = require('../models/drawing');
 var newDrawing = {
 
     post(req, res) {
-        console.log(req.user);
-        if (!req.user) {
-            res.send('Please, login');
-            return;
-        }
         var drawing = new Drawing({
             title: req.body.title,
             author: req.user.username,
