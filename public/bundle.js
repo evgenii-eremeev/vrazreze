@@ -90,6 +90,7 @@
 	        _react2.default.createElement(_reactRouter.Route, { path: '/register', component: _Register2.default })
 	    )
 	), document.getElementById('root'));
+
 	// import components
 
 /***/ },
