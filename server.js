@@ -10,10 +10,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var routes = require('./server/routes/index');
 
 var app = express();
-
-// view engine setup
-// app.set('views', process.cwd() + '/views');
-// app.set('view engine', 'jade');
+require('dotenv').load();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -29,16 +26,16 @@ app.use(express.static(process.cwd() + '/public'));
 
 app.use('/', routes);
 
-//passport config
+// passport config
 var User = require('./server/models/user');
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-//mongoose
-mongoose.connect('mongodb://localhost:27017/petrovich2');
+// mongoose
+mongoose.connect(process.env.MONGO_URI);
 
 var port = process.env.PORT || 8080;
-app.listen(port, () => {
+app.listen(port, function () {
     console.log("Express server running at http://localhost:" + port);
 });
