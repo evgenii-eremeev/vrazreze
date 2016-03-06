@@ -33,7 +33,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 // mongoose
-mongoose.connect(process.env.MONGO_URI);
+mongoose.connect('mongodb://jay:drawingswork@ds023098.mlab.com:23098/petrovich');
 
 var port = process.env.PORT || 8080;
 app.listen(port, function () {
