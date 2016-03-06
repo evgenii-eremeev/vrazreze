@@ -37,5 +37,5 @@ passport.deserializeUser(User.deserializeUser());
 mongoose.connect('mongodb://jay:drawingswork@ds023098.mlab.com:23098/petrovich');
 
 app.listen(app.get('port'), function () {
-    console.log("Express server running at http://localhost:" + port);
+    console.log("Express server running at http://localhost:" + app.get('port'));
 });
