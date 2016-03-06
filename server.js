@@ -10,6 +10,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var routes = require('./server/routes/index');
 
 var app = express();
+app.set('port', (process.env.PORT || 5000));
 require('dotenv').load();
 
 app.use(bodyParser.json());
@@ -35,7 +36,6 @@ passport.deserializeUser(User.deserializeUser());
 // mongoose
 mongoose.connect('mongodb://jay:drawingswork@ds023098.mlab.com:23098/petrovich');
 
-var port = process.env.PORT || 8080;
-app.listen(port, function () {
+app.listen(app.get('port'), function () {
     console.log("Express server running at http://localhost:" + port);
 });
