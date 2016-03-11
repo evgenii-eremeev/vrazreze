@@ -42098,7 +42098,8 @@
 	    displayName: 'SideNav',
 	    getInitialState: function getInitialState() {
 	        return {
-	            categories: []
+	            categories: [],
+	            active: null
 	        };
 	    },
 	    componentWillMount: function componentWillMount() {
@@ -42107,13 +42108,20 @@
 	        }.bind(this));
 	    },
 	    render: function render() {
+	        var _this = this;
+
 	        return _react2.default.createElement(
 	            'ul',
 	            { className: 'nav nav-pills nav-stacked' },
 	            this.state.categories.map(function (category, idx) {
 	                return _react2.default.createElement(
 	                    'li',
-	                    { role: 'presentation' },
+	                    { role: 'presentation',
+	                        onClick: function onClick() {
+	                            _this.setState({ active: idx });
+	                        },
+	                        className: _this.state.active === idx ? 'active' : ''
+	                    },
 	                    _react2.default.createElement(
 	                        _reactRouter.Link,
 	                        { to: '/categories/' + category.url },

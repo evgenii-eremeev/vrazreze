@@ -6,7 +6,8 @@ import Category from './Category';
 const SideNav = React.createClass({
     getInitialState () {
         return {
-            categories: []
+            categories: [],
+            active: null
         };
     },
 
@@ -20,7 +21,12 @@ const SideNav = React.createClass({
         return (
             <ul className="nav nav-pills nav-stacked">
                 {this.state.categories.map((category, idx) => (
-                    <li role="presentation">
+                    <li role="presentation"
+                        onClick={() => {
+                            this.setState({ active: idx })
+                        }}
+                        className={this.state.active === idx ? 'active' : ''}
+                        >
                         <Link to={'/categories/' + category.url}>
                             {category.name}
                         </Link>
