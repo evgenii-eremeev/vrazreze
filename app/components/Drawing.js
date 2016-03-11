@@ -12,7 +12,7 @@ const Drawing = ({
     return (
         <div>
             <h1>{title}</h1>
-            <img src={"uploads/" + picture} />
+            <img src={"uploads/" + picture} style={{maxWidth: 200}}/>
             <p>{description}</p>
             <p>Состав: {drawing_composition}</p>
             <p>Цена: {price} руб.</p>

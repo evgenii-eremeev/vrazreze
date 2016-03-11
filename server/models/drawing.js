@@ -8,17 +8,12 @@ var drawingSchema = new Schema({
     title: { type: String, maxlength: 255, required: true },
     author: { type: String, maxlength: 255, required: true },
     description: { type: String, maxlength: 1500, required: true },
-    category: { type: String, maxlength: 255, required: true },
+    category: { type: Schema.Types.ObjectId, required: true },
     drawing_composition: [String],
-    software: String,
-    rating: { type: Number, default: 0 },
     price: { type: Number, default: 0},
     tags: [String],
     picture: String,
-    archive: String,
-    site: String,
-    views: { type: Number, default: 0 },
-    other: Schema.Types.Mixed
+    views: { type: Number, default: 0 }
 });
 
 var Drawing = mongoose.model('Drawing', drawingSchema);

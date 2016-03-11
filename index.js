@@ -8,14 +8,17 @@ import Home from './app/components/Home';
 import NewDrawing from './app/components/NewDrawing';
 import Login from './app/components/Login';
 import Register from './app/components/Register';
+import Categories from './app/components/Categories';
 
 ReactDOM.render(
     <Router history={browserHistory}>
         <Route path="/" component={App}>
             <IndexRoute component={Home}/>
-            <Route path="/new_drawing" component={NewDrawing}/>
-            <Route path="/login" component={Login}/>
-            <Route path="/register" component={Register}/>
+            <Route path="new_drawing" component={NewDrawing} />
+            <Route path="login" component={Login} />
+            <Route path="register" component={Register} />
+            <Route path="categories" component={Categories} />
+            <Route path="categories/:category" component={Categories} />
         </Route>
     </Router>,
     document.getElementById('root')

@@ -3,6 +3,18 @@ import { Input, ButtonInput } from 'react-bootstrap';
 
 const NewDrawing = React.createClass({
 
+    getInitialState () {
+        return {
+            categories: []
+        };
+    },
+
+    componentWillMount () {
+        $.getJSON('api/categories', function (categories) {
+            this.setState({ categories });
+        }.bind(this));
+    },
+
     onNewDrawingSubmit (e) {
         e.preventDefault();
         let form = document.getElementById('newDrawingForm');
@@ -40,14 +52,11 @@ const NewDrawing = React.createClass({
                     >
                     <Input type="text" name="title" label="Название" required />
                     <Input type="select" name="category" label="Категория">
-                        <option value="Прочее">Прочее</option>
-                        <option value="Машиностроение">Машиностроение</option>
-                        <option value="Сельское хозяйство">Сельское хозяйство</option>
-                        <option value="Промышленность">Промышленность</option>
-                        <option value="Строительство">Строительство</option>
-                        <option value="Схемы">Схемы</option>
-                        <option value="Транспорт">Транспорт</option>
-                        <option value="Станки">Станки</option>
+                        {this.state.categories.map((category, idx) => (
+                            <option value={category.name} key={idx}>
+                                {category.name}
+                            </option>
+                        ))}
                     </Input>
                     <Input type="textarea"
                         name="description"

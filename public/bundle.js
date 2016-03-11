@@ -76,7 +76,14 @@
 
 	var _Register2 = _interopRequireDefault(_Register);
 
+	var _Categories = __webpack_require__(471);
+
+	var _Categories2 = _interopRequireDefault(_Categories);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// import components
+
 
 	_reactDom2.default.render(_react2.default.createElement(
 	    _reactRouter.Router,
@@ -85,13 +92,13 @@
 	        _reactRouter.Route,
 	        { path: '/', component: _App2.default },
 	        _react2.default.createElement(_reactRouter.IndexRoute, { component: _Home2.default }),
-	        _react2.default.createElement(_reactRouter.Route, { path: '/new_drawing', component: _NewDrawing2.default }),
-	        _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _Login2.default }),
-	        _react2.default.createElement(_reactRouter.Route, { path: '/register', component: _Register2.default })
+	        _react2.default.createElement(_reactRouter.Route, { path: 'new_drawing', component: _NewDrawing2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _Login2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: 'register', component: _Register2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: 'categories', component: _Categories2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: 'categories/:category', component: _Categories2.default })
 	    )
 	), document.getElementById('root'));
-
-	// import components
 
 /***/ },
 /* 1 */
@@ -24771,7 +24778,7 @@
 
 	var _reactRouter = __webpack_require__(159);
 
-	var _NavRight = __webpack_require__(469);
+	var _NavRight = __webpack_require__(460);
 
 	var _NavRight2 = _interopRequireDefault(_NavRight);
 
@@ -41764,26 +41771,115 @@
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactBootstrap = __webpack_require__(218);
+
+	var _reactRouterBootstrap = __webpack_require__(461);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var NavRight = _react2.default.createClass({
+	    displayName: 'NavRight',
+	    getInitialState: function getInitialState() {
+	        return {
+	            username: sessionStorage.username
+	        };
+	    },
+	    onLogoutClick: function onLogoutClick() {
+	        sessionStorage.clear();
+	        this.setState({
+	            username: ""
+	        });
+	        $.get('/logout', function (data) {
+	            console.log(data);
+	        });
+	    },
+	    render: function render() {
+	        var beforeLogin = _react2.default.createElement(
+	            _reactBootstrap.Nav,
+	            { pullRight: true },
+	            _react2.default.createElement(
+	                _reactRouterBootstrap.LinkContainer,
+	                { to: '/login' },
+	                _react2.default.createElement(
+	                    _reactBootstrap.NavItem,
+	                    { eventKey: 1 },
+	                    'Вход'
+	                )
+	            ),
+	            _react2.default.createElement(
+	                _reactRouterBootstrap.LinkContainer,
+	                { to: '/register' },
+	                _react2.default.createElement(
+	                    _reactBootstrap.NavItem,
+	                    { eventKey: 2 },
+	                    'Регистрация'
+	                )
+	            )
+	        );
+
+	        var afterLogin = _react2.default.createElement(
+	            _reactBootstrap.Nav,
+	            { pullRight: true },
+	            _react2.default.createElement(
+	                _reactRouterBootstrap.LinkContainer,
+	                { to: 'new_drawing' },
+	                _react2.default.createElement(
+	                    _reactBootstrap.NavItem,
+	                    { eventKey: 1 },
+	                    'Добавить'
+	                )
+	            ),
+	            _react2.default.createElement(
+	                _reactBootstrap.NavItem,
+	                { eventKey: 1 },
+	                this.state.username
+	            ),
+	            _react2.default.createElement(
+	                _reactBootstrap.NavItem,
+	                { eventKey: 2, onClick: this.onLogoutClick },
+	                'Выйти'
+	            )
+	        );
+	        return this.state.username ? afterLogin : beforeLogin;
+	    }
+	});
+
+	exports.default = NavRight;
+
+/***/ },
+/* 461 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _IndexLinkContainer2 = __webpack_require__(461);
+	var _IndexLinkContainer2 = __webpack_require__(462);
 
 	var _IndexLinkContainer3 = _interopRequireDefault(_IndexLinkContainer2);
 
 	exports.IndexLinkContainer = _IndexLinkContainer3['default'];
 
-	var _LinkContainer2 = __webpack_require__(462);
+	var _LinkContainer2 = __webpack_require__(463);
 
 	var _LinkContainer3 = _interopRequireDefault(_LinkContainer2);
 
 	exports.LinkContainer = _LinkContainer3['default'];
 
 /***/ },
-/* 461 */
+/* 462 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41808,7 +41904,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _LinkContainer = __webpack_require__(462);
+	var _LinkContainer = __webpack_require__(463);
 
 	var _LinkContainer2 = _interopRequireDefault(_LinkContainer);
 
@@ -41835,7 +41931,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 462 */
+/* 463 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// This is largely taken from react-router/lib/Link.
@@ -41940,7 +42036,6 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 463 */,
 /* 464 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -41954,6 +42049,8 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRouter = __webpack_require__(159);
+
 	var _SideNav = __webpack_require__(465);
 
 	var _SideNav2 = _interopRequireDefault(_SideNav);
@@ -41963,7 +42060,11 @@
 	var Home = _react2.default.createClass({
 	    displayName: 'Home',
 	    render: function render() {
-	        return _react2.default.createElement(_SideNav2.default, null);
+	        return _react2.default.createElement(
+	            _reactRouter.Link,
+	            { to: '/categories' },
+	            'Categories'
+	        );
 	    }
 	});
 
@@ -41985,7 +42086,9 @@
 
 	var _reactBootstrap = __webpack_require__(218);
 
-	var _Category = __webpack_require__(470);
+	var _reactRouter = __webpack_require__(159);
+
+	var _Category = __webpack_require__(469);
 
 	var _Category2 = _interopRequireDefault(_Category);
 
@@ -41995,59 +42098,29 @@
 	    displayName: 'SideNav',
 	    getInitialState: function getInitialState() {
 	        return {
-	            drawings: []
+	            categories: []
 	        };
 	    },
 	    componentWillMount: function componentWillMount() {
-	        var that = this;
-	        $.getJSON('api/drawings', function (drawings) {
-	            that.setState({ drawings: drawings });
-	        });
+	        $.getJSON('api/categories', function (categories) {
+	            this.setState({ categories: categories });
+	        }.bind(this));
 	    },
 	    render: function render() {
 	        return _react2.default.createElement(
-	            _reactBootstrap.Tabs,
-	            { id: 'sidenav', defaultActiveKey: 1, position: 'left', tabWidth: 3 },
-	            _react2.default.createElement(
-	                _reactBootstrap.Tab,
-	                { eventKey: 1, title: 'Машиностроение' },
-	                _react2.default.createElement(_Category2.default, { name: 'Машиностроение', drawings: this.state.drawings })
-	            ),
-	            _react2.default.createElement(
-	                _reactBootstrap.Tab,
-	                { eventKey: 2, title: 'Сельское хозяйство' },
-	                _react2.default.createElement(_Category2.default, { name: 'Сельское хозяйство', drawings: this.state.drawings })
-	            ),
-	            _react2.default.createElement(
-	                _reactBootstrap.Tab,
-	                { eventKey: 3, title: 'Промышленность' },
-	                _react2.default.createElement(_Category2.default, { name: 'Промышленность', drawings: this.state.drawings })
-	            ),
-	            _react2.default.createElement(
-	                _reactBootstrap.Tab,
-	                { eventKey: 4, title: 'Строительсво' },
-	                _react2.default.createElement(_Category2.default, { name: 'Строительсво', drawings: this.state.drawings })
-	            ),
-	            _react2.default.createElement(
-	                _reactBootstrap.Tab,
-	                { eventKey: 5, title: 'Схемы' },
-	                _react2.default.createElement(_Category2.default, { name: 'Схемы', drawings: this.state.drawings })
-	            ),
-	            _react2.default.createElement(
-	                _reactBootstrap.Tab,
-	                { eventKey: 6, title: 'Транспорт' },
-	                _react2.default.createElement(_Category2.default, { name: 'Транспорт', drawings: this.state.drawings })
-	            ),
-	            _react2.default.createElement(
-	                _reactBootstrap.Tab,
-	                { eventKey: 7, title: 'Станки' },
-	                _react2.default.createElement(_Category2.default, { name: 'Станки', drawings: this.state.drawings })
-	            ),
-	            _react2.default.createElement(
-	                _reactBootstrap.Tab,
-	                { eventKey: 8, title: 'Прочее' },
-	                _react2.default.createElement(_Category2.default, { name: 'Прочее', drawings: this.state.drawings })
-	            )
+	            'ul',
+	            { className: 'nav nav-pills nav-stacked' },
+	            this.state.categories.map(function (category, idx) {
+	                return _react2.default.createElement(
+	                    'li',
+	                    { role: 'presentation' },
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/categories/' + category.url },
+	                        category.name
+	                    )
+	                );
+	            })
 	        );
 	    }
 	});
@@ -42074,6 +42147,16 @@
 
 	var NewDrawing = _react2.default.createClass({
 	    displayName: 'NewDrawing',
+	    getInitialState: function getInitialState() {
+	        return {
+	            categories: []
+	        };
+	    },
+	    componentWillMount: function componentWillMount() {
+	        $.getJSON('api/categories', function (categories) {
+	            this.setState({ categories: categories });
+	        }.bind(this));
+	    },
 	    onNewDrawingSubmit: function onNewDrawingSubmit(e) {
 	        e.preventDefault();
 	        var form = document.getElementById('newDrawingForm');
@@ -42119,46 +42202,13 @@
 	                _react2.default.createElement(
 	                    _reactBootstrap.Input,
 	                    { type: 'select', name: 'category', label: 'Категория' },
-	                    _react2.default.createElement(
-	                        'option',
-	                        { value: 'Прочее' },
-	                        'Прочее'
-	                    ),
-	                    _react2.default.createElement(
-	                        'option',
-	                        { value: 'Машиностроение' },
-	                        'Машиностроение'
-	                    ),
-	                    _react2.default.createElement(
-	                        'option',
-	                        { value: 'Сельское хозяйство' },
-	                        'Сельское хозяйство'
-	                    ),
-	                    _react2.default.createElement(
-	                        'option',
-	                        { value: 'Промышленность' },
-	                        'Промышленность'
-	                    ),
-	                    _react2.default.createElement(
-	                        'option',
-	                        { value: 'Строительство' },
-	                        'Строительство'
-	                    ),
-	                    _react2.default.createElement(
-	                        'option',
-	                        { value: 'Схемы' },
-	                        'Схемы'
-	                    ),
-	                    _react2.default.createElement(
-	                        'option',
-	                        { value: 'Транспорт' },
-	                        'Транспорт'
-	                    ),
-	                    _react2.default.createElement(
-	                        'option',
-	                        { value: 'Станки' },
-	                        'Станки'
-	                    )
+	                    this.state.categories.map(function (category, idx) {
+	                        return _react2.default.createElement(
+	                            'option',
+	                            { value: category.name, key: idx },
+	                            category.name
+	                        );
+	                    })
 	                ),
 	                _react2.default.createElement(_reactBootstrap.Input, { type: 'textarea',
 	                    name: 'description',
@@ -42323,96 +42373,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactBootstrap = __webpack_require__(218);
-
-	var _reactRouterBootstrap = __webpack_require__(460);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var NavRight = _react2.default.createClass({
-	    displayName: 'NavRight',
-	    getInitialState: function getInitialState() {
-	        return {
-	            username: sessionStorage.username
-	        };
-	    },
-	    onLogoutClick: function onLogoutClick() {
-	        sessionStorage.clear();
-	        this.setState({
-	            username: ""
-	        });
-	        $.get('/logout', function (data) {
-	            console.log(data);
-	        });
-	    },
-	    render: function render() {
-	        var beforeLogin = _react2.default.createElement(
-	            _reactBootstrap.Nav,
-	            { pullRight: true },
-	            _react2.default.createElement(
-	                _reactRouterBootstrap.LinkContainer,
-	                { to: '/login' },
-	                _react2.default.createElement(
-	                    _reactBootstrap.NavItem,
-	                    { eventKey: 1 },
-	                    'Вход'
-	                )
-	            ),
-	            _react2.default.createElement(
-	                _reactRouterBootstrap.LinkContainer,
-	                { to: '/register' },
-	                _react2.default.createElement(
-	                    _reactBootstrap.NavItem,
-	                    { eventKey: 2 },
-	                    'Регистрация'
-	                )
-	            )
-	        );
-
-	        var afterLogin = _react2.default.createElement(
-	            _reactBootstrap.Nav,
-	            { pullRight: true },
-	            _react2.default.createElement(
-	                _reactRouterBootstrap.LinkContainer,
-	                { to: 'new_drawing' },
-	                _react2.default.createElement(
-	                    _reactBootstrap.NavItem,
-	                    { eventKey: 1 },
-	                    'Добавить'
-	                )
-	            ),
-	            _react2.default.createElement(
-	                _reactBootstrap.NavItem,
-	                { eventKey: 1 },
-	                this.state.username
-	            ),
-	            _react2.default.createElement(
-	                _reactBootstrap.NavItem,
-	                { eventKey: 2, onClick: this.onLogoutClick },
-	                'Выйти'
-	            )
-	        );
-	        return this.state.username ? afterLogin : beforeLogin;
-	    }
-	});
-
-	exports.default = NavRight;
-
-/***/ },
-/* 470 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _Drawing = __webpack_require__(471);
+	var _Drawing = __webpack_require__(470);
 
 	var _Drawing2 = _interopRequireDefault(_Drawing);
 
@@ -42444,7 +42405,7 @@
 	exports.default = Category;
 
 /***/ },
-/* 471 */
+/* 470 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -42476,7 +42437,7 @@
 	            null,
 	            title
 	        ),
-	        _react2.default.createElement("img", { src: "uploads/" + picture }),
+	        _react2.default.createElement("img", { src: "uploads/" + picture, style: { maxWidth: 200 } }),
 	        _react2.default.createElement(
 	            "p",
 	            null,
@@ -42511,6 +42472,71 @@
 	};
 
 	exports.default = Drawing;
+
+/***/ },
+/* 471 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactBootstrap = __webpack_require__(218);
+
+	var _SideNav = __webpack_require__(465);
+
+	var _SideNav2 = _interopRequireDefault(_SideNav);
+
+	var _Category = __webpack_require__(469);
+
+	var _Category2 = _interopRequireDefault(_Category);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Categories = _react2.default.createClass({
+	    displayName: 'Categories',
+	    getInitialState: function getInitialState() {
+	        return {
+	            drawings: []
+	        };
+	    },
+	    componentWillMount: function componentWillMount() {
+	        $.getJSON('api/drawings', function (drawings) {
+	            that.setState({ drawings: drawings });
+	        }.bind(this));
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            _reactBootstrap.Grid,
+	            { fluid: true },
+	            _react2.default.createElement(
+	                _reactBootstrap.Row,
+	                { className: 'show-grid' },
+	                _react2.default.createElement(
+	                    _reactBootstrap.Col,
+	                    { sm: 3 },
+	                    _react2.default.createElement(_SideNav2.default, null)
+	                ),
+	                _react2.default.createElement(
+	                    _reactBootstrap.Col,
+	                    { sm: 9 },
+	                    _react2.default.createElement(_Category2.default, {
+	                        name: this.props.params.category,
+	                        drawings: this.state.drawings
+	                    })
+	                )
+	            )
+	        );
+	    }
+	});
+
+	exports.default = Categories;
 
 /***/ }
 /******/ ]);

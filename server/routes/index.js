@@ -32,6 +32,9 @@ router.get('/logout', function(req, res) {
 // api/drawings
 router.get('/api/drawings', apiCtrl.drawings);
 
+// api/categories
+router.get('/api/categories', apiCtrl.categories)
+
 // 'any uri, because we use react-router'
 // Should be placed at the very end for the rest 'get' requests work
 router.get('*', function(req, res) {
