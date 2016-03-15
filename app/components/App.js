@@ -1,8 +1,18 @@
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
+
+import { attemptFetchDrawings, attemptFetchCategories } from '../actions/fetchDataActions';
 
 import Navigation from './navigation/Navigation';
 
 const App = React.createClass({
+
+    componentWillMount () {
+        const { dispatch } = this.props;
+        dispatch(attemptFetchDrawings());
+        dispatch(attemptFetchCategories());
+    },
+
     render () {
         return (
             <div>
@@ -11,6 +21,7 @@ const App = React.createClass({
             </div>
         );
     }
-})
+});
 
-export default App;
+
+export default connect()(App);

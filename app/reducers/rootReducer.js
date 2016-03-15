@@ -4,7 +4,7 @@ import { routerReducer } from 'react-router-redux';
 import fetchDataReducer from './fetchDataReducer';
 
 const rootReducer = combineReducers({
-    dataReducer,
+    data: fetchDataReducer,
     routing: routerReducer
 });
 

@@ -24774,6 +24774,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRedux = __webpack_require__(489);
+
+	var _fetchDataActions = __webpack_require__(504);
+
 	var _Navigation = __webpack_require__(472);
 
 	var _Navigation2 = _interopRequireDefault(_Navigation);
@@ -24782,6 +24786,12 @@
 
 	var App = _react2.default.createClass({
 	    displayName: 'App',
+	    componentWillMount: function componentWillMount() {
+	        var dispatch = this.props.dispatch;
+
+	        dispatch((0, _fetchDataActions.attemptFetchDrawings)());
+	        dispatch((0, _fetchDataActions.attemptFetchCategories)());
+	    },
 	    render: function render() {
 	        return _react2.default.createElement(
 	            'div',
@@ -24792,7 +24802,7 @@
 	    }
 	});
 
-	exports.default = App;
+	exports.default = (0, _reactRedux.connect)()(App);
 
 /***/ },
 /* 217 */,
@@ -42352,6 +42362,8 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRedux = __webpack_require__(489);
+
 	var _reactBootstrap = __webpack_require__(218);
 
 	var _SideNav = __webpack_require__(475);
@@ -42366,21 +42378,6 @@
 
 	var Categories = _react2.default.createClass({
 	    displayName: 'Categories',
-	    getInitialState: function getInitialState() {
-	        return {
-	            drawings: [],
-	            categories: []
-	        };
-	    },
-	    componentWillMount: function componentWillMount() {
-	        $.getJSON('api/drawings', function (drawings) {
-	            this.setState({ drawings: drawings });
-	        }.bind(this));
-
-	        $.getJSON('api/categories', function (categories) {
-	            this.setState({ categories: categories });
-	        }.bind(this));
-	    },
 	    filterDrawings: function filterDrawings(categoryUrl, categories, drawings) {
 	        if (!categoryUrl) {
 	            return [];
@@ -42404,13 +42401,13 @@
 	                _react2.default.createElement(
 	                    _reactBootstrap.Col,
 	                    { sm: 3 },
-	                    _react2.default.createElement(_SideNav2.default, { categories: this.state.categories })
+	                    _react2.default.createElement(_SideNav2.default, { categories: this.props.categories })
 	                ),
 	                _react2.default.createElement(
 	                    _reactBootstrap.Col,
 	                    { sm: 9 },
 	                    _react2.default.createElement(_Category2.default, {
-	                        drawings: this.filterDrawings(this.props.params.category, this.state.categories, this.state.drawings)
+	                        drawings: this.filterDrawings(this.props.params.category, this.props.categories, this.props.drawings)
 	                    })
 	                )
 	            )
@@ -42418,7 +42415,14 @@
 	    }
 	});
 
-	exports.default = Categories;
+	function mapStateToProps(state) {
+	    return {
+	        categories: state.data.categories,
+	        drawings: state.data.drawings
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Categories);
 
 /***/ },
 /* 475 */
@@ -43901,7 +43905,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var rootReducer = (0, _redux.combineReducers)({
-	    dataReducer: dataReducer,
+	    data: _fetchDataReducer2.default,
 	    routing: _reactRouterRedux.routerReducer
 	});
 

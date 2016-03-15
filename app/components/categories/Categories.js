@@ -1,27 +1,12 @@
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
+
 import { Grid, Row, Col } from 'react-bootstrap';
 import SideNav from './SideNav';
 import Category from './Category';
 
 
 const Categories = React.createClass({
-
-    getInitialState () {
-        return {
-            drawings: [],
-            categories: []
-        };
-    },
-
-    componentWillMount() {
-        $.getJSON('api/drawings', function (drawings) {
-            this.setState({ drawings });
-        }.bind(this));
-
-        $.getJSON('api/categories', function (categories) {
-            this.setState({ categories });
-        }.bind(this));
-    },
 
     filterDrawings(categoryUrl, categories, drawings) {
         if (!categoryUrl) {
@@ -41,13 +26,13 @@ const Categories = React.createClass({
         return (
             <Grid fluid={true}>
                 <Row className="show-grid">
-                    <Col sm={3}><SideNav categories={this.state.categories}/></Col>
+                    <Col sm={3}><SideNav categories={this.props.categories}/></Col>
                     <Col sm={9}>
                         <Category
                             drawings={this.filterDrawings(
                                 this.props.params.category,
-                                this.state.categories,
-                                this.state.drawings
+                                this.props.categories,
+                                this.props.drawings
                             )}
                         />
                     </Col>
@@ -57,4 +42,11 @@ const Categories = React.createClass({
     }
 });
 
-export default Categories;
+function mapStateToProps(state) {
+    return {
+        categories: state.data.categories,
+        drawings: state.data.drawings
+    };
+};
+
+export default connect(mapStateToProps)(Categories);
