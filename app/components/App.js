@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-import Navigation from './Navigation/Navigation';
+import Navigation from './navigation/Navigation';
 
 const App = React.createClass({
     render () {
