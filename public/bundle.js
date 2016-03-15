@@ -43892,52 +43892,23 @@
 
 	var _redux = __webpack_require__(479);
 
-	var _dataReducer = __webpack_require__(497);
-
-	var _dataReducer2 = _interopRequireDefault(_dataReducer);
-
 	var _reactRouterRedux = __webpack_require__(498);
+
+	var _fetchDataReducer = __webpack_require__(503);
+
+	var _fetchDataReducer2 = _interopRequireDefault(_fetchDataReducer);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var rootReducer = (0, _redux.combineReducers)({
-	    dataReducer: _dataReducer2.default,
+	    dataReducer: dataReducer,
 	    routing: _reactRouterRedux.routerReducer
 	});
 
 	exports.default = rootReducer;
 
 /***/ },
-/* 497 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var defaultStartState = {
-	    categories: [],
-	    drawings: []
-	};
-
-	function dataReducer() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? defaultStartState : arguments[0];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case "FETCH_DRAWINGS":
-	            return Object.assign({}, state, { drawings: action.data });
-	        case "FETCH_CATEGORIES":
-	            return Object.assign({}, state, { categories: action.data });
-	        default:
-	            return state;
-	    }
-	}
-
-	exports.default = dataReducer;
-
-/***/ },
+/* 497 */,
 /* 498 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -44294,6 +44265,36 @@
 	    };
 	  };
 	}
+
+/***/ },
+/* 503 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var defaultStartState = {
+	    categories: [],
+	    drawings: []
+	};
+
+	function fetchDataReducer() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? defaultStartState : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case "FETCH_DRAWINGS":
+	            return Object.assign({}, state, { drawings: action.data });
+	        case "FETCH_CATEGORIES":
+	            return Object.assign({}, state, { categories: action.data });
+	        default:
+	            return state;
+	    }
+	}
+
+	exports.default = fetchDataReducer;
 
 /***/ }
 /******/ ]);

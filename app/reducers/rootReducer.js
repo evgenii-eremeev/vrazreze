@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
-import dataReducer from './dataReducer';
 import { routerReducer } from 'react-router-redux';
+
+import fetchDataReducer from './fetchDataReducer';
 
 const rootReducer = combineReducers({
     dataReducer,
