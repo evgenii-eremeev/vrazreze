@@ -6,21 +6,14 @@ import Category from './Category';
 const SideNav = React.createClass({
     getInitialState () {
         return {
-            categories: [],
             active: null
         };
-    },
-
-    componentWillMount () {
-        $.getJSON('api/categories', function (categories) {
-            this.setState({ categories });
-        }.bind(this));
     },
 
     render () {
         return (
             <ul className="nav nav-pills nav-stacked">
-                {this.state.categories.map((category, idx) => (
+                {this.props.categories.map((category, idx) => (
                     <li role="presentation"
                         onClick={() => {
                             this.setState({ active: idx })
