@@ -44268,26 +44268,30 @@
 
 /***/ },
 /* 503 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+
+	var _fetchDataActions = __webpack_require__(504);
+
 	var defaultStartState = {
 	    categories: [],
 	    drawings: []
-	};
+	}; // action types
+
 
 	function fetchDataReducer() {
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? defaultStartState : arguments[0];
 	    var action = arguments[1];
 
 	    switch (action.type) {
-	        case "FETCH_DRAWINGS":
+	        case _fetchDataActions.FETCH_DRAWINGS:
 	            return Object.assign({}, state, { drawings: action.data });
-	        case "FETCH_CATEGORIES":
+	        case _fetchDataActions.FETCH_CATEGORIES:
 	            return Object.assign({}, state, { categories: action.data });
 	        default:
 	            return state;
@@ -44295,6 +44299,49 @@
 	}
 
 	exports.default = fetchDataReducer;
+
+/***/ },
+/* 504 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.fetchDrawings = fetchDrawings;
+	exports.fetchCategories = fetchCategories;
+	exports.attemptFetchDrawings = attemptFetchDrawings;
+	exports.attemptFetchCategories = attemptFetchCategories;
+	// action types
+
+	var FETCH_DRAWINGS = exports.FETCH_DRAWINGS = "FETCH_DRAWINGS";
+	var FETCH_CATEGORIES = exports.FETCH_CATEGORIES = "FETCH_CATEGORIES";
+
+	// action creators
+	function fetchDrawings(data) {
+	    return { type: FETCH_DRAWINGS, data: data };
+	}
+
+	function fetchCategories(data) {
+	    return { type: FETCH_CATEGORIES, data: data };
+	}
+
+	function attemptFetchDrawings() {
+	    return function (dispatch) {
+	        $.getJSON('api/drawings', function (drawings) {
+	            dispatch(fetchDrawings(drawings));
+	        });
+	    };
+	}
+
+	function attemptFetchCategories() {
+	    return function (dispatch) {
+	        $.getJSON('api/categories', function (categories) {
+	            dispatch(fetchCategories(categories));
+	        });
+	    };
+	}
 
 /***/ }
 /******/ ]);
