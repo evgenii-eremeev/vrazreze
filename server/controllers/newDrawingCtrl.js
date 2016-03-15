@@ -1,23 +1,33 @@
-var Drawing = require('../models/drawing');
+const Drawing = require('../models/drawing');
+const Category = require('../models/category');
 
-var newDrawing = {
+const newDrawing = (function newDrawing (){
 
-    post(req, res) {
-        var drawing = new Drawing({
-            title: req.body.title,
-            author: req.user.username,
-            description: req.body.description,
-            category: req.body.category,
-            drawing_composition: req.body.drawing_composition.split(','),
-            tags: req.body.tags.split(','),
-            price: req.body.price,
-            picture: req.file ? req.file.filename : ''
-        });
-        drawing.save(function (err, drawing) {
-            if (err) { throw err; }
-            res.json(drawing);
+    function post(req, res) {
+        Category
+            .findOne({ name: req.body.category })
+            .exec(function (err, category) {
+                if (err) { throw err; }
+                console.log(category);
+                const drawing = new Drawing({
+                    title: req.body.title,
+                    author: req.user.username,
+                    description: req.body.description,
+                    category: category._id,
+                    drawing_composition: req.body.drawing_composition.split(','),
+                    tags: req.body.tags.split(','),
+                    price: req.body.price,
+                    picture: req.file ? req.file.filename : ''
+                });
+                drawing.save(function (err, drawing) {
+                    if (err) { throw err; }
+                    res.json(drawing);
+                });
         });
     }
-};
+
+    const publicAPI = { post };
+    return publicAPI;
+})();
 
 module.exports = newDrawing;

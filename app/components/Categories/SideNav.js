@@ -15,6 +15,7 @@ const SideNav = React.createClass({
             <ul className="nav nav-pills nav-stacked">
                 {this.props.categories.map((category, idx) => (
                     <li role="presentation"
+                        key={idx}
                         onClick={() => {
                             this.setState({ active: idx })
                         }}

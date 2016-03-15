@@ -1,8 +1,9 @@
-var passport = require('passport');
-var User = require('../models/user');
+const passport = require('passport');
+const User = require('../models/user');
 
-var registerCtrl = {
-    post(req, res) {
+const registerCtrl = (function () {
+
+    function post (req, res) {
         User.register(
             new User({ username: req.body.username }),
             req.body.password,
@@ -18,6 +19,9 @@ var registerCtrl = {
             }
         ); // end User.register
     } // end post
-};
+
+    const publicAPI = { post };
+    return publicAPI;
+})();
 
 module.exports = registerCtrl;

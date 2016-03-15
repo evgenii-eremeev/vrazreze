@@ -42334,14 +42334,27 @@
 	    },
 	    componentWillMount: function componentWillMount() {
 	        $.getJSON('api/drawings', function (drawings) {
-	            that.setState({ drawings: drawings });
+	            this.setState({ drawings: drawings });
 	        }.bind(this));
 
 	        $.getJSON('api/categories', function (categories) {
 	            this.setState({ categories: categories });
 	        }.bind(this));
 	    },
+	    filterDrawings: function filterDrawings(categoryUrl, categories, drawings) {
+	        if (!categoryUrl) {
+	            return [];
+	        }
+	        var categoryId = categories.filter(function (category) {
+	            return category.url === categoryUrl;
+	        })[0]._id;
+	        var filteredDrawings = drawings.filter(function (drawing) {
+	            return drawing.category === categoryId;
+	        });
+	        return filteredDrawings;
+	    },
 	    render: function render() {
+
 	        return _react2.default.createElement(
 	            _reactBootstrap.Grid,
 	            { fluid: true },
@@ -42357,8 +42370,7 @@
 	                    _reactBootstrap.Col,
 	                    { sm: 9 },
 	                    _react2.default.createElement(_Category2.default, {
-	                        name: this.props.params.category,
-	                        drawings: this.state.drawings
+	                        drawings: this.filterDrawings(this.props.params.category, this.state.categories, this.state.drawings)
 	                    })
 	                )
 	            )
@@ -42409,6 +42421,7 @@
 	                return _react2.default.createElement(
 	                    'li',
 	                    { role: 'presentation',
+	                        key: idx,
 	                        onClick: function onClick() {
 	                            _this.setState({ active: idx });
 	                        },
@@ -42450,8 +42463,10 @@
 	var Category = _react2.default.createClass({
 	    displayName: 'Category',
 	    render: function render() {
-	        var filtrated = this.props.drawings.map(function (drawing, index) {
-	            if (drawing.category === this.props.name) {
+	        return _react2.default.createElement(
+	            'div',
+	            null,
+	            this.props.drawings.map(function (drawing, index) {
 	                return _react2.default.createElement(_Drawing2.default, { key: index,
 	                    title: drawing.title,
 	                    description: drawing.description,
@@ -42460,12 +42475,7 @@
 	                    price: drawing.price,
 	                    tags: drawing.tags,
 	                    created: drawing.created });
-	            }
-	        }, this);
-	        return _react2.default.createElement(
-	            'div',
-	            null,
-	            filtrated
+	            })
 	        );
 	    }
 	});

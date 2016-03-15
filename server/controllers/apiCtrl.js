@@ -5,9 +5,7 @@ const apiCtrl = (function apiCtrl () {
 
     function drawings (req, res) {
         Drawing.find({}, function (err, drawings) {
-            if (err) {
-                throw err;
-            }
+            if (err) { throw err; }
             res.json(drawings);
         });
     }
@@ -17,15 +15,13 @@ const apiCtrl = (function apiCtrl () {
             find().
             sort({ position: 1 }).
             exec(function (err, categories) {
-                if (err) {
-                    throw err;
-                }
+                if (err) { throw err; }
                 res.json(categories)
             });
     }
 
     const publicAPI = {
-        drawings, 
+        drawings,
         categories
     };
     return publicAPI;
