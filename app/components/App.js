@@ -23,5 +23,4 @@ const App = React.createClass({
     }
 });
 
-
 export default connect()(App);

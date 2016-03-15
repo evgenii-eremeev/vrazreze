@@ -7,7 +7,7 @@ import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 import thunkMiddleware from 'redux-thunk';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import { syncHistoryWithStore } from 'react-router-redux'
+import { syncHistoryWithStore, routerMiddleware } from 'react-router-redux'
 
 // Reducers
 import rootReducer from './app/reducers/rootReducer';
@@ -21,15 +21,16 @@ import Register from './app/components/Register';
 import Categories from './app/components/categories/Categories';
 
 // Set up store
+const routeMiddleware = routerMiddleware(browserHistory)
 const createStoreWithMiddleware = applyMiddleware(
-  thunkMiddleware // lets us dispatch() functions
+    thunkMiddleware, // lets us dispatch() functions
+    routeMiddleware
 )(createStore);
 
 const store = createStoreWithMiddleware(rootReducer);
 
 // Create an enhanced history that syncs navigation events with the store
 const history = syncHistoryWithStore(browserHistory, store);
-
 
 
 ReactDOM.render(

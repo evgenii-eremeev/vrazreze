@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { attemptFetchDrawings, attemptFetchCategories } from '../../actions/fetchDataActions';
 
 import { Grid, Row, Col } from 'react-bootstrap';
 import SideNav from './SideNav';
@@ -9,9 +10,16 @@ import Category from './Category';
 const Categories = React.createClass({
 
     filterDrawings(categoryUrl, categories, drawings) {
+        const { dispatch } = this.props;
+
         if (!categoryUrl) {
             return [];
         }
+        if (!categories.length || !drawings.length) {
+            // window.location = '/categories';
+            // return [];
+        }
+
         const categoryId = categories.filter(category =>
             category.url === categoryUrl
         )[0]._id;
@@ -22,7 +30,6 @@ const Categories = React.createClass({
     },
 
     render () {
-
         return (
             <Grid fluid={true}>
                 <Row className="show-grid">

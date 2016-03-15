@@ -1,10 +1,13 @@
 import React, { PropTypes } from 'react';
-import { browserHistory } from 'react-router';
 import { Input, Button } from 'react-bootstrap';
+import { push } from 'react-router-redux';
+import { connect } from 'react-redux';
 
 const Login = React.createClass({
+
     onLoginSubmit (e) {
         e.preventDefault();
+        const { dispatch } = this.props;
         $.ajax({
             type: "POST",
             url: '/login',
@@ -16,10 +19,11 @@ const Login = React.createClass({
                 $("#loginForm")[0].reset();
                 window.location = '/';
                 // use this than redux will be added
-                // browserHistory.push('/');
+                // dispatch(push('/'));
             }
         });
     },
+
     render () {
         return (
             <div className="container">
@@ -33,6 +37,6 @@ const Login = React.createClass({
             </div>
         );
     }
-})
+});
 
-export default Login;
+export default connect()(Login);

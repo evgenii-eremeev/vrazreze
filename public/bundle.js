@@ -101,14 +101,15 @@
 
 	// Components
 	// React + React Router
-	var createStoreWithMiddleware = (0, _redux.applyMiddleware)(_reduxThunk2.default // lets us dispatch() functions
-	)(_redux.createStore);
+	var routeMiddleware = (0, _reactRouterRedux.routerMiddleware)(_reactRouter.browserHistory);
 
 	// Reducers
 
 
 	// Redux
 
+	var createStoreWithMiddleware = (0, _redux.applyMiddleware)(_reduxThunk2.default, // lets us dispatch() functions
+	routeMiddleware)(_redux.createStore);
 
 	var store = createStoreWithMiddleware(_rootReducer2.default);
 
@@ -42082,9 +42083,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactRouter = __webpack_require__(159);
-
 	var _reactBootstrap = __webpack_require__(218);
+
+	var _reactRouterRedux = __webpack_require__(498);
+
+	var _reactRedux = __webpack_require__(489);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -42092,6 +42095,8 @@
 	    displayName: 'Login',
 	    onLoginSubmit: function onLoginSubmit(e) {
 	        e.preventDefault();
+	        var dispatch = this.props.dispatch;
+
 	        $.ajax({
 	            type: "POST",
 	            url: '/login',
@@ -42103,7 +42108,7 @@
 	                $("#loginForm")[0].reset();
 	                window.location = '/';
 	                // use this than redux will be added
-	                // browserHistory.push('/');
+	                // dispatch(push('/'));
 	            }
 	        });
 	    },
@@ -42132,7 +42137,7 @@
 	    }
 	});
 
-	exports.default = Login;
+	exports.default = (0, _reactRedux.connect)()(Login);
 
 /***/ },
 /* 467 */
@@ -42364,6 +42369,8 @@
 
 	var _reactRedux = __webpack_require__(489);
 
+	var _fetchDataActions = __webpack_require__(504);
+
 	var _reactBootstrap = __webpack_require__(218);
 
 	var _SideNav = __webpack_require__(475);
@@ -42379,9 +42386,17 @@
 	var Categories = _react2.default.createClass({
 	    displayName: 'Categories',
 	    filterDrawings: function filterDrawings(categoryUrl, categories, drawings) {
+	        var dispatch = this.props.dispatch;
+
+
 	        if (!categoryUrl) {
 	            return [];
 	        }
+	        if (!categories.length || !drawings.length) {
+	            // window.location = '/categories';
+	            // return [];
+	        }
+
 	        var categoryId = categories.filter(function (category) {
 	            return category.url === categoryUrl;
 	        })[0]._id;
@@ -42391,7 +42406,6 @@
 	        return filteredDrawings;
 	    },
 	    render: function render() {
-
 	        return _react2.default.createElement(
 	            _reactBootstrap.Grid,
 	            { fluid: true },
