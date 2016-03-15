@@ -8,7 +8,7 @@ import Home from './app/components/Home';
 import NewDrawing from './app/components/NewDrawing';
 import Login from './app/components/Login';
 import Register from './app/components/Register';
-import Categories from './app/components/Categories';
+import Categories from './app/components/Categories/Categories';
 
 ReactDOM.render(
     <Router history={browserHistory}>

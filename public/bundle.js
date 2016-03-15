@@ -76,7 +76,7 @@
 
 	var _Register2 = _interopRequireDefault(_Register);
 
-	var _Categories = __webpack_require__(471);
+	var _Categories = __webpack_require__(472);
 
 	var _Categories2 = _interopRequireDefault(_Categories);
 
@@ -24740,7 +24740,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Navigation = __webpack_require__(217);
+	var _Navigation = __webpack_require__(476);
 
 	var _Navigation2 = _interopRequireDefault(_Navigation);
 
@@ -24761,61 +24761,7 @@
 	exports.default = App;
 
 /***/ },
-/* 217 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactBootstrap = __webpack_require__(218);
-
-	var _reactRouter = __webpack_require__(159);
-
-	var _NavRight = __webpack_require__(460);
-
-	var _NavRight2 = _interopRequireDefault(_NavRight);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var Navigation = _react2.default.createClass({
-	    displayName: 'Navigation',
-	    render: function render() {
-	        return _react2.default.createElement(
-	            _reactBootstrap.Navbar,
-	            { inverse: true },
-	            _react2.default.createElement(
-	                _reactBootstrap.Navbar.Header,
-	                null,
-	                _react2.default.createElement(
-	                    _reactBootstrap.Navbar.Brand,
-	                    null,
-	                    _react2.default.createElement(
-	                        _reactRouter.IndexLink,
-	                        { to: '/' },
-	                        'Чертежи'
-	                    )
-	                ),
-	                _react2.default.createElement(_reactBootstrap.Navbar.Toggle, null)
-	            ),
-	            _react2.default.createElement(
-	                _reactBootstrap.Navbar.Collapse,
-	                null,
-	                _react2.default.createElement(_NavRight2.default, null)
-	            )
-	        );
-	    }
-	});
-
-	exports.default = Navigation;
-
-/***/ },
+/* 217 */,
 /* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -41766,95 +41712,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 460 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactBootstrap = __webpack_require__(218);
-
-	var _reactRouterBootstrap = __webpack_require__(461);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var NavRight = _react2.default.createClass({
-	    displayName: 'NavRight',
-	    getInitialState: function getInitialState() {
-	        return {
-	            username: sessionStorage.username
-	        };
-	    },
-	    onLogoutClick: function onLogoutClick() {
-	        sessionStorage.clear();
-	        this.setState({
-	            username: ""
-	        });
-	        $.get('/logout', function (data) {
-	            console.log(data);
-	        });
-	    },
-	    render: function render() {
-	        var beforeLogin = _react2.default.createElement(
-	            _reactBootstrap.Nav,
-	            { pullRight: true },
-	            _react2.default.createElement(
-	                _reactRouterBootstrap.LinkContainer,
-	                { to: '/login' },
-	                _react2.default.createElement(
-	                    _reactBootstrap.NavItem,
-	                    { eventKey: 1 },
-	                    'Вход'
-	                )
-	            ),
-	            _react2.default.createElement(
-	                _reactRouterBootstrap.LinkContainer,
-	                { to: '/register' },
-	                _react2.default.createElement(
-	                    _reactBootstrap.NavItem,
-	                    { eventKey: 2 },
-	                    'Регистрация'
-	                )
-	            )
-	        );
-
-	        var afterLogin = _react2.default.createElement(
-	            _reactBootstrap.Nav,
-	            { pullRight: true },
-	            _react2.default.createElement(
-	                _reactRouterBootstrap.LinkContainer,
-	                { to: 'new_drawing' },
-	                _react2.default.createElement(
-	                    _reactBootstrap.NavItem,
-	                    { eventKey: 1 },
-	                    'Добавить'
-	                )
-	            ),
-	            _react2.default.createElement(
-	                _reactBootstrap.NavItem,
-	                { eventKey: 1 },
-	                this.state.username
-	            ),
-	            _react2.default.createElement(
-	                _reactBootstrap.NavItem,
-	                { eventKey: 2, onClick: this.onLogoutClick },
-	                'Выйти'
-	            )
-	        );
-	        return this.state.username ? afterLogin : beforeLogin;
-	    }
-	});
-
-	exports.default = NavRight;
-
-/***/ },
+/* 460 */,
 /* 461 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -42051,10 +41909,6 @@
 
 	var _reactRouter = __webpack_require__(159);
 
-	var _SideNav = __webpack_require__(465);
-
-	var _SideNav2 = _interopRequireDefault(_SideNav);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Home = _react2.default.createClass({
@@ -42071,71 +41925,7 @@
 	exports.default = Home;
 
 /***/ },
-/* 465 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactBootstrap = __webpack_require__(218);
-
-	var _reactRouter = __webpack_require__(159);
-
-	var _Category = __webpack_require__(469);
-
-	var _Category2 = _interopRequireDefault(_Category);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var SideNav = _react2.default.createClass({
-	    displayName: 'SideNav',
-	    getInitialState: function getInitialState() {
-	        return {
-	            categories: [],
-	            active: null
-	        };
-	    },
-	    componentWillMount: function componentWillMount() {
-	        $.getJSON('api/categories', function (categories) {
-	            this.setState({ categories: categories });
-	        }.bind(this));
-	    },
-	    render: function render() {
-	        var _this = this;
-
-	        return _react2.default.createElement(
-	            'ul',
-	            { className: 'nav nav-pills nav-stacked' },
-	            this.state.categories.map(function (category, idx) {
-	                return _react2.default.createElement(
-	                    'li',
-	                    { role: 'presentation',
-	                        onClick: function onClick() {
-	                            _this.setState({ active: idx });
-	                        },
-	                        className: _this.state.active === idx ? 'active' : ''
-	                    },
-	                    _react2.default.createElement(
-	                        _reactRouter.Link,
-	                        { to: '/categories/' + category.url },
-	                        category.name
-	                    )
-	                );
-	            })
-	        );
-	    }
-	});
-
-	exports.default = SideNav;
-
-/***/ },
+/* 465 */,
 /* 466 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -42368,7 +42158,10 @@
 	exports.default = Register;
 
 /***/ },
-/* 469 */
+/* 469 */,
+/* 470 */,
+/* 471 */,
+/* 472 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42381,7 +42174,137 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Drawing = __webpack_require__(470);
+	var _reactBootstrap = __webpack_require__(218);
+
+	var _SideNav = __webpack_require__(473);
+
+	var _SideNav2 = _interopRequireDefault(_SideNav);
+
+	var _Category = __webpack_require__(474);
+
+	var _Category2 = _interopRequireDefault(_Category);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Categories = _react2.default.createClass({
+	    displayName: 'Categories',
+	    getInitialState: function getInitialState() {
+	        return {
+	            drawings: []
+	        };
+	    },
+	    componentWillMount: function componentWillMount() {
+	        $.getJSON('api/drawings', function (drawings) {
+	            that.setState({ drawings: drawings });
+	        }.bind(this));
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            _reactBootstrap.Grid,
+	            { fluid: true },
+	            _react2.default.createElement(
+	                _reactBootstrap.Row,
+	                { className: 'show-grid' },
+	                _react2.default.createElement(
+	                    _reactBootstrap.Col,
+	                    { sm: 3 },
+	                    _react2.default.createElement(_SideNav2.default, null)
+	                ),
+	                _react2.default.createElement(
+	                    _reactBootstrap.Col,
+	                    { sm: 9 },
+	                    _react2.default.createElement(_Category2.default, {
+	                        name: this.props.params.category,
+	                        drawings: this.state.drawings
+	                    })
+	                )
+	            )
+	        );
+	    }
+	});
+
+	exports.default = Categories;
+
+/***/ },
+/* 473 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactBootstrap = __webpack_require__(218);
+
+	var _reactRouter = __webpack_require__(159);
+
+	var _Category = __webpack_require__(474);
+
+	var _Category2 = _interopRequireDefault(_Category);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var SideNav = _react2.default.createClass({
+	    displayName: 'SideNav',
+	    getInitialState: function getInitialState() {
+	        return {
+	            categories: [],
+	            active: null
+	        };
+	    },
+	    componentWillMount: function componentWillMount() {
+	        $.getJSON('api/categories', function (categories) {
+	            this.setState({ categories: categories });
+	        }.bind(this));
+	    },
+	    render: function render() {
+	        var _this = this;
+
+	        return _react2.default.createElement(
+	            'ul',
+	            { className: 'nav nav-pills nav-stacked' },
+	            this.state.categories.map(function (category, idx) {
+	                return _react2.default.createElement(
+	                    'li',
+	                    { role: 'presentation',
+	                        onClick: function onClick() {
+	                            _this.setState({ active: idx });
+	                        },
+	                        className: _this.state.active === idx ? 'active' : ''
+	                    },
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/categories/' + category.url },
+	                        category.name
+	                    )
+	                );
+	            })
+	        );
+	    }
+	});
+
+	exports.default = SideNav;
+
+/***/ },
+/* 474 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Drawing = __webpack_require__(475);
 
 	var _Drawing2 = _interopRequireDefault(_Drawing);
 
@@ -42413,7 +42336,7 @@
 	exports.default = Category;
 
 /***/ },
-/* 470 */
+/* 475 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -42482,7 +42405,7 @@
 	exports.default = Drawing;
 
 /***/ },
-/* 471 */
+/* 476 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42497,54 +42420,133 @@
 
 	var _reactBootstrap = __webpack_require__(218);
 
-	var _SideNav = __webpack_require__(465);
+	var _reactRouter = __webpack_require__(159);
 
-	var _SideNav2 = _interopRequireDefault(_SideNav);
+	var _NavRight = __webpack_require__(477);
 
-	var _Category = __webpack_require__(469);
-
-	var _Category2 = _interopRequireDefault(_Category);
+	var _NavRight2 = _interopRequireDefault(_NavRight);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var Categories = _react2.default.createClass({
-	    displayName: 'Categories',
-	    getInitialState: function getInitialState() {
-	        return {
-	            drawings: []
-	        };
-	    },
-	    componentWillMount: function componentWillMount() {
-	        $.getJSON('api/drawings', function (drawings) {
-	            that.setState({ drawings: drawings });
-	        }.bind(this));
-	    },
+	var Navigation = _react2.default.createClass({
+	    displayName: 'Navigation',
 	    render: function render() {
 	        return _react2.default.createElement(
-	            _reactBootstrap.Grid,
-	            { fluid: true },
+	            _reactBootstrap.Navbar,
+	            { inverse: true },
 	            _react2.default.createElement(
-	                _reactBootstrap.Row,
-	                { className: 'show-grid' },
+	                _reactBootstrap.Navbar.Header,
+	                null,
 	                _react2.default.createElement(
-	                    _reactBootstrap.Col,
-	                    { sm: 3 },
-	                    _react2.default.createElement(_SideNav2.default, null)
+	                    _reactBootstrap.Navbar.Brand,
+	                    null,
+	                    _react2.default.createElement(
+	                        _reactRouter.IndexLink,
+	                        { to: '/' },
+	                        'Чертежи'
+	                    )
 	                ),
-	                _react2.default.createElement(
-	                    _reactBootstrap.Col,
-	                    { sm: 9 },
-	                    _react2.default.createElement(_Category2.default, {
-	                        name: this.props.params.category,
-	                        drawings: this.state.drawings
-	                    })
-	                )
+	                _react2.default.createElement(_reactBootstrap.Navbar.Toggle, null)
+	            ),
+	            _react2.default.createElement(
+	                _reactBootstrap.Navbar.Collapse,
+	                null,
+	                _react2.default.createElement(_NavRight2.default, null)
 	            )
 	        );
 	    }
 	});
 
-	exports.default = Categories;
+	exports.default = Navigation;
+
+/***/ },
+/* 477 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactBootstrap = __webpack_require__(218);
+
+	var _reactRouterBootstrap = __webpack_require__(461);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var NavRight = _react2.default.createClass({
+	    displayName: 'NavRight',
+	    getInitialState: function getInitialState() {
+	        return {
+	            username: sessionStorage.username
+	        };
+	    },
+	    onLogoutClick: function onLogoutClick() {
+	        sessionStorage.clear();
+	        this.setState({
+	            username: ""
+	        });
+	        $.get('/logout', function (data) {
+	            console.log(data);
+	        });
+	    },
+	    render: function render() {
+	        var beforeLogin = _react2.default.createElement(
+	            _reactBootstrap.Nav,
+	            { pullRight: true },
+	            _react2.default.createElement(
+	                _reactRouterBootstrap.LinkContainer,
+	                { to: '/login' },
+	                _react2.default.createElement(
+	                    _reactBootstrap.NavItem,
+	                    { eventKey: 1 },
+	                    'Вход'
+	                )
+	            ),
+	            _react2.default.createElement(
+	                _reactRouterBootstrap.LinkContainer,
+	                { to: '/register' },
+	                _react2.default.createElement(
+	                    _reactBootstrap.NavItem,
+	                    { eventKey: 2 },
+	                    'Регистрация'
+	                )
+	            )
+	        );
+
+	        var afterLogin = _react2.default.createElement(
+	            _reactBootstrap.Nav,
+	            { pullRight: true },
+	            _react2.default.createElement(
+	                _reactRouterBootstrap.LinkContainer,
+	                { to: 'new_drawing' },
+	                _react2.default.createElement(
+	                    _reactBootstrap.NavItem,
+	                    { eventKey: 1 },
+	                    'Добавить'
+	                )
+	            ),
+	            _react2.default.createElement(
+	                _reactBootstrap.NavItem,
+	                { eventKey: 1 },
+	                this.state.username
+	            ),
+	            _react2.default.createElement(
+	                _reactBootstrap.NavItem,
+	                { eventKey: 2, onClick: this.onLogoutClick },
+	                'Выйти'
+	            )
+	        );
+	        return this.state.username ? afterLogin : beforeLogin;
+	    }
+	});
+
+	exports.default = NavRight;
 
 /***/ }
 /******/ ]);
