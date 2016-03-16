@@ -94,19 +94,23 @@
 
 	var _Categories2 = _interopRequireDefault(_Categories);
 
+	var _Category = __webpack_require__(496);
+
+	var _Category2 = _interopRequireDefault(_Category);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// Set up store
 
 
-	// Components
-	// React + React Router
-	var routeMiddleware = (0, _reactRouterRedux.routerMiddleware)(_reactRouter.browserHistory);
-
 	// Reducers
 
 
 	// Redux
+	var routeMiddleware = (0, _reactRouterRedux.routerMiddleware)(_reactRouter.browserHistory);
+
+	// Components
+	// React + React Router
 
 	var createStoreWithMiddleware = (0, _redux.applyMiddleware)(_reduxThunk2.default, // lets us dispatch() functions
 	routeMiddleware)(_redux.createStore);
@@ -129,8 +133,11 @@
 	            _react2.default.createElement(_reactRouter.Route, { path: 'new_drawing', component: _NewDrawing2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _Login2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: 'register', component: _Register2.default }),
-	            _react2.default.createElement(_reactRouter.Route, { path: 'categories', component: _Categories2.default }),
-	            _react2.default.createElement(_reactRouter.Route, { path: 'categories/:category', component: _Categories2.default })
+	            _react2.default.createElement(
+	                _reactRouter.Route,
+	                { path: 'categories', component: _Categories2.default },
+	                _react2.default.createElement(_reactRouter.Route, { path: '/categories/:categoryUrl', component: _Category2.default })
+	            )
 	        )
 	    )
 	), document.getElementById('root'));
@@ -26512,25 +26519,23 @@
 	        $.getJSON('api/drawings', function (drawings) {
 	            dispatch(fetchDrawings(drawings));
 	        });
-	        return Promise.resolve();
 	    };
 	}
 
 	function attemptFetchCategories() {
 	    return function (dispatch) {
 	        $.getJSON('api/categories', function (categories) {
-	            dispatch(fetchCategories(categories));
+	            return dispatch(fetchCategories(categories));
 	        });
-	        return Promise.resolve();
 	    };
 	}
 
 	function attemptFetchCategory(url) {
 	    return function (dispatch) {
 	        $.getJSON('api/category/' + url, function (category) {
+	            console.log('attemptFetchCategory...');
 	            dispatch(fetchCategory(category));
 	        });
-	        return Promise.resolve();
 	    };
 	}
 
@@ -26560,15 +26565,11 @@
 
 	var App = _react2.default.createClass({
 	    displayName: 'App',
-	    componentWillMount: function componentWillMount() {
+	    componentDidMount: function componentDidMount() {
 	        var dispatch = this.props.dispatch;
 
-	        dispatch((0, _fetchDataActions.attemptFetchDrawings)()).then(function () {
-	            console.log('Done drawings in App!');
-	        });
-	        dispatch((0, _fetchDataActions.attemptFetchCategories)()).then(function () {
-	            console.log('Done categories in App!');
-	        });
+	        dispatch((0, _fetchDataActions.attemptFetchDrawings)());
+	        dispatch((0, _fetchDataActions.attemptFetchCategories)());
 	    },
 	    render: function render() {
 	        return _react2.default.createElement(
@@ -44156,25 +44157,6 @@
 
 	var Categories = _react2.default.createClass({
 	    displayName: 'Categories',
-	    filterDrawings: function filterDrawings(categoryUrl, categories, drawings) {
-	        var dispatch = this.props.dispatch;
-
-
-	        if (!categoryUrl) {
-	            return [];
-	        }
-	        if (!categories.length || !drawings.length) {
-	            window.location = '/categories';
-	            return [];
-	        }
-	        var categoryId = categories.filter(function (category) {
-	            return category.url === categoryUrl;
-	        })[0]._id;
-	        var filteredDrawings = drawings.filter(function (drawing) {
-	            return drawing.category === categoryId;
-	        });
-	        return filteredDrawings;
-	    },
 	    render: function render() {
 	        return _react2.default.createElement(
 	            _reactBootstrap.Grid,
@@ -44190,9 +44172,7 @@
 	                _react2.default.createElement(
 	                    _reactBootstrap.Col,
 	                    { sm: 9 },
-	                    _react2.default.createElement(_Category2.default, {
-	                        drawings: this.filterDrawings(this.props.params.category, this.props.categories, this.props.drawings)
-	                    })
+	                    this.props.children
 	                )
 	            )
 	        );
@@ -44201,10 +44181,9 @@
 
 	function mapStateToProps(state) {
 	    return {
-	        categories: state.data.categories,
-	        drawings: state.data.drawings
+	        categories: state.data.categories
 	    };
-	};
+	}
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Categories);
 
@@ -44226,9 +44205,9 @@
 
 	var _reactRouter = __webpack_require__(159);
 
-	var _Category = __webpack_require__(496);
+	var _reactRedux = __webpack_require__(227);
 
-	var _Category2 = _interopRequireDefault(_Category);
+	var _fetchDataActions = __webpack_require__(241);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -44238,6 +44217,10 @@
 	        return {
 	            active: null
 	        };
+	    },
+	    onCategoryClick: function onCategoryClick(idx, categoryUrl) {
+	        this.setState({ active: idx });
+	        this.props.dispatch((0, _fetchDataActions.attemptFetchCategory)(categoryUrl));
 	    },
 	    render: function render() {
 	        var _this = this;
@@ -44251,7 +44234,7 @@
 	                    { role: 'presentation',
 	                        key: idx,
 	                        onClick: function onClick() {
-	                            _this.setState({ active: idx });
+	                            _this.onCategoryClick(idx, category.url);
 	                        },
 	                        className: _this.state.active === idx ? 'active' : ''
 	                    },
@@ -44266,7 +44249,7 @@
 	    }
 	});
 
-	exports.default = SideNav;
+	exports.default = (0, _reactRedux.connect)()(SideNav);
 
 /***/ },
 /* 496 */
@@ -44282,33 +44265,51 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Drawing = __webpack_require__(497);
+	var _reactRedux = __webpack_require__(227);
 
-	var _Drawing2 = _interopRequireDefault(_Drawing);
+	var _fetchDataActions = __webpack_require__(241);
+
+	var _Drawings = __webpack_require__(498);
+
+	var _Drawings2 = _interopRequireDefault(_Drawings);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Category = _react2.default.createClass({
 	    displayName: 'Category',
+	    componentDidMount: function componentDidMount() {
+	        var _props = this.props;
+	        var dispatch = _props.dispatch;
+	        var params = _props.params;
+
+	        dispatch((0, _fetchDataActions.attemptFetchCategory)(params.categoryUrl));
+	    },
+	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	        if (nextProps.params.categoryUrl !== this.props.params.categoryUrl) {
+	            var dispatch = nextProps.dispatch;
+	            var params = nextProps.params;
+	            var category = nextProps.category;
+
+	            dispatch((0, _fetchDataActions.attemptFetchCategory)(params.categoryUrl));
+	        }
+	    },
 	    render: function render() {
 	        return _react2.default.createElement(
 	            'div',
 	            null,
-	            this.props.drawings.map(function (drawing, index) {
-	                return _react2.default.createElement(_Drawing2.default, { key: index,
-	                    title: drawing.title,
-	                    description: drawing.description,
-	                    picture: drawing.picture,
-	                    drawing_composition: drawing.drawing_composition,
-	                    price: drawing.price,
-	                    tags: drawing.tags,
-	                    created: drawing.created });
-	            })
+	            this.props.params.categoryUrl,
+	            _react2.default.createElement(_Drawings2.default, { drawings: this.props.category })
 	        );
 	    }
 	});
 
-	exports.default = Category;
+	function mapStateToProps(state) {
+	    return {
+	        category: state.data.category
+	    };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Category);
 
 /***/ },
 /* 497 */
@@ -44378,6 +44379,48 @@
 	};
 
 	exports.default = Drawing;
+
+/***/ },
+/* 498 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Drawing = __webpack_require__(497);
+
+	var _Drawing2 = _interopRequireDefault(_Drawing);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Drawings = _react2.default.createClass({
+	    displayName: 'Drawings',
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'div',
+	            null,
+	            this.props.drawings.map(function (drawing, index) {
+	                return _react2.default.createElement(_Drawing2.default, { key: index,
+	                    title: drawing.title,
+	                    description: drawing.description,
+	                    picture: drawing.picture,
+	                    drawing_composition: drawing.drawing_composition,
+	                    price: drawing.price,
+	                    tags: drawing.tags,
+	                    created: drawing.created });
+	            })
+	        );
+	    }
+	});
+
+	exports.default = Drawings;
 
 /***/ }
 /******/ ]);

@@ -1,13 +1,20 @@
 import React, { PropTypes } from 'react';
 import { Tabs, Tab } from 'react-bootstrap';
 import { Link } from 'react-router';
-import Category from './Category';
+import { connect } from 'react-redux';
+import { attemptFetchCategory, attemptFetchCategories } from '../../actions/fetchDataActions';
 
 const SideNav = React.createClass({
+
     getInitialState () {
         return {
             active: null
         };
+    },
+
+    onCategoryClick(idx, categoryUrl) {
+        this.setState({ active: idx });
+        this.props.dispatch(attemptFetchCategory(categoryUrl));
     },
 
     render () {
@@ -17,7 +24,7 @@ const SideNav = React.createClass({
                     <li role="presentation"
                         key={idx}
                         onClick={() => {
-                            this.setState({ active: idx })
+                            this.onCategoryClick(idx, category.url);
                         }}
                         className={this.state.active === idx ? 'active' : ''}
                         >
@@ -29,6 +36,8 @@ const SideNav = React.createClass({
             </ul>
         );
     }
-})
+});
 
-export default SideNav;
+
+
+export default connect()(SideNav);

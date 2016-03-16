@@ -24,24 +24,22 @@ export function attemptFetchDrawings() {
         $.getJSON('api/drawings', function (drawings) {
             dispatch(fetchDrawings(drawings));
         });
-		return Promise.resolve();
     }
 }
 
 export function attemptFetchCategories() {
     return (dispatch) => {
         $.getJSON('api/categories', function (categories) {
-            dispatch(fetchCategories(categories));
+            return dispatch(fetchCategories(categories));
         });
-		return Promise.resolve();
     }
 }
 
 export function attemptFetchCategory(url) {
     return (dispatch) => {
         $.getJSON('api/category/' + url, function (category) {
+			console.log('attemptFetchCategory...');
             dispatch(fetchCategory(category));
         });
-		return Promise.resolve();
-    }
+    };
 }

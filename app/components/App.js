@@ -1,20 +1,16 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { attemptFetchDrawings, attemptFetchCategories } from '../actions/fetchDataActions';
+import { attemptFetchDrawings, attemptFetchCategories, attemptFetchCategory } from '../actions/fetchDataActions';
 
 import Navigation from './navigation/Navigation';
 
 const App = React.createClass({
 
-    componentWillMount () {
+    componentDidMount () {
         const { dispatch } = this.props;
-        dispatch(attemptFetchDrawings()).then(() => {
-            console.log('Done drawings in App!');
-        });
-        dispatch(attemptFetchCategories()).then(() => {
-            console.log('Done categories in App!');
-        });
+        dispatch(attemptFetchDrawings());
+        dispatch(attemptFetchCategories());
     },
 
     render () {

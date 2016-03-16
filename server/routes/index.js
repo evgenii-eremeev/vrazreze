@@ -29,11 +29,15 @@ router.get('/logout', function(req, res) {
     res.send("Logout successfully!")
 });
 
-// api/drawings
+// API
+// drawings
 router.get('/api/drawings', apiCtrl.drawings);
 
-// api/categories
-router.get('/api/categories', apiCtrl.categories)
+// categories
+router.get('/api/categories', apiCtrl.categories);
+
+// category:url
+router.get('/api/category/:url', apiCtrl.category);
 
 // 'any uri, because we use react-router'
 // Should be placed at the very end for the rest 'get' requests work

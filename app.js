@@ -19,6 +19,7 @@ import NewDrawing from './app/components/NewDrawing';
 import Login from './app/components/Login';
 import Register from './app/components/Register';
 import Categories from './app/components/categories/Categories';
+import Category from './app/components/categories/Category';
 
 // Set up store
 const routeMiddleware = routerMiddleware(browserHistory)
@@ -41,8 +42,9 @@ ReactDOM.render(
                 <Route path="new_drawing" component={NewDrawing} />
                 <Route path="login" component={Login} />
                 <Route path="register" component={Register} />
-                <Route path="categories" component={Categories} />
-                <Route path="categories/:category" component={Categories} />
+                <Route path="categories" component={Categories} >
+                    <Route path="/categories/:categoryUrl" component={Category} />
+                </Route>
             </Route>
         </Router>
     </Provider>,
