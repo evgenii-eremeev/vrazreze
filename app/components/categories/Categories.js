@@ -16,16 +16,15 @@ const Categories = React.createClass({
             return [];
         }
         if (!categories.length || !drawings.length) {
-            // window.location = '/categories';
-            // return [];
+            window.location = '/categories';
+            return [];
         }
-
         const categoryId = categories.filter(category =>
             category.url === categoryUrl
         )[0]._id;
         const filteredDrawings = drawings.filter(drawing =>
             drawing.category === categoryId
-        )
+        );
         return filteredDrawings;
     },
 

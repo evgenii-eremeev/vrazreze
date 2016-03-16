@@ -9,8 +9,12 @@ const App = React.createClass({
 
     componentWillMount () {
         const { dispatch } = this.props;
-        dispatch(attemptFetchDrawings());
-        dispatch(attemptFetchCategories());
+        dispatch(attemptFetchDrawings()).then(() => {
+            console.log('Done drawings in App!');
+        });
+        dispatch(attemptFetchCategories()).then(() => {
+            console.log('Done categories in App!');
+        });
     },
 
     render () {

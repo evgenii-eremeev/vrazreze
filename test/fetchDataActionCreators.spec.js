@@ -4,8 +4,10 @@ import fetchDataReducer from '../app/reducers/fetchDataReducer';
 import {
     FETCH_DRAWINGS,
     FETCH_CATEGORIES,
+    FETCH_CATEGORY,
     fetchDrawings,
-    fetchCategories
+    fetchCategories,
+    fetchCategory
 } from '../app/actions/fetchDataActions';
 
 describe('fetchDataActionCreators', function () {
@@ -52,6 +54,33 @@ describe('fetchDataActionCreators', function () {
                 [
                     {name: 'cat1'},
                     {name: 'cat2'}
+                ]
+            );
+            expect(
+                fetchDataReducer(stateBefore, action)
+            ).toEqual(stateAfter)
+        });
+    });
+
+    describe('FETCH_CATEGORY', function () {
+        it('should despatch action with action creator', function () {
+            const stateBefore = {
+                categories: [],
+                drawings: [],
+                category: []
+            };
+            const stateAfter = {
+                categories: [],
+                drawings: [],
+                category: [
+                    { name: 'drawing1' },
+                    { name: 'drawing2' }
+                ]
+            };
+            const action = fetchCategory(
+                [
+                    {name: 'drawing1'},
+                    {name: 'drawing2'}
                 ]
             );
             expect(

@@ -9,7 +9,8 @@ describe('dataRuducer', function () {
             const stateBefore = undefined;
             const stateAfter = {
                 categories: [],
-                drawings: []
+                drawings: [],
+                category: []
             };
             expect(
                 fetchDataReducer(stateBefore, {})
