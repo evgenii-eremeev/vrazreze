@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { Tabs, Tab } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { attemptFetchCategory, attemptFetchCategories } from '../../actions/fetchDataActions';
+import { attemptFetchCategory, attemptFetchCategories, fetchCategory } from '../../actions/fetchDataActions';
 
 const SideNav = React.createClass({
 
@@ -14,7 +14,8 @@ const SideNav = React.createClass({
 
     onCategoryClick(idx, categoryUrl) {
         this.setState({ active: idx });
-        this.props.dispatch(attemptFetchCategory(categoryUrl));
+        // this.props.dispatch(attemptFetchCategory(categoryUrl));
+
     },
 
     render () {

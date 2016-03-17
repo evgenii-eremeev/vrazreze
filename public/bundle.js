@@ -26517,7 +26517,7 @@
 	function attemptFetchDrawings() {
 	    return function (dispatch) {
 	        $.getJSON('api/drawings', function (drawings) {
-	            dispatch(fetchDrawings(drawings));
+	            return dispatch(fetchDrawings(drawings));
 	        });
 	    };
 	}
@@ -43905,20 +43905,12 @@
 
 	var _reactBootstrap = __webpack_require__(244);
 
+	var _reactRedux = __webpack_require__(227);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var NewDrawing = _react2.default.createClass({
 	    displayName: 'NewDrawing',
-	    getInitialState: function getInitialState() {
-	        return {
-	            categories: []
-	        };
-	    },
-	    componentWillMount: function componentWillMount() {
-	        $.getJSON('api/categories', function (categories) {
-	            this.setState({ categories: categories });
-	        }.bind(this));
-	    },
 	    onNewDrawingSubmit: function onNewDrawingSubmit(e) {
 	        e.preventDefault();
 	        var form = document.getElementById('newDrawingForm');
@@ -43964,7 +43956,7 @@
 	                _react2.default.createElement(
 	                    _reactBootstrap.Input,
 	                    { type: 'select', name: 'category', label: 'Категория' },
-	                    this.state.categories.map(function (category, idx) {
+	                    this.props.categories.map(function (category, idx) {
 	                        return _react2.default.createElement(
 	                            'option',
 	                            { value: category.name, key: idx },
@@ -43987,7 +43979,13 @@
 	    }
 	});
 
-	exports.default = NewDrawing;
+	function mapStateToProps(state) {
+	    return {
+	        categories: state.data.categories
+	    };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(NewDrawing);
 
 /***/ },
 /* 492 */
@@ -44220,7 +44218,7 @@
 	    },
 	    onCategoryClick: function onCategoryClick(idx, categoryUrl) {
 	        this.setState({ active: idx });
-	        this.props.dispatch((0, _fetchDataActions.attemptFetchCategory)(categoryUrl));
+	        // this.props.dispatch(attemptFetchCategory(categoryUrl));
 	    },
 	    render: function render() {
 	        var _this = this;
@@ -44277,20 +44275,44 @@
 
 	var Category = _react2.default.createClass({
 	    displayName: 'Category',
-	    componentDidMount: function componentDidMount() {
+	    componentWillMount: function componentWillMount() {
 	        var _props = this.props;
 	        var dispatch = _props.dispatch;
 	        var params = _props.params;
+	        // dispatch(attemptFetchCategory(params.categoryUrl));
 
-	        dispatch((0, _fetchDataActions.attemptFetchCategory)(params.categoryUrl));
+	        console.log('wmt', params.categoryUrl);
+	        $.getJSON('api/category/' + params.categoryUrl, function (category) {
+	            console.log('fetchCategory... wil mnt');
+	            dispatch((0, _fetchDataActions.fetchCategory)(category));
+	        });
+	    },
+	    componentDidMount: function componentDidMount() {
+	        var _props2 = this.props;
+	        var dispatch = _props2.dispatch;
+	        var params = _props2.params;
+	        // dispatch(attemptFetchCategory(params.categoryUrl));
+
+	        console.log('did mt', params.categoryUrl);
+	        $.getJSON('api/category/' + params.categoryUrl, function (category) {
+	            console.log('fetchCategory...');
+	            dispatch((0, _fetchDataActions.fetchCategory)(category));
+	        });
 	    },
 	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	        if (nextProps.params.categoryUrl !== this.props.params.categoryUrl) {
-	            var dispatch = nextProps.dispatch;
-	            var params = nextProps.params;
-	            var category = nextProps.category;
+	            (function () {
+	                var dispatch = nextProps.dispatch;
+	                var params = nextProps.params;
+	                var category = nextProps.category;
+	                // dispatch(attemptFetchCategory(params.categoryUrl));
 
-	            dispatch((0, _fetchDataActions.attemptFetchCategory)(params.categoryUrl));
+	                console.log('wrp ' + params.categoryUrl);
+	                $.getJSON('api/category/' + params.categoryUrl, function (category) {
+	                    console.log('fetchCategory...');
+	                    dispatch((0, _fetchDataActions.fetchCategory)(category));
+	                });
+	            })();
 	        }
 	    },
 	    render: function render() {

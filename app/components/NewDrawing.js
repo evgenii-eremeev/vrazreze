@@ -1,19 +1,8 @@
 import React, { PropTypes } from 'react';
 import { Input, ButtonInput } from 'react-bootstrap';
+import { connect } from 'react-redux';
 
 const NewDrawing = React.createClass({
-
-    getInitialState () {
-        return {
-            categories: []
-        };
-    },
-
-    componentWillMount () {
-        $.getJSON('api/categories', function (categories) {
-            this.setState({ categories });
-        }.bind(this));
-    },
 
     onNewDrawingSubmit (e) {
         e.preventDefault();
@@ -52,7 +41,7 @@ const NewDrawing = React.createClass({
                     >
                     <Input type="text" name="title" label="Название" required />
                     <Input type="select" name="category" label="Категория">
-                        {this.state.categories.map((category, idx) => (
+                        {this.props.categories.map((category, idx) => (
                             <option value={category.name} key={idx}>
                                 {category.name}
                             </option>
@@ -72,6 +61,14 @@ const NewDrawing = React.createClass({
             </div>
         );
     }
-})
+});
 
-export default NewDrawing;
+
+function mapStateToProps(state) {
+    return {
+        categories: state.data.categories
+    };
+}
+
+
+export default connect(mapStateToProps)(NewDrawing);

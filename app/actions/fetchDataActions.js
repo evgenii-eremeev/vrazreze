@@ -22,7 +22,7 @@ export function fetchCategory(data) {
 export function attemptFetchDrawings() {
     return (dispatch) => {
         $.getJSON('api/drawings', function (drawings) {
-            dispatch(fetchDrawings(drawings));
+            return dispatch(fetchDrawings(drawings));
         });
     }
 }
