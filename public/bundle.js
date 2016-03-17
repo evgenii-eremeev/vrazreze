@@ -26456,7 +26456,6 @@
 
 	var defaultStartState = {
 	    categories: [],
-	    drawings: [],
 	    category: []
 	}; // action types
 
@@ -26466,8 +26465,6 @@
 	    var action = arguments[1];
 
 	    switch (action.type) {
-	        case _fetchDataActions.FETCH_DRAWINGS:
-	            return Object.assign({}, state, { drawings: action.data });
 	        case _fetchDataActions.FETCH_CATEGORIES:
 	            return Object.assign({}, state, { categories: action.data });
 	        case _fetchDataActions.FETCH_CATEGORY:
@@ -26481,62 +26478,58 @@
 
 /***/ },
 /* 241 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+		value: true
 	});
-	exports.fetchDrawings = fetchDrawings;
+	exports.FETCH_CATEGORY = exports.FETCH_CATEGORIES = undefined;
 	exports.fetchCategories = fetchCategories;
 	exports.fetchCategory = fetchCategory;
-	exports.attemptFetchDrawings = attemptFetchDrawings;
 	exports.attemptFetchCategories = attemptFetchCategories;
 	exports.attemptFetchCategory = attemptFetchCategory;
+
+	var _isomorphicFetch = __webpack_require__(500);
+
+	var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	// action types
 
-	var FETCH_DRAWINGS = exports.FETCH_DRAWINGS = "FETCH_DRAWINGS";
 	var FETCH_CATEGORIES = exports.FETCH_CATEGORIES = "FETCH_CATEGORIES";
 	var FETCH_CATEGORY = exports.FETCH_CATEGORY = "FETCH_CATEGORY";
 
 	// sync action creators
-	function fetchDrawings(data) {
-	    return { type: FETCH_DRAWINGS, data: data };
-	}
-
 	function fetchCategories(data) {
-	    return { type: FETCH_CATEGORIES, data: data };
+		return { type: FETCH_CATEGORIES, data: data };
 	}
 
 	function fetchCategory(data) {
-	    return { type: FETCH_CATEGORY, data: data };
+		return { type: FETCH_CATEGORY, data: data };
 	}
 
 	// async action creators
-	function attemptFetchDrawings() {
-	    return function (dispatch) {
-	        $.getJSON('api/drawings', function (drawings) {
-	            return dispatch(fetchDrawings(drawings));
-	        });
-	    };
-	}
-
 	function attemptFetchCategories() {
-	    return function (dispatch) {
-	        $.getJSON('api/categories', function (categories) {
-	            return dispatch(fetchCategories(categories));
-	        });
-	    };
+		return function (dispatch) {
+			return (0, _isomorphicFetch2.default)('/api/categories').then(function (response) {
+				return response.json();
+			}).then(function (json) {
+				return dispatch(fetchCategories(json));
+			});
+		};
 	}
 
-	function attemptFetchCategory(url) {
-	    return function (dispatch) {
-	        $.getJSON('api/category/' + url, function (category) {
-	            console.log('attemptFetchCategory...');
-	            dispatch(fetchCategory(category));
-	        });
-	    };
+	function attemptFetchCategory(categoryUrl) {
+		return function (dispatch) {
+			return (0, _isomorphicFetch2.default)('/api/category/' + categoryUrl).then(function (response) {
+				return response.json();
+			}).then(function (json) {
+				return dispatch(fetchCategory(json));
+			});
+		};
 	}
 
 /***/ },
@@ -26568,7 +26561,6 @@
 	    componentDidMount: function componentDidMount() {
 	        var dispatch = this.props.dispatch;
 
-	        dispatch((0, _fetchDataActions.attemptFetchDrawings)());
 	        dispatch((0, _fetchDataActions.attemptFetchCategories)());
 	    },
 	    render: function render() {
@@ -44216,9 +44208,8 @@
 	            active: null
 	        };
 	    },
-	    onCategoryClick: function onCategoryClick(idx, categoryUrl) {
+	    onCategoryClick: function onCategoryClick(idx) {
 	        this.setState({ active: idx });
-	        // this.props.dispatch(attemptFetchCategory(categoryUrl));
 	    },
 	    render: function render() {
 	        var _this = this;
@@ -44267,60 +44258,44 @@
 
 	var _fetchDataActions = __webpack_require__(241);
 
-	var _Drawings = __webpack_require__(498);
+	var _Drawing = __webpack_require__(497);
 
-	var _Drawings2 = _interopRequireDefault(_Drawings);
+	var _Drawing2 = _interopRequireDefault(_Drawing);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Category = _react2.default.createClass({
 	    displayName: 'Category',
-	    componentWillMount: function componentWillMount() {
+	    componentDidMount: function componentDidMount() {
 	        var _props = this.props;
 	        var dispatch = _props.dispatch;
 	        var params = _props.params;
-	        // dispatch(attemptFetchCategory(params.categoryUrl));
 
-	        console.log('wmt', params.categoryUrl);
-	        $.getJSON('api/category/' + params.categoryUrl, function (category) {
-	            console.log('fetchCategory... wil mnt');
-	            dispatch((0, _fetchDataActions.fetchCategory)(category));
-	        });
-	    },
-	    componentDidMount: function componentDidMount() {
-	        var _props2 = this.props;
-	        var dispatch = _props2.dispatch;
-	        var params = _props2.params;
-	        // dispatch(attemptFetchCategory(params.categoryUrl));
-
-	        console.log('did mt', params.categoryUrl);
-	        $.getJSON('api/category/' + params.categoryUrl, function (category) {
-	            console.log('fetchCategory...');
-	            dispatch((0, _fetchDataActions.fetchCategory)(category));
-	        });
+	        dispatch((0, _fetchDataActions.attemptFetchCategory)(params.categoryUrl));
 	    },
 	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	        if (nextProps.params.categoryUrl !== this.props.params.categoryUrl) {
-	            (function () {
-	                var dispatch = nextProps.dispatch;
-	                var params = nextProps.params;
-	                var category = nextProps.category;
-	                // dispatch(attemptFetchCategory(params.categoryUrl));
+	            var dispatch = nextProps.dispatch;
+	            var params = nextProps.params;
+	            var category = nextProps.category;
 
-	                console.log('wrp ' + params.categoryUrl);
-	                $.getJSON('api/category/' + params.categoryUrl, function (category) {
-	                    console.log('fetchCategory...');
-	                    dispatch((0, _fetchDataActions.fetchCategory)(category));
-	                });
-	            })();
+	            dispatch((0, _fetchDataActions.attemptFetchCategory)(params.categoryUrl));
 	        }
 	    },
 	    render: function render() {
 	        return _react2.default.createElement(
 	            'div',
 	            null,
-	            this.props.params.categoryUrl,
-	            _react2.default.createElement(_Drawings2.default, { drawings: this.props.category })
+	            this.props.category.map(function (drawing, index) {
+	                return _react2.default.createElement(_Drawing2.default, { key: index,
+	                    title: drawing.title,
+	                    description: drawing.description,
+	                    picture: drawing.picture,
+	                    drawing_composition: drawing.drawing_composition,
+	                    price: drawing.price,
+	                    tags: drawing.tags,
+	                    created: drawing.created });
+	            })
 	        );
 	    }
 	});
@@ -44403,46 +44378,412 @@
 	exports.default = Drawing;
 
 /***/ },
-/* 498 */
+/* 498 */,
+/* 499 */
+/***/ function(module, exports) {
+
+	(function(self) {
+	  'use strict';
+
+	  if (self.fetch) {
+	    return
+	  }
+
+	  function normalizeName(name) {
+	    if (typeof name !== 'string') {
+	      name = String(name)
+	    }
+	    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
+	      throw new TypeError('Invalid character in header field name')
+	    }
+	    return name.toLowerCase()
+	  }
+
+	  function normalizeValue(value) {
+	    if (typeof value !== 'string') {
+	      value = String(value)
+	    }
+	    return value
+	  }
+
+	  function Headers(headers) {
+	    this.map = {}
+
+	    if (headers instanceof Headers) {
+	      headers.forEach(function(value, name) {
+	        this.append(name, value)
+	      }, this)
+
+	    } else if (headers) {
+	      Object.getOwnPropertyNames(headers).forEach(function(name) {
+	        this.append(name, headers[name])
+	      }, this)
+	    }
+	  }
+
+	  Headers.prototype.append = function(name, value) {
+	    name = normalizeName(name)
+	    value = normalizeValue(value)
+	    var list = this.map[name]
+	    if (!list) {
+	      list = []
+	      this.map[name] = list
+	    }
+	    list.push(value)
+	  }
+
+	  Headers.prototype['delete'] = function(name) {
+	    delete this.map[normalizeName(name)]
+	  }
+
+	  Headers.prototype.get = function(name) {
+	    var values = this.map[normalizeName(name)]
+	    return values ? values[0] : null
+	  }
+
+	  Headers.prototype.getAll = function(name) {
+	    return this.map[normalizeName(name)] || []
+	  }
+
+	  Headers.prototype.has = function(name) {
+	    return this.map.hasOwnProperty(normalizeName(name))
+	  }
+
+	  Headers.prototype.set = function(name, value) {
+	    this.map[normalizeName(name)] = [normalizeValue(value)]
+	  }
+
+	  Headers.prototype.forEach = function(callback, thisArg) {
+	    Object.getOwnPropertyNames(this.map).forEach(function(name) {
+	      this.map[name].forEach(function(value) {
+	        callback.call(thisArg, value, name, this)
+	      }, this)
+	    }, this)
+	  }
+
+	  function consumed(body) {
+	    if (body.bodyUsed) {
+	      return Promise.reject(new TypeError('Already read'))
+	    }
+	    body.bodyUsed = true
+	  }
+
+	  function fileReaderReady(reader) {
+	    return new Promise(function(resolve, reject) {
+	      reader.onload = function() {
+	        resolve(reader.result)
+	      }
+	      reader.onerror = function() {
+	        reject(reader.error)
+	      }
+	    })
+	  }
+
+	  function readBlobAsArrayBuffer(blob) {
+	    var reader = new FileReader()
+	    reader.readAsArrayBuffer(blob)
+	    return fileReaderReady(reader)
+	  }
+
+	  function readBlobAsText(blob) {
+	    var reader = new FileReader()
+	    reader.readAsText(blob)
+	    return fileReaderReady(reader)
+	  }
+
+	  var support = {
+	    blob: 'FileReader' in self && 'Blob' in self && (function() {
+	      try {
+	        new Blob();
+	        return true
+	      } catch(e) {
+	        return false
+	      }
+	    })(),
+	    formData: 'FormData' in self,
+	    arrayBuffer: 'ArrayBuffer' in self
+	  }
+
+	  function Body() {
+	    this.bodyUsed = false
+
+
+	    this._initBody = function(body) {
+	      this._bodyInit = body
+	      if (typeof body === 'string') {
+	        this._bodyText = body
+	      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
+	        this._bodyBlob = body
+	      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
+	        this._bodyFormData = body
+	      } else if (!body) {
+	        this._bodyText = ''
+	      } else if (support.arrayBuffer && ArrayBuffer.prototype.isPrototypeOf(body)) {
+	        // Only support ArrayBuffers for POST method.
+	        // Receiving ArrayBuffers happens via Blobs, instead.
+	      } else {
+	        throw new Error('unsupported BodyInit type')
+	      }
+
+	      if (!this.headers.get('content-type')) {
+	        if (typeof body === 'string') {
+	          this.headers.set('content-type', 'text/plain;charset=UTF-8')
+	        } else if (this._bodyBlob && this._bodyBlob.type) {
+	          this.headers.set('content-type', this._bodyBlob.type)
+	        }
+	      }
+	    }
+
+	    if (support.blob) {
+	      this.blob = function() {
+	        var rejected = consumed(this)
+	        if (rejected) {
+	          return rejected
+	        }
+
+	        if (this._bodyBlob) {
+	          return Promise.resolve(this._bodyBlob)
+	        } else if (this._bodyFormData) {
+	          throw new Error('could not read FormData body as blob')
+	        } else {
+	          return Promise.resolve(new Blob([this._bodyText]))
+	        }
+	      }
+
+	      this.arrayBuffer = function() {
+	        return this.blob().then(readBlobAsArrayBuffer)
+	      }
+
+	      this.text = function() {
+	        var rejected = consumed(this)
+	        if (rejected) {
+	          return rejected
+	        }
+
+	        if (this._bodyBlob) {
+	          return readBlobAsText(this._bodyBlob)
+	        } else if (this._bodyFormData) {
+	          throw new Error('could not read FormData body as text')
+	        } else {
+	          return Promise.resolve(this._bodyText)
+	        }
+	      }
+	    } else {
+	      this.text = function() {
+	        var rejected = consumed(this)
+	        return rejected ? rejected : Promise.resolve(this._bodyText)
+	      }
+	    }
+
+	    if (support.formData) {
+	      this.formData = function() {
+	        return this.text().then(decode)
+	      }
+	    }
+
+	    this.json = function() {
+	      return this.text().then(JSON.parse)
+	    }
+
+	    return this
+	  }
+
+	  // HTTP methods whose capitalization should be normalized
+	  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
+
+	  function normalizeMethod(method) {
+	    var upcased = method.toUpperCase()
+	    return (methods.indexOf(upcased) > -1) ? upcased : method
+	  }
+
+	  function Request(input, options) {
+	    options = options || {}
+	    var body = options.body
+	    if (Request.prototype.isPrototypeOf(input)) {
+	      if (input.bodyUsed) {
+	        throw new TypeError('Already read')
+	      }
+	      this.url = input.url
+	      this.credentials = input.credentials
+	      if (!options.headers) {
+	        this.headers = new Headers(input.headers)
+	      }
+	      this.method = input.method
+	      this.mode = input.mode
+	      if (!body) {
+	        body = input._bodyInit
+	        input.bodyUsed = true
+	      }
+	    } else {
+	      this.url = input
+	    }
+
+	    this.credentials = options.credentials || this.credentials || 'omit'
+	    if (options.headers || !this.headers) {
+	      this.headers = new Headers(options.headers)
+	    }
+	    this.method = normalizeMethod(options.method || this.method || 'GET')
+	    this.mode = options.mode || this.mode || null
+	    this.referrer = null
+
+	    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
+	      throw new TypeError('Body not allowed for GET or HEAD requests')
+	    }
+	    this._initBody(body)
+	  }
+
+	  Request.prototype.clone = function() {
+	    return new Request(this)
+	  }
+
+	  function decode(body) {
+	    var form = new FormData()
+	    body.trim().split('&').forEach(function(bytes) {
+	      if (bytes) {
+	        var split = bytes.split('=')
+	        var name = split.shift().replace(/\+/g, ' ')
+	        var value = split.join('=').replace(/\+/g, ' ')
+	        form.append(decodeURIComponent(name), decodeURIComponent(value))
+	      }
+	    })
+	    return form
+	  }
+
+	  function headers(xhr) {
+	    var head = new Headers()
+	    var pairs = xhr.getAllResponseHeaders().trim().split('\n')
+	    pairs.forEach(function(header) {
+	      var split = header.trim().split(':')
+	      var key = split.shift().trim()
+	      var value = split.join(':').trim()
+	      head.append(key, value)
+	    })
+	    return head
+	  }
+
+	  Body.call(Request.prototype)
+
+	  function Response(bodyInit, options) {
+	    if (!options) {
+	      options = {}
+	    }
+
+	    this.type = 'default'
+	    this.status = options.status
+	    this.ok = this.status >= 200 && this.status < 300
+	    this.statusText = options.statusText
+	    this.headers = options.headers instanceof Headers ? options.headers : new Headers(options.headers)
+	    this.url = options.url || ''
+	    this._initBody(bodyInit)
+	  }
+
+	  Body.call(Response.prototype)
+
+	  Response.prototype.clone = function() {
+	    return new Response(this._bodyInit, {
+	      status: this.status,
+	      statusText: this.statusText,
+	      headers: new Headers(this.headers),
+	      url: this.url
+	    })
+	  }
+
+	  Response.error = function() {
+	    var response = new Response(null, {status: 0, statusText: ''})
+	    response.type = 'error'
+	    return response
+	  }
+
+	  var redirectStatuses = [301, 302, 303, 307, 308]
+
+	  Response.redirect = function(url, status) {
+	    if (redirectStatuses.indexOf(status) === -1) {
+	      throw new RangeError('Invalid status code')
+	    }
+
+	    return new Response(null, {status: status, headers: {location: url}})
+	  }
+
+	  self.Headers = Headers;
+	  self.Request = Request;
+	  self.Response = Response;
+
+	  self.fetch = function(input, init) {
+	    return new Promise(function(resolve, reject) {
+	      var request
+	      if (Request.prototype.isPrototypeOf(input) && !init) {
+	        request = input
+	      } else {
+	        request = new Request(input, init)
+	      }
+
+	      var xhr = new XMLHttpRequest()
+
+	      function responseURL() {
+	        if ('responseURL' in xhr) {
+	          return xhr.responseURL
+	        }
+
+	        // Avoid security warnings on getResponseHeader when not allowed by CORS
+	        if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
+	          return xhr.getResponseHeader('X-Request-URL')
+	        }
+
+	        return;
+	      }
+
+	      xhr.onload = function() {
+	        var status = (xhr.status === 1223) ? 204 : xhr.status
+	        if (status < 100 || status > 599) {
+	          reject(new TypeError('Network request failed'))
+	          return
+	        }
+	        var options = {
+	          status: status,
+	          statusText: xhr.statusText,
+	          headers: headers(xhr),
+	          url: responseURL()
+	        }
+	        var body = 'response' in xhr ? xhr.response : xhr.responseText;
+	        resolve(new Response(body, options))
+	      }
+
+	      xhr.onerror = function() {
+	        reject(new TypeError('Network request failed'))
+	      }
+
+	      xhr.open(request.method, request.url, true)
+
+	      if (request.credentials === 'include') {
+	        xhr.withCredentials = true
+	      }
+
+	      if ('responseType' in xhr && support.blob) {
+	        xhr.responseType = 'blob'
+	      }
+
+	      request.headers.forEach(function(value, name) {
+	        xhr.setRequestHeader(name, value)
+	      })
+
+	      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
+	    })
+	  }
+	  self.fetch.polyfill = true
+	})(typeof self !== 'undefined' ? self : this);
+
+
+/***/ },
+/* 500 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	// the whatwg-fetch polyfill installs the fetch() function
+	// on the global object (window or self)
+	//
+	// Return that as the export for use in Webpack, Browserify etc.
+	__webpack_require__(499);
+	module.exports = self.fetch.bind(self);
 
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _Drawing = __webpack_require__(497);
-
-	var _Drawing2 = _interopRequireDefault(_Drawing);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var Drawings = _react2.default.createClass({
-	    displayName: 'Drawings',
-	    render: function render() {
-	        return _react2.default.createElement(
-	            'div',
-	            null,
-	            this.props.drawings.map(function (drawing, index) {
-	                return _react2.default.createElement(_Drawing2.default, { key: index,
-	                    title: drawing.title,
-	                    description: drawing.description,
-	                    picture: drawing.picture,
-	                    drawing_composition: drawing.drawing_composition,
-	                    price: drawing.price,
-	                    tags: drawing.tags,
-	                    created: drawing.created });
-	            })
-	        );
-	    }
-	});
-
-	exports.default = Drawings;
 
 /***/ }
 /******/ ]);

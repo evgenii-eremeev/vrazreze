@@ -1,15 +1,10 @@
+import fetch from 'isomorphic-fetch';
 // action types
 
-export const FETCH_DRAWINGS = "FETCH_DRAWINGS";
 export const FETCH_CATEGORIES = "FETCH_CATEGORIES";
 export const FETCH_CATEGORY = "FETCH_CATEGORY";
 
-
 // sync action creators
-export function fetchDrawings(data) {
-	return { type: FETCH_DRAWINGS, data }
-}
-
 export function fetchCategories(data) {
 	return { type: FETCH_CATEGORIES, data }
 }
@@ -19,27 +14,18 @@ export function fetchCategory(data) {
 }
 
 // async action creators
-export function attemptFetchDrawings() {
-    return (dispatch) => {
-        $.getJSON('api/drawings', function (drawings) {
-            return dispatch(fetchDrawings(drawings));
-        });
-    }
-}
-
 export function attemptFetchCategories() {
     return (dispatch) => {
-        $.getJSON('api/categories', function (categories) {
-            return dispatch(fetchCategories(categories));
-        });
-    }
+		return fetch('/api/categories')
+			.then(response => response.json())
+			.then(json => dispatch(fetchCategories(json)));
+    };
 }
 
-export function attemptFetchCategory(url) {
+export function attemptFetchCategory(categoryUrl) {
     return (dispatch) => {
-        $.getJSON('api/category/' + url, function (category) {
-			console.log('attemptFetchCategory...');
-            dispatch(fetchCategory(category));
-        });
+		return fetch('/api/category/' + categoryUrl)
+			.then(response => response.json())
+			.then(json => dispatch(fetchCategory(json)));
     };
 }

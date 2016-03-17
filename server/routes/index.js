@@ -30,9 +30,6 @@ router.get('/logout', function(req, res) {
 });
 
 // API
-// drawings
-router.get('/api/drawings', apiCtrl.drawings);
-
 // categories
 router.get('/api/categories', apiCtrl.categories);
 

@@ -12,10 +12,8 @@ const SideNav = React.createClass({
         };
     },
 
-    onCategoryClick(idx, categoryUrl) {
+    onCategoryClick(idx) {
         this.setState({ active: idx });
-        // this.props.dispatch(attemptFetchCategory(categoryUrl));
-
     },
 
     render () {

@@ -3,20 +3,12 @@ const Category = require('../models/category');
 
 const apiCtrl = (function apiCtrl () {
 
-    function drawings (req, res) {
-        Drawing.find({}, function (err, drawings) {
-            if (err) { throw err; }
-            res.json(drawings);
-        });
-    }
-
     function categories (req, res) {
         Category
             .find()
             .sort({ position: 1 })
             .exec(function (err, categories) {
                 if (err) { throw err; }
-                console.log("api/categories");
                 res.json(categories)
             });
     }
@@ -26,7 +18,6 @@ const apiCtrl = (function apiCtrl () {
             res.json([]);
             return;
         }
-        console.log(req.params.url);
         Category
             .findOne({ url: req.params.url })
             .exec(function (err, category) {
@@ -35,14 +26,12 @@ const apiCtrl = (function apiCtrl () {
                     .find({ category: category._id })
                     .exec(function (err, drawings) {
                         if (err) { throw err; }
-                        console.log("api/category");
                         res.json(drawings);
                     });
             });
     }
 
     const publicAPI = {
-        drawings,
         categories,
         category
     };
