@@ -26433,10 +26433,15 @@
 
 	var _drawingsReducer2 = _interopRequireDefault(_drawingsReducer);
 
+	var _categoriesReducer = __webpack_require__(503);
+
+	var _categoriesReducer2 = _interopRequireDefault(_categoriesReducer);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var rootReducer = (0, _redux.combineReducers)({
 	    drawings: _drawingsReducer2.default,
+	    categories: _categoriesReducer2.default,
 	    routing: _reactRouterRedux.routerReducer
 	});
 
@@ -26460,7 +26465,7 @@
 
 	var _reactRedux = __webpack_require__(227);
 
-	var _fetchDataActions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions/fetchDataActions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _categoriesActions = __webpack_require__(504);
 
 	var _Navigation = __webpack_require__(243);
 
@@ -26473,7 +26478,7 @@
 	    componentDidMount: function componentDidMount() {
 	        var dispatch = this.props.dispatch;
 
-	        dispatch((0, _fetchDataActions.attemptFetchCategories)());
+	        dispatch((0, _categoriesActions.fetchCategories)());
 	    },
 	    render: function render() {
 	        return _react2.default.createElement(
@@ -44041,8 +44046,6 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactRedux = __webpack_require__(227);
-
 	var _reactBootstrap = __webpack_require__(244);
 
 	var _SideNav = __webpack_require__(495);
@@ -44063,7 +44066,7 @@
 	                _react2.default.createElement(
 	                    _reactBootstrap.Col,
 	                    { sm: 3 },
-	                    _react2.default.createElement(_SideNav2.default, { categories: this.props.categories })
+	                    _react2.default.createElement(_SideNav2.default, null)
 	                ),
 	                _react2.default.createElement(
 	                    _reactBootstrap.Col,
@@ -44075,13 +44078,7 @@
 	    }
 	});
 
-	function mapStateToProps(state) {
-	    return {
-	        categories: state.data.categories
-	    };
-	}
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Categories);
+	exports.default = Categories;
 
 /***/ },
 /* 495 */
@@ -44103,8 +44100,6 @@
 
 	var _reactRedux = __webpack_require__(227);
 
-	var _fetchDataActions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../actions/fetchDataActions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var SideNav = _react2.default.createClass({
@@ -44123,7 +44118,7 @@
 	        return _react2.default.createElement(
 	            'ul',
 	            { className: 'nav nav-pills nav-stacked' },
-	            this.props.categories.map(function (category, idx) {
+	            this.props.categories.items.map(function (category, idx) {
 	                return _react2.default.createElement(
 	                    'li',
 	                    { role: 'presentation',
@@ -44144,7 +44139,13 @@
 	    }
 	});
 
-	exports.default = (0, _reactRedux.connect)()(SideNav);
+	function mapStateToProps(state) {
+	    return {
+	        categories: state.categories
+	    };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(SideNav);
 
 /***/ },
 /* 496 */
@@ -44162,7 +44163,7 @@
 
 	var _reactRedux = __webpack_require__(227);
 
-	var _fetchDataActions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../actions/fetchDataActions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _drawingsActions = __webpack_require__(502);
 
 	var _Drawing = __webpack_require__(497);
 
@@ -44177,7 +44178,7 @@
 	        var dispatch = _props.dispatch;
 	        var params = _props.params;
 
-	        dispatch((0, _fetchDataActions.attemptFetchCategory)(params.categoryUrl));
+	        dispatch((0, _drawingsActions.fetchDrawings)(params.categoryUrl));
 	    },
 	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	        if (nextProps.params.categoryUrl !== this.props.params.categoryUrl) {
@@ -44185,7 +44186,7 @@
 	            var params = nextProps.params;
 	            var category = nextProps.category;
 
-	            dispatch((0, _fetchDataActions.attemptFetchCategory)(params.categoryUrl));
+	            dispatch((0, _drawingsActions.fetchDrawings)(params.categoryUrl));
 	        }
 	    },
 	    render: function render() {
@@ -44285,8 +44286,413 @@
 
 /***/ },
 /* 498 */,
-/* 499 */,
-/* 500 */,
+/* 499 */
+/***/ function(module, exports) {
+
+	(function(self) {
+	  'use strict';
+
+	  if (self.fetch) {
+	    return
+	  }
+
+	  function normalizeName(name) {
+	    if (typeof name !== 'string') {
+	      name = String(name)
+	    }
+	    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
+	      throw new TypeError('Invalid character in header field name')
+	    }
+	    return name.toLowerCase()
+	  }
+
+	  function normalizeValue(value) {
+	    if (typeof value !== 'string') {
+	      value = String(value)
+	    }
+	    return value
+	  }
+
+	  function Headers(headers) {
+	    this.map = {}
+
+	    if (headers instanceof Headers) {
+	      headers.forEach(function(value, name) {
+	        this.append(name, value)
+	      }, this)
+
+	    } else if (headers) {
+	      Object.getOwnPropertyNames(headers).forEach(function(name) {
+	        this.append(name, headers[name])
+	      }, this)
+	    }
+	  }
+
+	  Headers.prototype.append = function(name, value) {
+	    name = normalizeName(name)
+	    value = normalizeValue(value)
+	    var list = this.map[name]
+	    if (!list) {
+	      list = []
+	      this.map[name] = list
+	    }
+	    list.push(value)
+	  }
+
+	  Headers.prototype['delete'] = function(name) {
+	    delete this.map[normalizeName(name)]
+	  }
+
+	  Headers.prototype.get = function(name) {
+	    var values = this.map[normalizeName(name)]
+	    return values ? values[0] : null
+	  }
+
+	  Headers.prototype.getAll = function(name) {
+	    return this.map[normalizeName(name)] || []
+	  }
+
+	  Headers.prototype.has = function(name) {
+	    return this.map.hasOwnProperty(normalizeName(name))
+	  }
+
+	  Headers.prototype.set = function(name, value) {
+	    this.map[normalizeName(name)] = [normalizeValue(value)]
+	  }
+
+	  Headers.prototype.forEach = function(callback, thisArg) {
+	    Object.getOwnPropertyNames(this.map).forEach(function(name) {
+	      this.map[name].forEach(function(value) {
+	        callback.call(thisArg, value, name, this)
+	      }, this)
+	    }, this)
+	  }
+
+	  function consumed(body) {
+	    if (body.bodyUsed) {
+	      return Promise.reject(new TypeError('Already read'))
+	    }
+	    body.bodyUsed = true
+	  }
+
+	  function fileReaderReady(reader) {
+	    return new Promise(function(resolve, reject) {
+	      reader.onload = function() {
+	        resolve(reader.result)
+	      }
+	      reader.onerror = function() {
+	        reject(reader.error)
+	      }
+	    })
+	  }
+
+	  function readBlobAsArrayBuffer(blob) {
+	    var reader = new FileReader()
+	    reader.readAsArrayBuffer(blob)
+	    return fileReaderReady(reader)
+	  }
+
+	  function readBlobAsText(blob) {
+	    var reader = new FileReader()
+	    reader.readAsText(blob)
+	    return fileReaderReady(reader)
+	  }
+
+	  var support = {
+	    blob: 'FileReader' in self && 'Blob' in self && (function() {
+	      try {
+	        new Blob();
+	        return true
+	      } catch(e) {
+	        return false
+	      }
+	    })(),
+	    formData: 'FormData' in self,
+	    arrayBuffer: 'ArrayBuffer' in self
+	  }
+
+	  function Body() {
+	    this.bodyUsed = false
+
+
+	    this._initBody = function(body) {
+	      this._bodyInit = body
+	      if (typeof body === 'string') {
+	        this._bodyText = body
+	      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
+	        this._bodyBlob = body
+	      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
+	        this._bodyFormData = body
+	      } else if (!body) {
+	        this._bodyText = ''
+	      } else if (support.arrayBuffer && ArrayBuffer.prototype.isPrototypeOf(body)) {
+	        // Only support ArrayBuffers for POST method.
+	        // Receiving ArrayBuffers happens via Blobs, instead.
+	      } else {
+	        throw new Error('unsupported BodyInit type')
+	      }
+
+	      if (!this.headers.get('content-type')) {
+	        if (typeof body === 'string') {
+	          this.headers.set('content-type', 'text/plain;charset=UTF-8')
+	        } else if (this._bodyBlob && this._bodyBlob.type) {
+	          this.headers.set('content-type', this._bodyBlob.type)
+	        }
+	      }
+	    }
+
+	    if (support.blob) {
+	      this.blob = function() {
+	        var rejected = consumed(this)
+	        if (rejected) {
+	          return rejected
+	        }
+
+	        if (this._bodyBlob) {
+	          return Promise.resolve(this._bodyBlob)
+	        } else if (this._bodyFormData) {
+	          throw new Error('could not read FormData body as blob')
+	        } else {
+	          return Promise.resolve(new Blob([this._bodyText]))
+	        }
+	      }
+
+	      this.arrayBuffer = function() {
+	        return this.blob().then(readBlobAsArrayBuffer)
+	      }
+
+	      this.text = function() {
+	        var rejected = consumed(this)
+	        if (rejected) {
+	          return rejected
+	        }
+
+	        if (this._bodyBlob) {
+	          return readBlobAsText(this._bodyBlob)
+	        } else if (this._bodyFormData) {
+	          throw new Error('could not read FormData body as text')
+	        } else {
+	          return Promise.resolve(this._bodyText)
+	        }
+	      }
+	    } else {
+	      this.text = function() {
+	        var rejected = consumed(this)
+	        return rejected ? rejected : Promise.resolve(this._bodyText)
+	      }
+	    }
+
+	    if (support.formData) {
+	      this.formData = function() {
+	        return this.text().then(decode)
+	      }
+	    }
+
+	    this.json = function() {
+	      return this.text().then(JSON.parse)
+	    }
+
+	    return this
+	  }
+
+	  // HTTP methods whose capitalization should be normalized
+	  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
+
+	  function normalizeMethod(method) {
+	    var upcased = method.toUpperCase()
+	    return (methods.indexOf(upcased) > -1) ? upcased : method
+	  }
+
+	  function Request(input, options) {
+	    options = options || {}
+	    var body = options.body
+	    if (Request.prototype.isPrototypeOf(input)) {
+	      if (input.bodyUsed) {
+	        throw new TypeError('Already read')
+	      }
+	      this.url = input.url
+	      this.credentials = input.credentials
+	      if (!options.headers) {
+	        this.headers = new Headers(input.headers)
+	      }
+	      this.method = input.method
+	      this.mode = input.mode
+	      if (!body) {
+	        body = input._bodyInit
+	        input.bodyUsed = true
+	      }
+	    } else {
+	      this.url = input
+	    }
+
+	    this.credentials = options.credentials || this.credentials || 'omit'
+	    if (options.headers || !this.headers) {
+	      this.headers = new Headers(options.headers)
+	    }
+	    this.method = normalizeMethod(options.method || this.method || 'GET')
+	    this.mode = options.mode || this.mode || null
+	    this.referrer = null
+
+	    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
+	      throw new TypeError('Body not allowed for GET or HEAD requests')
+	    }
+	    this._initBody(body)
+	  }
+
+	  Request.prototype.clone = function() {
+	    return new Request(this)
+	  }
+
+	  function decode(body) {
+	    var form = new FormData()
+	    body.trim().split('&').forEach(function(bytes) {
+	      if (bytes) {
+	        var split = bytes.split('=')
+	        var name = split.shift().replace(/\+/g, ' ')
+	        var value = split.join('=').replace(/\+/g, ' ')
+	        form.append(decodeURIComponent(name), decodeURIComponent(value))
+	      }
+	    })
+	    return form
+	  }
+
+	  function headers(xhr) {
+	    var head = new Headers()
+	    var pairs = xhr.getAllResponseHeaders().trim().split('\n')
+	    pairs.forEach(function(header) {
+	      var split = header.trim().split(':')
+	      var key = split.shift().trim()
+	      var value = split.join(':').trim()
+	      head.append(key, value)
+	    })
+	    return head
+	  }
+
+	  Body.call(Request.prototype)
+
+	  function Response(bodyInit, options) {
+	    if (!options) {
+	      options = {}
+	    }
+
+	    this.type = 'default'
+	    this.status = options.status
+	    this.ok = this.status >= 200 && this.status < 300
+	    this.statusText = options.statusText
+	    this.headers = options.headers instanceof Headers ? options.headers : new Headers(options.headers)
+	    this.url = options.url || ''
+	    this._initBody(bodyInit)
+	  }
+
+	  Body.call(Response.prototype)
+
+	  Response.prototype.clone = function() {
+	    return new Response(this._bodyInit, {
+	      status: this.status,
+	      statusText: this.statusText,
+	      headers: new Headers(this.headers),
+	      url: this.url
+	    })
+	  }
+
+	  Response.error = function() {
+	    var response = new Response(null, {status: 0, statusText: ''})
+	    response.type = 'error'
+	    return response
+	  }
+
+	  var redirectStatuses = [301, 302, 303, 307, 308]
+
+	  Response.redirect = function(url, status) {
+	    if (redirectStatuses.indexOf(status) === -1) {
+	      throw new RangeError('Invalid status code')
+	    }
+
+	    return new Response(null, {status: status, headers: {location: url}})
+	  }
+
+	  self.Headers = Headers;
+	  self.Request = Request;
+	  self.Response = Response;
+
+	  self.fetch = function(input, init) {
+	    return new Promise(function(resolve, reject) {
+	      var request
+	      if (Request.prototype.isPrototypeOf(input) && !init) {
+	        request = input
+	      } else {
+	        request = new Request(input, init)
+	      }
+
+	      var xhr = new XMLHttpRequest()
+
+	      function responseURL() {
+	        if ('responseURL' in xhr) {
+	          return xhr.responseURL
+	        }
+
+	        // Avoid security warnings on getResponseHeader when not allowed by CORS
+	        if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
+	          return xhr.getResponseHeader('X-Request-URL')
+	        }
+
+	        return;
+	      }
+
+	      xhr.onload = function() {
+	        var status = (xhr.status === 1223) ? 204 : xhr.status
+	        if (status < 100 || status > 599) {
+	          reject(new TypeError('Network request failed'))
+	          return
+	        }
+	        var options = {
+	          status: status,
+	          statusText: xhr.statusText,
+	          headers: headers(xhr),
+	          url: responseURL()
+	        }
+	        var body = 'response' in xhr ? xhr.response : xhr.responseText;
+	        resolve(new Response(body, options))
+	      }
+
+	      xhr.onerror = function() {
+	        reject(new TypeError('Network request failed'))
+	      }
+
+	      xhr.open(request.method, request.url, true)
+
+	      if (request.credentials === 'include') {
+	        xhr.withCredentials = true
+	      }
+
+	      if ('responseType' in xhr && support.blob) {
+	        xhr.responseType = 'blob'
+	      }
+
+	      request.headers.forEach(function(value, name) {
+	        xhr.setRequestHeader(name, value)
+	      })
+
+	      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
+	    })
+	  }
+	  self.fetch.polyfill = true
+	})(typeof self !== 'undefined' ? self : this);
+
+
+/***/ },
+/* 500 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// the whatwg-fetch polyfill installs the fetch() function
+	// on the global object (window or self)
+	//
+	// Return that as the export for use in Webpack, Browserify etc.
+	__webpack_require__(499);
+	module.exports = self.fetch.bind(self);
+
+
+/***/ },
 /* 501 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -44296,7 +44702,7 @@
 	    value: true
 	});
 
-	var _drawingsActions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions/drawingsActions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _drawingsActions = __webpack_require__(502);
 
 	var defaultDrawingsState = {
 	    isFetching: false,
@@ -44326,6 +44732,168 @@
 	}
 
 	exports.default = drawingsReducer;
+
+/***/ },
+/* 502 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.FETCH_DRAWINGS_FAIL = exports.FETCH_DRAWINGS_SUCCESS = exports.START_FETCHING_DRAWINGS = undefined;
+	exports.startFetchingDrawings = startFetchingDrawings;
+	exports.fetchDrawingsSuccess = fetchDrawingsSuccess;
+	exports.fetchDrawingsFail = fetchDrawingsFail;
+	exports.fetchDrawings = fetchDrawings;
+
+	var _isomorphicFetch = __webpack_require__(500);
+
+	var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// action types
+	var START_FETCHING_DRAWINGS = exports.START_FETCHING_DRAWINGS = "START_FETCHING_DRAWINGS";
+	var FETCH_DRAWINGS_SUCCESS = exports.FETCH_DRAWINGS_SUCCESS = "FETCH_DRAWINGS_SUCCESS";
+	var FETCH_DRAWINGS_FAIL = exports.FETCH_DRAWINGS_FAIL = "FETCH_DRAWINGS_FAIL";
+
+	// sync action creators
+	function startFetchingDrawings() {
+		return {
+			type: START_FETCHING_DRAWINGS,
+			isFetching: true
+		};
+	}
+
+	function fetchDrawingsSuccess(categoryUrl, items) {
+		return {
+			type: FETCH_DRAWINGS_SUCCESS,
+			categoryUrl: categoryUrl,
+			items: items
+		};
+	}
+
+	function fetchDrawingsFail(error) {
+		return {
+			type: FETCH_DRAWINGS_FAIL,
+			error: error
+		};
+	}
+
+	// async action creators
+	function fetchDrawings(categoryUrl) {
+		return function (dispatch) {
+			dispatch(startFetchingDrawings());
+			return (0, _isomorphicFetch2.default)('/api/category/' + categoryUrl).then(function (response) {
+				return response.json();
+			}).then(function (json) {
+				return dispatch(fetchDrawingsSuccess(categoryUrl, json));
+			}).catch(function (error) {
+				return dispatch(fetchDrawingsFail("Error fetching drawings..."));
+			});
+		};
+	}
+
+/***/ },
+/* 503 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _categoriesActions = __webpack_require__(504);
+
+	var defaultCategoriesState = {
+	    isFetching: false,
+	    items: [],
+	    error: null
+	}; // action types
+
+
+	function categoriesReducer() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? defaultCategoriesState : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _categoriesActions.START_FETCHING_CATEGORIES:
+	            return Object.assign({}, defaultCategoriesState, { isFetching: true });
+	        case _categoriesActions.FETCH_CATEGORIES_SUCCESS:
+	            return Object.assign({}, defaultCategoriesState, { items: action.items });
+	        case _categoriesActions.FETCH_CATEGORIES_FAIL:
+	            return Object.assign({}, defaultCategoriesState, { error: action.error });
+	        default:
+	            return defaultCategoriesState;
+	    }
+	}
+
+	exports.default = categoriesReducer;
+
+/***/ },
+/* 504 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.FETCH_CATEGORIES_FAIL = exports.FETCH_CATEGORIES_SUCCESS = exports.START_FETCHING_CATEGORIES = undefined;
+	exports.startFetchingCategories = startFetchingCategories;
+	exports.fetchCategoriesSuccess = fetchCategoriesSuccess;
+	exports.fetchCategoriesFail = fetchCategoriesFail;
+	exports.fetchCategories = fetchCategories;
+
+	var _isomorphicFetch = __webpack_require__(500);
+
+	var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// action types
+	var START_FETCHING_CATEGORIES = exports.START_FETCHING_CATEGORIES = "START_FETCHING_CATEGORIES";
+	var FETCH_CATEGORIES_SUCCESS = exports.FETCH_CATEGORIES_SUCCESS = "FETCH_CATEGORIES_SUCCESS";
+	var FETCH_CATEGORIES_FAIL = exports.FETCH_CATEGORIES_FAIL = "FETCH_CATEGORIES_FAIL";
+
+	// sync action creators
+	function startFetchingCategories() {
+		return {
+			type: START_FETCHING_CATEGORIES,
+			isFetching: true
+		};
+	}
+
+	function fetchCategoriesSuccess(items) {
+		return {
+			type: FETCH_CATEGORIES_SUCCESS,
+			items: items
+		};
+	}
+
+	function fetchCategoriesFail(error) {
+		return {
+			type: FETCH_CATEGORIES_FAIL,
+			error: error
+		};
+	}
+
+	// async action creators
+	function fetchCategories() {
+		return function (dispatch) {
+			dispatch(startFetchingCategories());
+			return (0, _isomorphicFetch2.default)('/api/categories').then(function (response) {
+				return response.json();
+			}).then(function (json) {
+				return dispatch(fetchCategoriesSuccess(json));
+			}).catch(function (error) {
+				return dispatch(fetchCategoriesFail("Error fetching categories..."));
+			});
+		};
+	}
 
 /***/ }
 /******/ ]);

@@ -1,9 +1,9 @@
 import fetch from 'isomorphic-fetch';
 
 // action types
-const START_FETCHING_DRAWINGS = "START_FETCHING_DRAWINGS";
-const FETCH_DRAWINGS_SUCCESS = "FETCH_DRAWINGS_SUCCESS";
-const FETCH_DRAWINGS_FAIL = "FETCH_DRAWINGS_FAIL";
+export const START_FETCHING_DRAWINGS = "START_FETCHING_DRAWINGS";
+export const FETCH_DRAWINGS_SUCCESS = "FETCH_DRAWINGS_SUCCESS";
+export const FETCH_DRAWINGS_FAIL = "FETCH_DRAWINGS_FAIL";
 
 // sync action creators
 export function startFetchingDrawings() {
@@ -29,7 +29,7 @@ export function fetchDrawingsFail(error) {
 }
 
 // async action creators
-export function attemptFetchCategory(categoryUrl) {
+export function fetchDrawings(categoryUrl) {
     return (dispatch) => {
 		dispatch(startFetchingDrawings());
 		return fetch('/api/category/' + categoryUrl)
@@ -38,16 +38,7 @@ export function attemptFetchCategory(categoryUrl) {
 				fetchDrawingsSuccess(categoryUrl, json))
 			)
 			.catch(error => dispatch(
-				fetchDrawingsFail("Can't load drowings, retry")
-			);
+				fetchDrawingsFail("Error fetching drawings...")
+			));
     };
 }
-
-
-// export function attemptFetchCategories() {
-//     return (dispatch) => {
-// 		return fetch('/api/categories')
-// 			.then(response => response.json())
-// 			.then(json => dispatch(fetchCategories(json)));
-//     };
-// }

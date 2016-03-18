@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react';
 import { Tabs, Tab } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { attemptFetchCategory, attemptFetchCategories, fetchCategory } from '../../actions/fetchDataActions';
 
 const SideNav = React.createClass({
 
@@ -19,7 +18,7 @@ const SideNav = React.createClass({
     render () {
         return (
             <ul className="nav nav-pills nav-stacked">
-                {this.props.categories.map((category, idx) => (
+                {this.props.categories.items.map((category, idx) => (
                     <li role="presentation"
                         key={idx}
                         onClick={() => {
@@ -37,6 +36,10 @@ const SideNav = React.createClass({
     }
 });
 
+function mapStateToProps(state) {
+    return {
+        categories: state.categories
+    };
+}
 
-
-export default connect()(SideNav);
+export default connect(mapStateToProps)(SideNav);

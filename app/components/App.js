@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { attemptFetchCategories, attemptFetchCategory } from '../actions/fetchDataActions';
+import { fetchCategories } from '../actions/categoriesActions';
 
 import Navigation from './navigation/Navigation';
 
@@ -9,7 +9,7 @@ const App = React.createClass({
 
     componentDidMount () {
         const { dispatch } = this.props;
-        dispatch(attemptFetchCategories());
+        dispatch(fetchCategories());
     },
 
     render () {

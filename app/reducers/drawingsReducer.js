@@ -10,7 +10,7 @@ const defaultDrawingsState = {
     items: [],
     categoryUrl: '',
     error: null
-}
+};
 
 function drawingsReducer(
     state = defaultDrawingsState,

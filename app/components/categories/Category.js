@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { attemptFetchCategory, attemptFetchCategories, fetchCategory } from '../../actions/fetchDataActions';
+import { fetchDrawings } from '../../actions/drawingsActions';
 
 import Drawing from './Drawing';
 
@@ -8,13 +8,13 @@ const Category = React.createClass({
 
     componentDidMount() {
         const { dispatch, params } = this.props;
-        dispatch(attemptFetchCategory(params.categoryUrl));
+        dispatch(fetchDrawings(params.categoryUrl));
     },
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.params.categoryUrl !== this.props.params.categoryUrl) {
             const { dispatch, params, category } = nextProps
-            dispatch(attemptFetchCategory(params.categoryUrl));
+            dispatch(fetchDrawings(params.categoryUrl));
         }
     },
 

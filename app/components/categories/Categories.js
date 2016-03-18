@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
 
 import { Grid, Row, Col } from 'react-bootstrap';
 import SideNav from './SideNav';
@@ -11,7 +10,7 @@ const Categories = React.createClass({
         return (
             <Grid fluid={true}>
                 <Row className="show-grid">
-                    <Col sm={3}><SideNav categories={this.props.categories}/></Col>
+                    <Col sm={3}><SideNav /></Col>
                     <Col sm={9}>
                         { this.props.children }
                     </Col>
@@ -21,10 +20,5 @@ const Categories = React.createClass({
     }
 });
 
-function mapStateToProps(state) {
-    return {
-        categories: state.data.categories
-    };
-}
 
-export default connect(mapStateToProps)(Categories);
+export default Categories;
