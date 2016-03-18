@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 
-import fetchDataReducer from './fetchDataReducer';
+import drawingsReducer from './drawingsReducer';
 
 const rootReducer = combineReducers({
-    data: fetchDataReducer,
+    drawings: drawingsReducer,
     routing: routerReducer
 });
 

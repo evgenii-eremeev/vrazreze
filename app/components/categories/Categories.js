@@ -1,10 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { attemptFetchCategory, attemptFetchCategories } from '../../actions/fetchDataActions';
 
 import { Grid, Row, Col } from 'react-bootstrap';
 import SideNav from './SideNav';
-import Category from './Category';
 
 
 const Categories = React.createClass({
