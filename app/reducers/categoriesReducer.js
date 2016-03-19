@@ -35,7 +35,7 @@ function categoriesReducer(
                 { error: action.error }
             );
         default:
-            return defaultCategoriesState
+            return state;
         }
 }
 

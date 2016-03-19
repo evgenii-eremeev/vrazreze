@@ -16,9 +16,10 @@ const SideNav = React.createClass({
     },
 
     render () {
+        const { categories } = this.props;
         return (
             <ul className="nav nav-pills nav-stacked">
-                {this.props.categories.items.map((category, idx) => (
+                {categories.items.map((category, idx) => (
                     <li role="presentation"
                         key={idx}
                         onClick={() => {

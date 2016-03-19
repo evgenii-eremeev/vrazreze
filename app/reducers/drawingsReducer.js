@@ -39,7 +39,7 @@ function drawingsReducer(
                 { error: action.error }
             );
         default:
-            return defaultDrawingsState
+            return state;
         }
 }
 

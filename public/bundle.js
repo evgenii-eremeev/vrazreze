@@ -44115,10 +44115,12 @@
 	    render: function render() {
 	        var _this = this;
 
+	        var categories = this.props.categories;
+
 	        return _react2.default.createElement(
 	            'ul',
 	            { className: 'nav nav-pills nav-stacked' },
-	            this.props.categories.items.map(function (category, idx) {
+	            categories.items.map(function (category, idx) {
 	                return _react2.default.createElement(
 	                    'li',
 	                    { role: 'presentation',
@@ -44184,24 +44186,22 @@
 	        if (nextProps.params.categoryUrl !== this.props.params.categoryUrl) {
 	            var dispatch = nextProps.dispatch;
 	            var params = nextProps.params;
-	            var category = nextProps.category;
 
 	            dispatch((0, _drawingsActions.fetchDrawings)(params.categoryUrl));
 	        }
 	    },
 	    render: function render() {
-	        return _react2.default.createElement(
+	        var drawings = this.props.drawings;
+
+	        return drawings.isFetching ? _react2.default.createElement(
+	            'p',
+	            null,
+	            'Загружаем...'
+	        ) : _react2.default.createElement(
 	            'div',
 	            null,
-	            this.props.category.map(function (drawing, index) {
-	                return _react2.default.createElement(_Drawing2.default, { key: index,
-	                    title: drawing.title,
-	                    description: drawing.description,
-	                    picture: drawing.picture,
-	                    drawing_composition: drawing.drawing_composition,
-	                    price: drawing.price,
-	                    tags: drawing.tags,
-	                    created: drawing.created });
+	            drawings.items.map(function (drawing, index) {
+	                return _react2.default.createElement(_Drawing2.default, { key: index, drawing: drawing });
 	            })
 	        );
 	    }
@@ -44209,7 +44209,7 @@
 
 	function mapStateToProps(state) {
 	    return {
-	        category: state.data.category
+	        drawings: state.drawings
 	    };
 	}
 
@@ -44232,13 +44232,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Drawing = function Drawing(_ref) {
-	    var title = _ref.title;
-	    var description = _ref.description;
-	    var price = _ref.price;
-	    var drawing_composition = _ref.drawing_composition;
-	    var tags = _ref.tags;
-	    var created = _ref.created;
-	    var picture = _ref.picture;
+	    var drawing = _ref.drawing;
 
 	    return _react2.default.createElement(
 	        "div",
@@ -44246,38 +44240,38 @@
 	        _react2.default.createElement(
 	            "h1",
 	            null,
-	            title
+	            drawing.title
 	        ),
-	        _react2.default.createElement("img", { src: "uploads/" + picture, style: { maxWidth: 200 } }),
+	        _react2.default.createElement("img", { src: "uploads/" + drawing.picture, style: { maxWidth: 200 } }),
 	        _react2.default.createElement(
 	            "p",
 	            null,
-	            description
+	            drawing.description
 	        ),
 	        _react2.default.createElement(
 	            "p",
 	            null,
 	            "Состав: ",
-	            drawing_composition
+	            drawing.drawing_composition
 	        ),
 	        _react2.default.createElement(
 	            "p",
 	            null,
 	            "Цена: ",
-	            price,
+	            drawing.price,
 	            " руб."
 	        ),
 	        _react2.default.createElement(
 	            "p",
 	            null,
 	            "Ключевые слова: ",
-	            tags
+	            drawing.tags
 	        ),
 	        _react2.default.createElement(
 	            "p",
 	            null,
 	            "Дата: ",
-	            created
+	            drawing.created
 	        )
 	    );
 	};
@@ -44727,7 +44721,7 @@
 	        case _drawingsActions.FETCH_DRAWINGS_FAIL:
 	            return Object.assign({}, defaultDrawingsState, { error: action.error });
 	        default:
-	            return defaultDrawingsState;
+	            return state;
 	    }
 	}
 
@@ -44827,7 +44821,7 @@
 	        case _categoriesActions.FETCH_CATEGORIES_FAIL:
 	            return Object.assign({}, defaultCategoriesState, { error: action.error });
 	        default:
-	            return defaultCategoriesState;
+	            return state;
 	    }
 	}
 
