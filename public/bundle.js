@@ -43910,7 +43910,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactBootstrap = __webpack_require__(244);
+	var _reactDom = __webpack_require__(158);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _regexValidators = __webpack_require__(505);
 
 	var _reactRouterRedux = __webpack_require__(234);
 
@@ -43920,45 +43924,102 @@
 
 	var Login = _react2.default.createClass({
 	    displayName: 'Login',
-	    onLoginSubmit: function onLoginSubmit(e) {
-	        e.preventDefault();
-	        var dispatch = this.props.dispatch;
-
-	        $.ajax({
-	            type: "POST",
-	            url: '/login',
-	            data: $("#loginForm").serialize(),
-	            success: function success(user) {
-	                console.log("Login!");
-	                sessionStorage.username = user.username;
-	                sessionStorage._id = user._id;
-	                $("#loginForm")[0].reset();
-	                window.location = '/';
-	                // use this than redux will be added
-	                // dispatch(push('/'));
-	            }
+	    getInitialState: function getInitialState() {
+	        return {
+	            errorMessage: null,
+	            isEmailFieldIncorrect: false
+	        };
+	    },
+	    componentDidMount: function componentDidMount() {
+	        _reactDom2.default.findDOMNode(this.refs.email).focus();
+	    },
+	    getInputContainerClass: function getInputContainerClass(inputIncorrect) {
+	        return "form-group " + (inputIncorrect ? "has-error" : "");
+	    },
+	    findErrorsInLoginForm: function findErrorsInLoginForm(formData) {
+	        // Checking email
+	        this.setState({
+	            errorMessage: null,
+	            isEmailFieldIncorrect: false,
+	            isPasswordFieldIncorrect: false
 	        });
+
+	        if (formData.email === "") {
+	            this.setState({
+	                errorMessage: "Нужно ввести e-mail.",
+	                isEmailFieldIncorrect: true
+	            });
+	        } else if (!(0, _regexValidators.validateEmail)(formData.email)) {
+	            this.setState({
+	                errorMessage: "Пожалуйста введите правильный e-mail.",
+	                isEmailFieldIncorrect: true
+	            });
+	        } else if (formData.password === "") {
+	            this.setState({
+	                errorMessage: "Пароль не может быть пустым.",
+	                isPasswordFieldIncorrect: true
+	            });
+	        }
+	    },
+	    onLoginClick: function onLoginClick() {
+	        var formData = {
+	            email: this.refs.email.value.trim(),
+	            password: this.refs.password.value.trim()
+	        };
+	        this.findErrorsInLoginForm(formData);
 	    },
 	    render: function render() {
+	        var errorLabel = undefined;
+	        if (this.state.errorMessage) {
+	            errorLabel = _react2.default.createElement(
+	                'div',
+	                { className: this.getInputContainerClass(true) },
+	                _react2.default.createElement('br', null),
+	                _react2.default.createElement(
+	                    'label',
+	                    { className: 'control-label' },
+	                    this.state.errorMessage
+	                )
+	            );
+	        }
+
 	        return _react2.default.createElement(
 	            'div',
 	            { className: 'container' },
 	            _react2.default.createElement(
-	                'h1',
-	                null,
-	                'Вход'
-	            ),
-	            _react2.default.createElement('br', null),
-	            _react2.default.createElement(
 	                'form',
-	                { role: 'form', id: 'loginForm', method: 'post', style: { maxWidth: 300 }, onSubmit: this.onLoginSubmit },
-	                _react2.default.createElement(_reactBootstrap.Input, { type: 'text', name: 'username', label: 'Имя пользователя' }),
-	                _react2.default.createElement(_reactBootstrap.Input, { type: 'password', name: 'password', label: 'Пароль' }),
+	                { style: { maxWidth: 400, margin: "0 auto" } },
 	                _react2.default.createElement(
-	                    _reactBootstrap.Button,
-	                    { type: 'submit', bsStyle: 'primary' },
+	                    'h1',
+	                    null,
+	                    'Вход'
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: this.getInputContainerClass(this.state.isEmailFieldIncorrect) },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { className: 'control-label' },
+	                        'E-mail'
+	                    ),
+	                    _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'email' })
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: this.getInputContainerClass(this.state.isPasswordFieldIncorrect) },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { className: 'control-label' },
+	                        'Пароль'
+	                    ),
+	                    _react2.default.createElement('input', { className: 'form-control', type: 'password', ref: 'password' })
+	                ),
+	                _react2.default.createElement(
+	                    'button',
+	                    { onClick: this.onLoginClick, className: 'btn btn-primary' },
 	                    'Войти'
-	                )
+	                ),
+	                errorLabel
 	            )
 	        );
 	    }
@@ -44887,6 +44948,26 @@
 				return dispatch(fetchCategoriesFail("Error fetching categories..."));
 			});
 		};
+	}
+
+/***/ },
+/* 505 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.validateEmail = validateEmail;
+	var emailRegex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+
+	/**
+	* Given a trimmed string, returns true if the string matches
+	* a proper email format.
+	*/
+	function validateEmail(email) {
+		return emailRegex.test(email);
 	}
 
 /***/ }

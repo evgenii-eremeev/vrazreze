@@ -1,38 +1,87 @@
 import React, { PropTypes } from 'react';
-import { Input, Button } from 'react-bootstrap';
+import ReactDOM from 'react-dom';
+import { validateEmail } from '../utils/regexValidators';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 
 const Login = React.createClass({
 
-    onLoginSubmit (e) {
-        e.preventDefault();
-        const { dispatch } = this.props;
-        $.ajax({
-            type: "POST",
-            url: '/login',
-            data: $("#loginForm").serialize(),
-            success: function (user) {
-                console.log("Login!");
-                sessionStorage.username = user.username;
-                sessionStorage._id = user._id;
-                $("#loginForm")[0].reset();
-                window.location = '/';
-                // use this than redux will be added
-                // dispatch(push('/'));
-            }
+    getInitialState() {
+        return {
+            errorMessage:  null,
+            isEmailFieldIncorrect : false
+        };
+    },
+
+    componentDidMount(){
+        ReactDOM.findDOMNode(this.refs.email).focus();
+    },
+
+    getInputContainerClass(inputIncorrect){
+        return ("form-group " + (inputIncorrect ? "has-error" : "") );
+    },
+
+    findErrorsInLoginForm(formData) {
+        // Checking email
+        this.setState({
+            errorMessage:  null,
+            isEmailFieldIncorrect: false,
+            isPasswordFieldIncorrect: false
         });
+
+        if (formData.email === "") {
+            this.setState({
+                errorMessage: "Нужно ввести e-mail.",
+                isEmailFieldIncorrect: true
+            });
+        }
+        else if (!validateEmail(formData.email)) {
+            this.setState({
+                errorMessage: "Пожалуйста введите правильный e-mail.",
+                isEmailFieldIncorrect: true
+            });
+        }
+        else if (formData.password === "") {
+            this.setState({
+                errorMessage: "Пароль не может быть пустым.",
+                isPasswordFieldIncorrect: true
+            });
+        }
+    },
+
+    onLoginClick() {
+        const formData = {
+            email : this.refs.email.value.trim(),
+            password : this.refs.password.value.trim()
+        };
+        this.findErrorsInLoginForm(formData);
     },
 
     render () {
+        let errorLabel;
+        if (this.state.errorMessage) {
+            errorLabel = (
+                <div className={this.getInputContainerClass(true)}>
+                    <br />
+                    <label className="control-label">{this.state.errorMessage}</label>
+                </div>
+            );
+        }
+
         return (
             <div className="container">
-                <h1>Вход</h1>
-                <br />
-                <form role='form' id="loginForm" method="post" style={{maxWidth: 300}} onSubmit={this.onLoginSubmit}>
-                    <Input type="text"  name="username" label="Имя пользователя" />
-                    <Input type="password" name="password" label="Пароль" />
-                    <Button type="submit" bsStyle="primary">Войти</Button>
+                <form style={{maxWidth: 400, margin: "0 auto"}}>
+                    <h1>Вход</h1>
+                    <div className={this.getInputContainerClass(this.state.isEmailFieldIncorrect)}>
+                        <label className="control-label">E-mail</label>
+                        <input className="form-control" type="text" ref="email" />
+                    </div>
+                    <div className={this.getInputContainerClass(this.state.isPasswordFieldIncorrect)}>
+                        <label className="control-label">Пароль</label>
+                        <input className="form-control" type="password" ref="password" />
+                    </div>
+                    <button onClick={this.onLoginClick} className="btn btn-primary">Войти</button>
+                    { errorLabel }
                 </form>
             </div>
         );
