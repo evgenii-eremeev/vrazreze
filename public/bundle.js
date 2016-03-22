@@ -82,9 +82,9 @@
 
 	var _NewDrawing2 = _interopRequireDefault(_NewDrawing);
 
-	var _Login = __webpack_require__(492);
+	var _MainLogin = __webpack_require__(508);
 
-	var _Login2 = _interopRequireDefault(_Login);
+	var _MainLogin2 = _interopRequireDefault(_MainLogin);
 
 	var _Register = __webpack_require__(493);
 
@@ -131,7 +131,7 @@
 	            { path: '/', component: _App2.default },
 	            _react2.default.createElement(_reactRouter.IndexRoute, { component: _Home2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: 'new_drawing', component: _NewDrawing2.default }),
-	            _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _Login2.default }),
+	            _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _MainLogin2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: 'register', component: _Register2.default }),
 	            _react2.default.createElement(
 	                _reactRouter.Route,
@@ -26437,11 +26437,16 @@
 
 	var _categoriesReducer2 = _interopRequireDefault(_categoriesReducer);
 
+	var _authReducer = __webpack_require__(506);
+
+	var _authReducer2 = _interopRequireDefault(_authReducer);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var rootReducer = (0, _redux.combineReducers)({
 	    drawings: _drawingsReducer2.default,
 	    categories: _categoriesReducer2.default,
+	    userAuthSession: _authReducer2.default,
 	    routing: _reactRouterRedux.routerReducer
 	});
 
@@ -43515,26 +43520,41 @@
 
 	var _reactRouterBootstrap = __webpack_require__(487);
 
+	var _reactRedux = __webpack_require__(227);
+
+	var _authActions = __webpack_require__(507);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var NavRight = _react2.default.createClass({
 	    displayName: 'NavRight',
-	    getInitialState: function getInitialState() {
-	        return {
-	            username: sessionStorage.username
-	        };
-	    },
 	    onLogoutClick: function onLogoutClick() {
-	        sessionStorage.clear();
-	        this.setState({
-	            username: ""
-	        });
-	        $.get('/logout', function (data) {
-	            console.log(data);
-	        });
+	        this.props.dispatch((0, _authActions.attemptLogout)());
 	    },
 	    render: function render() {
-	        var beforeLogin = _react2.default.createElement(
+	        return this.props.userAuthSession.isLoggedIn ? _react2.default.createElement(
+	            _reactBootstrap.Nav,
+	            { pullRight: true },
+	            _react2.default.createElement(
+	                _reactRouterBootstrap.LinkContainer,
+	                { to: 'new_drawing' },
+	                _react2.default.createElement(
+	                    _reactBootstrap.NavItem,
+	                    { eventKey: 1 },
+	                    'Добавить'
+	                )
+	            ),
+	            _react2.default.createElement(
+	                _reactBootstrap.NavItem,
+	                { eventKey: 1 },
+	                this.props.userAuthSession.userObject.username
+	            ),
+	            _react2.default.createElement(
+	                _reactBootstrap.NavItem,
+	                { eventKey: 2, onClick: this.onLogoutClick },
+	                'Выйти'
+	            )
+	        ) : _react2.default.createElement(
 	            _reactBootstrap.Nav,
 	            { pullRight: true },
 	            _react2.default.createElement(
@@ -43556,35 +43576,16 @@
 	                )
 	            )
 	        );
-
-	        var afterLogin = _react2.default.createElement(
-	            _reactBootstrap.Nav,
-	            { pullRight: true },
-	            _react2.default.createElement(
-	                _reactRouterBootstrap.LinkContainer,
-	                { to: 'new_drawing' },
-	                _react2.default.createElement(
-	                    _reactBootstrap.NavItem,
-	                    { eventKey: 1 },
-	                    'Добавить'
-	                )
-	            ),
-	            _react2.default.createElement(
-	                _reactBootstrap.NavItem,
-	                { eventKey: 1 },
-	                this.state.username
-	            ),
-	            _react2.default.createElement(
-	                _reactBootstrap.NavItem,
-	                { eventKey: 2, onClick: this.onLogoutClick },
-	                'Выйти'
-	            )
-	        );
-	        return this.state.username ? afterLogin : beforeLogin;
 	    }
 	});
 
-	exports.default = NavRight;
+	function mapStateToProps(state) {
+	    return {
+	        userAuthSession: state.userAuthSession
+	    };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(NavRight);
 
 /***/ },
 /* 487 */
@@ -43897,137 +43898,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(NewDrawing);
 
 /***/ },
-/* 492 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(158);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
-	var _regexValidators = __webpack_require__(505);
-
-	var _reactRouterRedux = __webpack_require__(234);
-
-	var _reactRedux = __webpack_require__(227);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var Login = _react2.default.createClass({
-	    displayName: 'Login',
-	    getInitialState: function getInitialState() {
-	        return {
-	            errorMessage: null,
-	            isEmailFieldIncorrect: false
-	        };
-	    },
-	    componentDidMount: function componentDidMount() {
-	        _reactDom2.default.findDOMNode(this.refs.email).focus();
-	    },
-	    getInputContainerClass: function getInputContainerClass(inputIncorrect) {
-	        return "form-group " + (inputIncorrect ? "has-error" : "");
-	    },
-	    findErrorsInLoginForm: function findErrorsInLoginForm(formData) {
-	        // Checking email
-	        this.setState({
-	            errorMessage: null,
-	            isEmailFieldIncorrect: false,
-	            isPasswordFieldIncorrect: false
-	        });
-
-	        if (formData.email === "") {
-	            this.setState({
-	                errorMessage: "Нужно ввести e-mail.",
-	                isEmailFieldIncorrect: true
-	            });
-	        } else if (!(0, _regexValidators.validateEmail)(formData.email)) {
-	            this.setState({
-	                errorMessage: "Пожалуйста введите правильный e-mail.",
-	                isEmailFieldIncorrect: true
-	            });
-	        } else if (formData.password === "") {
-	            this.setState({
-	                errorMessage: "Пароль не может быть пустым.",
-	                isPasswordFieldIncorrect: true
-	            });
-	        }
-	    },
-	    onLoginClick: function onLoginClick() {
-	        var formData = {
-	            email: this.refs.email.value.trim(),
-	            password: this.refs.password.value.trim()
-	        };
-	        this.findErrorsInLoginForm(formData);
-	    },
-	    render: function render() {
-	        var errorLabel = undefined;
-	        if (this.state.errorMessage) {
-	            errorLabel = _react2.default.createElement(
-	                'div',
-	                { className: this.getInputContainerClass(true) },
-	                _react2.default.createElement('br', null),
-	                _react2.default.createElement(
-	                    'label',
-	                    { className: 'control-label' },
-	                    this.state.errorMessage
-	                )
-	            );
-	        }
-
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'container' },
-	            _react2.default.createElement(
-	                'form',
-	                { style: { maxWidth: 400, margin: "0 auto" } },
-	                _react2.default.createElement(
-	                    'h1',
-	                    null,
-	                    'Вход'
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: this.getInputContainerClass(this.state.isEmailFieldIncorrect) },
-	                    _react2.default.createElement(
-	                        'label',
-	                        { className: 'control-label' },
-	                        'E-mail'
-	                    ),
-	                    _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'email' })
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: this.getInputContainerClass(this.state.isPasswordFieldIncorrect) },
-	                    _react2.default.createElement(
-	                        'label',
-	                        { className: 'control-label' },
-	                        'Пароль'
-	                    ),
-	                    _react2.default.createElement('input', { className: 'form-control', type: 'password', ref: 'password' })
-	                ),
-	                _react2.default.createElement(
-	                    'button',
-	                    { onClick: this.onLoginClick, className: 'btn btn-primary' },
-	                    'Войти'
-	                ),
-	                errorLabel
-	            )
-	        );
-	    }
-	});
-
-	exports.default = (0, _reactRedux.connect)()(Login);
-
-/***/ },
+/* 492 */,
 /* 493 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -44969,6 +44840,467 @@
 	function validateEmail(email) {
 		return emailRegex.test(email);
 	}
+
+/***/ },
+/* 506 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _authActions = __webpack_require__(507);
+
+	var defaultStartState = {
+	    isLoggedIn: false,
+	    fetchingAuthUpdate: false,
+	    userObject: null,
+	    error: null
+	};
+
+	function authReducer() {
+	    var userAuthState = arguments.length <= 0 || arguments[0] === undefined ? defaultStartState : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+
+	        case _authActions.STARTED_SESSION_CHECK:
+	        case _authActions.CLICKED_LOGIN:
+	        case _authActions.CLICKED_SIGNUP:
+	        case _authActions.CLICKED_LOGOUT:
+	            return Object.assign({}, userAuthState, {
+	                fetchingAuthUpdate: true,
+	                error: null
+	            });
+
+	        case _authActions.LOGIN_SUCCESS:
+	        case _authActions.SIGNUP_SUCCESS:
+	            return Object.assign({}, userAuthState, {
+	                isLoggedIn: true,
+	                fetchingAuthUpdate: false,
+	                userObject: action.userObject,
+	                error: null
+	            });
+
+	        case _authActions.LOGIN_FAIL:
+	        case _authActions.SIGNUP_FAIL:
+	            return Object.assign({}, userAuthState, {
+	                isLoggedIn: false,
+	                fetchingAuthUpdate: false,
+	                error: action.error
+	            });
+
+	        case _authActions.CHECKED_SESSION_STATUS:
+	            if (action.result.isLoggedIn) {
+	                return Object.assign({}, userAuthState, {
+	                    isLoggedIn: true,
+	                    fetchingAuthUpdate: false,
+	                    userObject: action.result.userObject,
+	                    error: null
+	                });
+	            }
+	            // set to default conditions
+	            // (ignore errors and let login/signup handle server errors)
+	            return Object.assign({}, defaultStartState);
+
+	        case _authActions.LOGOUT_SUCCESS:
+	            return Object.assign({}, defaultStartState);
+
+	        case _authActions.NAVIGATE_AWAY_FROM_AUTH_FORM:
+	            return Object.assign({}, userAuthState, {
+	                error: null
+	            });
+
+	        default:
+	            return userAuthState;
+	    }
+	}
+
+	exports.default = authReducer;
+
+/***/ },
+/* 507 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.clickedSignUp = clickedSignUp;
+	exports.signUpSuccess = signUpSuccess;
+	exports.signUpFail = signUpFail;
+	exports.attemptSignUp = attemptSignUp;
+	exports.clickedLogin = clickedLogin;
+	exports.loginSuccess = loginSuccess;
+	exports.loginFail = loginFail;
+	exports.attemptLogin = attemptLogin;
+	exports.startedSessionCheck = startedSessionCheck;
+	exports.checkedSessionStatus = checkedSessionStatus;
+	exports.checkSessionStatus = checkSessionStatus;
+	exports.clickedLogout = clickedLogout;
+	exports.logoutSuccess = logoutSuccess;
+	exports.attemptLogout = attemptLogout;
+	exports.navigatedAwayFromAuthFormPage = navigatedAwayFromAuthFormPage;
+	/*
+	 * action types
+	 */
+
+	var CLICKED_SIGNUP = exports.CLICKED_SIGNUP = 'CLICKED_SIGNUP';
+	var SIGNUP_SUCCESS = exports.SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
+	var SIGNUP_FAIL = exports.SIGNUP_FAIL = 'SIGNUP_FAIL';
+
+	var CLICKED_LOGIN = exports.CLICKED_LOGIN = 'CLICKED_LOGIN';
+	var LOGIN_SUCCESS = exports.LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+	var LOGIN_FAIL = exports.LOGIN_FAIL = 'LOGIN_FAIL';
+
+	var STARTED_SESSION_CHECK = exports.STARTED_SESSION_CHECK = 'STARTED_SESSION_CHECK';
+	var CHECKED_SESSION_STATUS = exports.CHECKED_SESSION_STATUS = 'CHECKED_SESSION_STATUS';
+
+	var CLICKED_LOGOUT = exports.CLICKED_LOGOUT = 'CLICKED_LOGOUT';
+	var LOGOUT_SUCCESS = exports.LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+
+	var NAVIGATE_AWAY_FROM_AUTH_FORM = exports.NAVIGATE_AWAY_FROM_AUTH_FORM = 'NAVIGATE_AWAY_FROM_AUTH_FORM';
+
+	/*
+	 * other constants
+	 */
+
+	/*
+	 * action creators
+	 */
+
+	function clickedSignUp() {
+		return { type: CLICKED_SIGNUP };
+	}
+
+	function signUpSuccess(userObject) {
+		return { type: SIGNUP_SUCCESS, userObject: userObject };
+	}
+
+	function signUpFail(error) {
+		return { type: SIGNUP_FAIL, error: error };
+	}
+
+	function attemptSignUp(email, password, displayName) {
+		return function (dispatch) {
+			dispatch(clickedSignUp());
+
+			$.ajax({
+				type: 'POST',
+				url: '/signup',
+				data: { email: email, password: password, displayName: displayName } }).done(function (data) {
+				if (data.error) {
+					dispatch(signUpFail(data.error));
+				} else {
+					dispatch(signUpSuccess(data));
+				}
+			}).fail(function (a, b, c, d) {
+				// console.log('failed to signup',a,b,c,d);
+				dispatch(signUpFail("TODO find the error..."));
+			});
+		};
+	}
+
+	function clickedLogin() {
+		return { type: CLICKED_LOGIN };
+	}
+
+	function loginSuccess(userObject) {
+		return { type: LOGIN_SUCCESS, userObject: userObject };
+	}
+
+	function loginFail(error) {
+		return { type: LOGIN_FAIL, error: error };
+	}
+
+	function attemptLogin(email, password) {
+		return function (dispatch) {
+			dispatch(clickedLogin());
+
+			$.ajax({
+				type: 'POST',
+				url: '/login',
+				data: { username: email, password: password }
+			}).done(function (data) {
+				if (data.error) {
+					dispatch(loginFail(data.error));
+				} else {
+					dispatch(loginSuccess(data));
+				}
+			}).fail(function (data) {
+				if (data.responseText === "Unauthorized") {
+					dispatch(loginFail("Не удалось войти, проверьте e-mail и пароль"));
+				} else {
+					dispatch(loginFail("Что-то пошло не так, попробуйте снова"));
+				}
+			});
+		};
+	}
+
+	function startedSessionCheck() {
+		return { type: STARTED_SESSION_CHECK };
+	}
+
+	function checkedSessionStatus(result) {
+		return { type: CHECKED_SESSION_STATUS, result: result };
+	}
+
+	function checkSessionStatus(email, password) {
+		return function (dispatch) {
+			dispatch(startedSessionCheck());
+
+			$.ajax({
+				type: 'POST',
+				url: '/checkSession',
+				data: {} }).done(function (result) {
+				dispatch(checkedSessionStatus(result));
+			}).fail(function (a, b, c, d) {
+				// console.log('failed to check',a,b,c,d);
+				dispatch(checkedSessionStatus("TODO find the error..."));
+			});
+		};
+	}
+
+	function clickedLogout() {
+		return { type: CLICKED_LOGOUT };
+	}
+
+	function logoutSuccess() {
+		return { type: LOGOUT_SUCCESS };
+	}
+
+	function attemptLogout() {
+		return function (dispatch) {
+			dispatch(clickedLogout());
+
+			$.ajax({
+				type: 'POST',
+				url: '/logout' }).done(function () {
+				dispatch(logoutSuccess());
+			}).fail(function () {
+				// Not the redux way, but I think it's fair enough.
+				alert("Can't log you out at the moment. Try again in a bit");
+			});
+		};
+	}
+
+	function navigatedAwayFromAuthFormPage() {
+		return { type: NAVIGATE_AWAY_FROM_AUTH_FORM };
+	}
+
+/***/ },
+/* 508 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(227);
+
+	var _reactRouterRedux = __webpack_require__(234);
+
+	var _LoginForm = __webpack_require__(509);
+
+	var _LoginForm2 = _interopRequireDefault(_LoginForm);
+
+	var _authActions = __webpack_require__(507);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var MainLogin = _react2.default.createClass({
+	    displayName: 'MainLogin',
+	    transferToDashboardIfLoggedIn: function transferToDashboardIfLoggedIn() {
+	        if (this.props.userAuthSession.isLoggedIn) {
+	            this.props.dispatch((0, _reactRouterRedux.push)('/'));
+	        }
+	    },
+	    componentWillMount: function componentWillMount() {
+	        this.transferToDashboardIfLoggedIn();
+	    },
+	    componentDidUpdate: function componentDidUpdate() {
+	        this.transferToDashboardIfLoggedIn();
+	    },
+	    componentWillUnmount: function componentWillUnmount() {
+	        this.props.dispatch((0, _authActions.navigatedAwayFromAuthFormPage)());
+	    },
+	    render: function render() {
+	        var _props = this.props;
+	        var dispatch = _props.dispatch;
+	        var userAuthSession = _props.userAuthSession;
+
+
+	        return _react2.default.createElement(_LoginForm2.default, { onClickLogin: function onClickLogin(formData) {
+	                dispatch((0, _authActions.attemptLogin)(formData.email, formData.password));
+	            },
+	            isFetchingData: userAuthSession.fetchingAuthUpdate,
+	            serverError: userAuthSession.error
+	        });
+	    }
+	});
+
+	function mapStateToProps(state) {
+	    return {
+	        userAuthSession: state.userAuthSession
+	    };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(MainLogin);
+
+/***/ },
+/* 509 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(158);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _regexValidators = __webpack_require__(505);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var initialFormState = {
+	    errorMessage: null,
+	    isEmailFieldIncorrect: false,
+	    isPasswordFieldIncorrect: false
+	};
+
+	var LoginForm = _react2.default.createClass({
+	    displayName: 'LoginForm',
+	    getInitialState: function getInitialState() {
+	        return Object.assign({}, initialFormState);
+	    },
+	    componentDidMount: function componentDidMount() {
+	        _reactDom2.default.findDOMNode(this.refs.email).focus();
+	    },
+	    getInputContainerClass: function getInputContainerClass(inputIncorrect) {
+	        return "form-group " + (inputIncorrect ? "has-error" : "");
+	    },
+	    findErrorsInLoginForm: function findErrorsInLoginForm(formData) {
+	        var newState = Object.assign({}, initialFormState);
+
+	        if (formData.email === "") {
+	            newState.errorMessage = "Нужно ввести e-mail.";
+	            newState.isEmailFieldIncorrect = true;
+	        } else if (!(0, _regexValidators.validateEmail)(formData.email)) {
+	            newState.errorMessage = "Пожалуйста введите правильный e-mail.";
+	            newState.isEmailFieldIncorrect = true;
+	        } else if (formData.password === "") {
+	            newState.errorMessage = "Пароль не может быть пустым.";
+	            newState.isPasswordFieldIncorrect = true;
+	        }
+	        return newState;
+	    },
+	    handleOnLoginClick: function handleOnLoginClick() {
+	        var formData = {
+	            email: this.refs.email.value.trim(),
+	            password: this.refs.password.value.trim()
+	        };
+
+	        var newState = this.findErrorsInLoginForm(formData);
+	        this.setState(newState);
+	        if (!newState.errorMessage) {
+	            this.props.onClickLogin(formData);
+	        }
+	    },
+	    render: function render() {
+	        var errorLabel = undefined;
+	        var loader = undefined;
+
+	        if (this.props.isFetchingData) {
+	            loader = _react2.default.createElement(
+	                'p',
+	                null,
+	                'Секунду...'
+	            );
+	        }
+
+	        if (this.state.errorMessage) {
+	            errorLabel = _react2.default.createElement(
+	                'div',
+	                { className: this.getInputContainerClass(true) },
+	                _react2.default.createElement(
+	                    'label',
+	                    { className: 'control-label' },
+	                    this.state.errorMessage
+	                )
+	            );
+	        } else if (this.props.serverError) {
+	            errorLabel = _react2.default.createElement(
+	                'div',
+	                { className: this.getInputContainerClass(true) },
+	                _react2.default.createElement(
+	                    'label',
+	                    { className: 'control-label' },
+	                    this.props.serverError
+	                )
+	            );
+	        }
+
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'container' },
+	            _react2.default.createElement(
+	                'div',
+	                { style: { maxWidth: 400, margin: "0 auto" } },
+	                _react2.default.createElement(
+	                    'h1',
+	                    null,
+	                    'Вход'
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: this.getInputContainerClass(this.state.isEmailFieldIncorrect) },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { className: 'control-label' },
+	                        'E-mail'
+	                    ),
+	                    _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'email' })
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: this.getInputContainerClass(this.state.isPasswordFieldIncorrect) },
+	                    _react2.default.createElement(
+	                        'label',
+	                        { className: 'control-label' },
+	                        'Пароль'
+	                    ),
+	                    _react2.default.createElement('input', { className: 'form-control', type: 'password', ref: 'password' })
+	                ),
+	                _react2.default.createElement(
+	                    'button',
+	                    { onClick: this.handleOnLoginClick, className: 'btn btn-primary' },
+	                    'Войти'
+	                ),
+	                _react2.default.createElement('br', null),
+	                errorLabel,
+	                loader
+	            )
+	        );
+	    }
+	});
+
+	exports.default = LoginForm;
 
 /***/ }
 /******/ ]);

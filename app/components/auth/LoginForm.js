@@ -1,16 +1,17 @@
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
-import { validateEmail } from '../utils/regexValidators';
-import { push } from 'react-router-redux';
-import { connect } from 'react-redux';
+import { validateEmail } from '../../utils/regexValidators';
 
-const Login = React.createClass({
+const initialFormState = {
+      errorMessage:  null,
+      isEmailFieldIncorrect : false,
+      isPasswordFieldIncorrect : false
+};
+
+const LoginForm = React.createClass({
 
     getInitialState() {
-        return {
-            errorMessage:  null,
-            isEmailFieldIncorrect : false
-        };
+        return Object.assign({}, initialFormState);
     },
 
     componentDidMount(){
@@ -22,55 +23,62 @@ const Login = React.createClass({
     },
 
     findErrorsInLoginForm(formData) {
-        // Checking email
-        this.setState({
-            errorMessage:  null,
-            isEmailFieldIncorrect: false,
-            isPasswordFieldIncorrect: false
-        });
+        let newState = Object.assign({}, initialFormState);
 
         if (formData.email === "") {
-            this.setState({
-                errorMessage: "Нужно ввести e-mail.",
-                isEmailFieldIncorrect: true
-            });
+            newState.errorMessage = "Нужно ввести e-mail.";
+            newState.isEmailFieldIncorrect = true;
         }
         else if (!validateEmail(formData.email)) {
-            this.setState({
-                errorMessage: "Пожалуйста введите правильный e-mail.",
-                isEmailFieldIncorrect: true
-            });
+            newState.errorMessage = "Пожалуйста введите правильный e-mail.";
+            newState.isEmailFieldIncorrect = true;
         }
         else if (formData.password === "") {
-            this.setState({
-                errorMessage: "Пароль не может быть пустым.",
-                isPasswordFieldIncorrect: true
-            });
+            newState.errorMessage = "Пароль не может быть пустым.";
+            newState.isPasswordFieldIncorrect = true;
         }
+        return newState;
     },
 
-    onLoginClick() {
+    handleOnLoginClick() {
         const formData = {
             email : this.refs.email.value.trim(),
             password : this.refs.password.value.trim()
         };
-        this.findErrorsInLoginForm(formData);
+
+        let newState = this.findErrorsInLoginForm(formData);
+        this.setState(newState);
+        if (!newState.errorMessage){
+            this.props.onClickLogin(formData);
+        }
     },
 
     render () {
         let errorLabel;
+        let loader;
+
+        if (this.props.isFetchingData){
+            loader = <p>Секунду...</p>;
+        }
+
         if (this.state.errorMessage) {
             errorLabel = (
                 <div className={this.getInputContainerClass(true)}>
-                    <br />
                     <label className="control-label">{this.state.errorMessage}</label>
+                </div>
+            );
+        }
+        else if(this.props.serverError){
+            errorLabel = (
+                <div className={this.getInputContainerClass(true)}>
+                    <label className="control-label">{this.props.serverError}</label>
                 </div>
             );
         }
 
         return (
             <div className="container">
-                <form style={{maxWidth: 400, margin: "0 auto"}}>
+                <div style={{maxWidth: 400, margin: "0 auto"}}>
                     <h1>Вход</h1>
                     <div className={this.getInputContainerClass(this.state.isEmailFieldIncorrect)}>
                         <label className="control-label">E-mail</label>
@@ -80,12 +88,14 @@ const Login = React.createClass({
                         <label className="control-label">Пароль</label>
                         <input className="form-control" type="password" ref="password" />
                     </div>
-                    <button onClick={this.onLoginClick} className="btn btn-primary">Войти</button>
+                    <button onClick={this.handleOnLoginClick} className="btn btn-primary">Войти</button>
+                    <br />
                     { errorLabel }
-                </form>
+                    { loader }
+                </div>
             </div>
         );
     }
 });
 
-export default connect()(Login);
+export default LoginForm;

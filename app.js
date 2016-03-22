@@ -16,7 +16,7 @@ import rootReducer from './app/reducers/rootReducer';
 import App from './app/components/App';
 import Home from './app/components/Home';
 import NewDrawing from './app/components/NewDrawing';
-import Login from './app/components/Login';
+import MainLogin from './app/components/auth/MainLogin';
 import Register from './app/components/Register';
 import Categories from './app/components/categories/Categories';
 import Category from './app/components/categories/Category';
@@ -40,7 +40,7 @@ ReactDOM.render(
             <Route path="/" component={App}>
                 <IndexRoute component={Home}/>
                 <Route path="new_drawing" component={NewDrawing} />
-                <Route path="login" component={Login} />
+                <Route path="login" component={MainLogin} />
                 <Route path="register" component={Register} />
                 <Route path="categories" component={Categories} >
                     <Route path="/categories/:categoryUrl" component={Category} />
