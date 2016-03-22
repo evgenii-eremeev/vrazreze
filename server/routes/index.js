@@ -13,7 +13,7 @@ var apiCtrl = require('../controllers/apiCtrl');
 router.use('/new_drawing', newDrawingRouter);
 
 // register
-router.post('/register', registerCtrl.post);
+router.post('/signup', registerCtrl.post);
 
 // login
 router.post('/login',

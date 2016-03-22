@@ -39,14 +39,15 @@ export function signUpFail(error) {
 	return { type: SIGNUP_FAIL, error };
 }
 
-export function attemptSignUp(email, password, displayName) {
+export function attemptSignUp(email, password) {
   return (dispatch) => {
     dispatch(clickedSignUp());
 
     $.ajax({
 			type: 'POST',
 			url: '/signup',
-			data: {email, password, displayName} })
+			data: {username: email, password}
+        })
 			.done(function(data) {
 				if (data.error){
 					dispatch(signUpFail(data.error));
@@ -55,7 +56,7 @@ export function attemptSignUp(email, password, displayName) {
 				}
 			})
 			.fail(function(a,b,c,d) {
-			  // console.log('failed to signup',a,b,c,d);
+			  console.log('failed to signup',a,b,c,d);
 			  dispatch(signUpFail("TODO find the error..."));
 			});
   }
@@ -117,7 +118,8 @@ export function checkSessionStatus(email, password) {
     $.ajax({
 			type: 'POST',
 			url: '/checkSession',
-			data: {} })
+			data: {}
+        })
 			.done(function(result) {
 				dispatch(checkedSessionStatus(result));
 			})

@@ -29,7 +29,7 @@ const NavRight = React.createClass({
                     <LinkContainer to='/login'>
                         <NavItem eventKey={1}>Вход</NavItem>
                     </LinkContainer>
-                    <LinkContainer to='/register'>
+                    <LinkContainer to='/signup'>
                         <NavItem eventKey={2}>Регистрация</NavItem>
                     </LinkContainer>
                 </Nav>

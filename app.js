@@ -17,7 +17,7 @@ import App from './app/components/App';
 import Home from './app/components/Home';
 import NewDrawing from './app/components/NewDrawing';
 import MainLogin from './app/components/auth/MainLogin';
-import Register from './app/components/Register';
+import MainSignUp from './app/components/auth/MainSignUp';
 import Categories from './app/components/categories/Categories';
 import Category from './app/components/categories/Category';
 
@@ -41,7 +41,7 @@ ReactDOM.render(
                 <IndexRoute component={Home}/>
                 <Route path="new_drawing" component={NewDrawing} />
                 <Route path="login" component={MainLogin} />
-                <Route path="register" component={Register} />
+                <Route path="signup" component={MainSignUp} />
                 <Route path="categories" component={Categories} >
                     <Route path="/categories/:categoryUrl" component={Category} />
                 </Route>

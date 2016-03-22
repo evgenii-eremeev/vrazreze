@@ -1,14 +1,16 @@
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
+
 import { validateEmail } from '../../utils/regexValidators';
 
 const initialFormState = {
       errorMessage:  null,
       isEmailFieldIncorrect : false,
-      isPasswordFieldIncorrect : false
+      isPasswordFieldIncorrect : false,
+      isConfirmPasswordFieldIncorrect : false
 };
 
-const LoginForm = React.createClass({
+const SignUpForm = React.createClass({
 
     getInitialState() {
         return Object.assign({}, initialFormState);
@@ -22,9 +24,11 @@ const LoginForm = React.createClass({
         return ("form-group " + (inputIncorrect ? "has-error" : "") );
     },
 
-    findErrorsInLoginForm(formData) {
+    findErrorsInSignupForm(formData) {
+        // Only finding one error at a time.
         let newState = Object.assign({}, initialFormState);
 
+        // Checking email
         if (formData.email === "") {
             newState.errorMessage = "E-mail не может быть пустым.";
             newState.isEmailFieldIncorrect = true;
@@ -33,34 +37,47 @@ const LoginForm = React.createClass({
             newState.errorMessage = "Пожалуйста введите правильный e-mail.";
             newState.isEmailFieldIncorrect = true;
         }
+        // Checking password
         else if (formData.password === "") {
-            newState.errorMessage = "Пароль не может быть пустым.";
+            newState.errorMessage = "Password is required";
             newState.isPasswordFieldIncorrect = true;
         }
+        // Checking confirmed password
+        else if (formData.confirmedPassword === "") {
+            newState.errorMessage = "Пароль не может быть пустым.";
+            newState.isConfirmPasswordFieldIncorrect = true;
+        }
+        else if (formData.confirmedPassword !== formData.password) {
+            newState.errorMessage = "Пароли не совпадают.";
+            newState.isConfirmPasswordFieldIncorrect = true;
+            newState.isPasswordFieldIncorrect = true;
+        }
+
         return newState;
     },
 
-    handleOnLoginClick() {
-        const formData = {
+    handleOnClickSignUp(){
+        var formData = {
             email : this.refs.email.value.trim(),
-            password : this.refs.password.value.trim()
-        };
+            password : this.refs.password.value.trim(),
+            confirmedPassword : this.refs.confirmPassword.value.trim()
+        }
 
-        let newState = this.findErrorsInLoginForm(formData);
+        let newState = this.findErrorsInSignupForm(formData);
         this.setState(newState);
-        if (!newState.errorMessage){
-            this.props.onClickLogin(formData);
+
+        if (!newState.errorMessage) {
+            this.props.onClickSignUp(formData);
         }
     },
 
     render () {
+        let loader; //TODO implement a better loader
         let errorLabel;
-        let loader;
-
-        if (this.props.isFetchingData){
+        if (this.props.isFetchingData) {
             loader = <p>Секунду...</p>;
         }
-
+        //TODO create a "FormErrorMessage" component
         if (this.state.errorMessage) {
             errorLabel = (
                 <div className={this.getInputContainerClass(true)}>
@@ -68,7 +85,7 @@ const LoginForm = React.createClass({
                 </div>
             );
         }
-        else if(this.props.serverError){
+        else if (this.props.serverError) {
             errorLabel = (
                 <div className={this.getInputContainerClass(true)}>
                     <label className="control-label">{this.props.serverError}</label>
@@ -78,22 +95,25 @@ const LoginForm = React.createClass({
 
         return (
             <div style={{maxWidth: 400, margin: "0 auto"}}>
-                <h1>Вход</h1>
+                <h1>Регистрация</h1>
                 <div className={this.getInputContainerClass(this.state.isEmailFieldIncorrect)}>
                     <label className="control-label">E-mail</label>
-                    <input className="form-control" type="text" ref="email" />
+                    <input className="form-control" type="text" ref="email"/>
                 </div>
                 <div className={this.getInputContainerClass(this.state.isPasswordFieldIncorrect)}>
                     <label className="control-label">Пароль</label>
                     <input className="form-control" type="password" ref="password" />
                 </div>
-                <button onClick={this.handleOnLoginClick} className="btn btn-primary">Войти</button>
-                <br />
-                { errorLabel }
+                <div className={this.getInputContainerClass(this.state.isConfirmPasswordFieldIncorrect)}>
+                    <label className="control-label">Подтвердите пароль</label>
+                    <input className="form-control" type="password" ref="confirmPassword" />
+                </div>
+                <button className="btn btn-primary" onClick={this.handleOnClickSignUp}>Зарегистрироваться</button>
                 { loader }
+                { errorLabel }
             </div>
         );
     }
-});
+})
 
-export default LoginForm;
+export default SignUpForm;

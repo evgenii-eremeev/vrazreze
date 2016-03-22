@@ -86,9 +86,9 @@
 
 	var _MainLogin2 = _interopRequireDefault(_MainLogin);
 
-	var _Register = __webpack_require__(493);
+	var _MainSignUp = __webpack_require__(510);
 
-	var _Register2 = _interopRequireDefault(_Register);
+	var _MainSignUp2 = _interopRequireDefault(_MainSignUp);
 
 	var _Categories = __webpack_require__(494);
 
@@ -132,7 +132,7 @@
 	            _react2.default.createElement(_reactRouter.IndexRoute, { component: _Home2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: 'new_drawing', component: _NewDrawing2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _MainLogin2.default }),
-	            _react2.default.createElement(_reactRouter.Route, { path: 'register', component: _Register2.default }),
+	            _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _MainSignUp2.default }),
 	            _react2.default.createElement(
 	                _reactRouter.Route,
 	                { path: 'categories', component: _Categories2.default },
@@ -43568,7 +43568,7 @@
 	            ),
 	            _react2.default.createElement(
 	                _reactRouterBootstrap.LinkContainer,
-	                { to: '/register' },
+	                { to: '/signup' },
 	                _react2.default.createElement(
 	                    _reactBootstrap.NavItem,
 	                    { eventKey: 2 },
@@ -43899,72 +43899,7 @@
 
 /***/ },
 /* 492 */,
-/* 493 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRouter = __webpack_require__(159);
-
-	var _reactBootstrap = __webpack_require__(244);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var Register = _react2.default.createClass({
-	    displayName: 'Register',
-	    onRegisterSubmit: function onRegisterSubmit(e) {
-	        e.preventDefault();
-	        $.ajax({
-	            type: "POST",
-	            url: '/register',
-	            data: $("#registerForm").serialize(),
-	            success: function success(user) {
-	                console.log("Registered!");
-	                sessionStorage.username = user.username;
-	                sessionStorage._id = user._id;
-	                $("#registerForm")[0].reset();
-	                window.location = '/';
-	                // use this than redux will be added
-	                // browserHistory.push('/');
-	            }
-	        });
-	    },
-	    render: function render() {
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'container' },
-	            _react2.default.createElement(
-	                'h1',
-	                null,
-	                'Регистрация'
-	            ),
-	            _react2.default.createElement('br', null),
-	            _react2.default.createElement(
-	                'form',
-	                { role: 'form', id: 'registerForm', method: 'post', onSubmit: this.onRegisterSubmit, style: { maxWidth: '300' } },
-	                _react2.default.createElement(_reactBootstrap.Input, { type: 'text', name: 'username', label: 'Имя пользователя' }),
-	                _react2.default.createElement(_reactBootstrap.Input, { type: 'password', name: 'password', label: 'Пароль' }),
-	                _react2.default.createElement(
-	                    _reactBootstrap.Button,
-	                    { type: 'submit', bsStyle: 'primary' },
-	                    'Зарегистрироваться'
-	                )
-	            )
-	        );
-	    }
-	});
-
-	exports.default = Register;
-
-/***/ },
+/* 493 */,
 /* 494 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -44984,21 +44919,22 @@
 		return { type: SIGNUP_FAIL, error: error };
 	}
 
-	function attemptSignUp(email, password, displayName) {
+	function attemptSignUp(email, password) {
 		return function (dispatch) {
 			dispatch(clickedSignUp());
 
 			$.ajax({
 				type: 'POST',
 				url: '/signup',
-				data: { email: email, password: password, displayName: displayName } }).done(function (data) {
+				data: { username: email, password: password }
+			}).done(function (data) {
 				if (data.error) {
 					dispatch(signUpFail(data.error));
 				} else {
 					dispatch(signUpSuccess(data));
 				}
 			}).fail(function (a, b, c, d) {
-				// console.log('failed to signup',a,b,c,d);
+				console.log('failed to signup', a, b, c, d);
 				dispatch(signUpFail("TODO find the error..."));
 			});
 		};
@@ -45055,7 +44991,8 @@
 			$.ajax({
 				type: 'POST',
 				url: '/checkSession',
-				data: {} }).done(function (result) {
+				data: {}
+			}).done(function (result) {
 				dispatch(checkedSessionStatus(result));
 			}).fail(function (a, b, c, d) {
 				// console.log('failed to check',a,b,c,d);
@@ -45199,7 +45136,7 @@
 	        var newState = Object.assign({}, initialFormState);
 
 	        if (formData.email === "") {
-	            newState.errorMessage = "Нужно ввести e-mail.";
+	            newState.errorMessage = "E-mail не может быть пустым.";
 	            newState.isEmailFieldIncorrect = true;
 	        } else if (!(0, _regexValidators.validateEmail)(formData.email)) {
 	            newState.errorMessage = "Пожалуйста введите правильный e-mail.";
@@ -45258,49 +45195,276 @@
 
 	        return _react2.default.createElement(
 	            'div',
-	            { className: 'container' },
+	            { style: { maxWidth: 400, margin: "0 auto" } },
+	            _react2.default.createElement(
+	                'h1',
+	                null,
+	                'Вход'
+	            ),
 	            _react2.default.createElement(
 	                'div',
-	                { style: { maxWidth: 400, margin: "0 auto" } },
+	                { className: this.getInputContainerClass(this.state.isEmailFieldIncorrect) },
 	                _react2.default.createElement(
-	                    'h1',
-	                    null,
-	                    'Вход'
+	                    'label',
+	                    { className: 'control-label' },
+	                    'E-mail'
 	                ),
+	                _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'email' })
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: this.getInputContainerClass(this.state.isPasswordFieldIncorrect) },
 	                _react2.default.createElement(
-	                    'div',
-	                    { className: this.getInputContainerClass(this.state.isEmailFieldIncorrect) },
-	                    _react2.default.createElement(
-	                        'label',
-	                        { className: 'control-label' },
-	                        'E-mail'
-	                    ),
-	                    _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'email' })
+	                    'label',
+	                    { className: 'control-label' },
+	                    'Пароль'
 	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: this.getInputContainerClass(this.state.isPasswordFieldIncorrect) },
-	                    _react2.default.createElement(
-	                        'label',
-	                        { className: 'control-label' },
-	                        'Пароль'
-	                    ),
-	                    _react2.default.createElement('input', { className: 'form-control', type: 'password', ref: 'password' })
-	                ),
-	                _react2.default.createElement(
-	                    'button',
-	                    { onClick: this.handleOnLoginClick, className: 'btn btn-primary' },
-	                    'Войти'
-	                ),
-	                _react2.default.createElement('br', null),
-	                errorLabel,
-	                loader
-	            )
+	                _react2.default.createElement('input', { className: 'form-control', type: 'password', ref: 'password' })
+	            ),
+	            _react2.default.createElement(
+	                'button',
+	                { onClick: this.handleOnLoginClick, className: 'btn btn-primary' },
+	                'Войти'
+	            ),
+	            _react2.default.createElement('br', null),
+	            errorLabel,
+	            loader
 	        );
 	    }
 	});
 
 	exports.default = LoginForm;
+
+/***/ },
+/* 510 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(227);
+
+	var _reactRouterRedux = __webpack_require__(234);
+
+	var _SignUpForm = __webpack_require__(511);
+
+	var _SignUpForm2 = _interopRequireDefault(_SignUpForm);
+
+	var _authActions = __webpack_require__(507);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var MainSignUp = _react2.default.createClass({
+	    displayName: 'MainSignUp',
+	    transferToDashboardIfLoggedIn: function transferToDashboardIfLoggedIn() {
+	        if (this.props.userAuthSession.isLoggedIn) {
+	            this.props.dispatch((0, _reactRouterRedux.push)('/'));
+	        }
+	    },
+	    componentWillMount: function componentWillMount() {
+	        this.transferToDashboardIfLoggedIn();
+	    },
+	    componentDidUpdate: function componentDidUpdate() {
+	        this.transferToDashboardIfLoggedIn();
+	    },
+	    componentWillUnmount: function componentWillUnmount() {
+	        this.props.dispatch((0, _authActions.navigatedAwayFromAuthFormPage)());
+	    },
+	    render: function render() {
+	        var _props = this.props;
+	        var dispatch = _props.dispatch;
+	        var userAuthSession = _props.userAuthSession;
+
+	        return _react2.default.createElement(_SignUpForm2.default, { onClickSignUp: function onClickSignUp(formData) {
+	                dispatch((0, _authActions.attemptSignUp)(formData.email, formData.password));
+	            },
+	            isFetchingData: userAuthSession.fetchingAuthUpdate,
+	            serverError: userAuthSession.error
+	        });
+	    }
+	});
+
+	function mapStateToProps(state) {
+	    return {
+	        userAuthSession: state.userAuthSession
+	    };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(MainSignUp);
+
+/***/ },
+/* 511 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(158);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _regexValidators = __webpack_require__(505);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var initialFormState = {
+	    errorMessage: null,
+	    isEmailFieldIncorrect: false,
+	    isPasswordFieldIncorrect: false,
+	    isConfirmPasswordFieldIncorrect: false
+	};
+
+	var SignUpForm = _react2.default.createClass({
+	    displayName: 'SignUpForm',
+	    getInitialState: function getInitialState() {
+	        return Object.assign({}, initialFormState);
+	    },
+	    componentDidMount: function componentDidMount() {
+	        _reactDom2.default.findDOMNode(this.refs.email).focus();
+	    },
+	    getInputContainerClass: function getInputContainerClass(inputIncorrect) {
+	        return "form-group " + (inputIncorrect ? "has-error" : "");
+	    },
+	    findErrorsInSignupForm: function findErrorsInSignupForm(formData) {
+	        // Only finding one error at a time.
+	        var newState = Object.assign({}, initialFormState);
+
+	        // Checking email
+	        if (formData.email === "") {
+	            newState.errorMessage = "E-mail не может быть пустым.";
+	            newState.isEmailFieldIncorrect = true;
+	        } else if (!(0, _regexValidators.validateEmail)(formData.email)) {
+	            newState.errorMessage = "Пожалуйста введите правильный e-mail.";
+	            newState.isEmailFieldIncorrect = true;
+	        }
+	        // Checking password
+	        else if (formData.password === "") {
+	                newState.errorMessage = "Password is required";
+	                newState.isPasswordFieldIncorrect = true;
+	            }
+	            // Checking confirmed password
+	            else if (formData.confirmedPassword === "") {
+	                    newState.errorMessage = "Пароль не может быть пустым.";
+	                    newState.isConfirmPasswordFieldIncorrect = true;
+	                } else if (formData.confirmedPassword !== formData.password) {
+	                    newState.errorMessage = "Пароли не совпадают.";
+	                    newState.isConfirmPasswordFieldIncorrect = true;
+	                    newState.isPasswordFieldIncorrect = true;
+	                }
+
+	        return newState;
+	    },
+	    handleOnClickSignUp: function handleOnClickSignUp() {
+	        var formData = {
+	            email: this.refs.email.value.trim(),
+	            password: this.refs.password.value.trim(),
+	            confirmedPassword: this.refs.confirmPassword.value.trim()
+	        };
+
+	        var newState = this.findErrorsInSignupForm(formData);
+	        this.setState(newState);
+
+	        if (!newState.errorMessage) {
+	            this.props.onClickSignUp(formData);
+	        }
+	    },
+	    render: function render() {
+	        var loader = undefined; //TODO implement a better loader
+	        var errorLabel = undefined;
+	        if (this.props.isFetchingData) {
+	            loader = _react2.default.createElement(
+	                'p',
+	                null,
+	                'Секунду...'
+	            );
+	        }
+	        //TODO create a "FormErrorMessage" component
+	        if (this.state.errorMessage) {
+	            errorLabel = _react2.default.createElement(
+	                'div',
+	                { className: this.getInputContainerClass(true) },
+	                _react2.default.createElement(
+	                    'label',
+	                    { className: 'control-label' },
+	                    this.state.errorMessage
+	                )
+	            );
+	        } else if (this.props.serverError) {
+	            errorLabel = _react2.default.createElement(
+	                'div',
+	                { className: this.getInputContainerClass(true) },
+	                _react2.default.createElement(
+	                    'label',
+	                    { className: 'control-label' },
+	                    this.props.serverError
+	                )
+	            );
+	        }
+
+	        return _react2.default.createElement(
+	            'div',
+	            { style: { maxWidth: 400, margin: "0 auto" } },
+	            _react2.default.createElement(
+	                'h1',
+	                null,
+	                'Регистрация'
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: this.getInputContainerClass(this.state.isEmailFieldIncorrect) },
+	                _react2.default.createElement(
+	                    'label',
+	                    { className: 'control-label' },
+	                    'E-mail'
+	                ),
+	                _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'email' })
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: this.getInputContainerClass(this.state.isPasswordFieldIncorrect) },
+	                _react2.default.createElement(
+	                    'label',
+	                    { className: 'control-label' },
+	                    'Пароль'
+	                ),
+	                _react2.default.createElement('input', { className: 'form-control', type: 'password', ref: 'password' })
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: this.getInputContainerClass(this.state.isConfirmPasswordFieldIncorrect) },
+	                _react2.default.createElement(
+	                    'label',
+	                    { className: 'control-label' },
+	                    'Подтвердите пароль'
+	                ),
+	                _react2.default.createElement('input', { className: 'form-control', type: 'password', ref: 'confirmPassword' })
+	            ),
+	            _react2.default.createElement(
+	                'button',
+	                { className: 'btn btn-primary', onClick: this.handleOnClickSignUp },
+	                'Зарегистрироваться'
+	            ),
+	            loader,
+	            errorLabel
+	        );
+	    }
+	});
+
+	exports.default = SignUpForm;
 
 /***/ }
 /******/ ]);
