@@ -43859,14 +43859,14 @@
 	                    id: 'newDrawingForm',
 	                    method: 'post',
 	                    enctype: 'multipart/form-data',
-	                    style: { maxWidth: 500, margin: '0 auto' },
+	                    style: { maxWidth: 500, margin: '0 auto', padding: '0 10px' },
 	                    onSubmit: this.onNewDrawingSubmit
 	                },
 	                _react2.default.createElement(_reactBootstrap.Input, { type: 'text', name: 'title', label: 'Название', required: true }),
 	                _react2.default.createElement(
 	                    _reactBootstrap.Input,
 	                    { type: 'select', name: 'category', label: 'Категория' },
-	                    this.props.categories.map(function (category, idx) {
+	                    this.props.categories.items.map(function (category, idx) {
 	                        return _react2.default.createElement(
 	                            'option',
 	                            { value: category.name, key: idx },
@@ -43891,7 +43891,7 @@
 
 	function mapStateToProps(state) {
 	    return {
-	        categories: state.data.categories
+	        categories: state.categories
 	    };
 	}
 
@@ -44933,9 +44933,12 @@
 				} else {
 					dispatch(signUpSuccess(data));
 				}
-			}).fail(function (a, b, c, d) {
-				console.log('failed to signup', a, b, c, d);
-				dispatch(signUpFail("TODO find the error..."));
+			}).fail(function (res) {
+				if (res.statusText === 'Conflict') {
+					dispatch(signUpFail("Данный e-mail уже был зарегистрирован"));
+				} else {
+					dispatch(signUpFail("Что-то пошло не так"));
+				}
 			});
 		};
 	}

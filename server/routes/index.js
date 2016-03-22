@@ -6,14 +6,14 @@ var router = express.Router();
 var newDrawingRouter = require('./newDrawingRouter');
 
 // import controllers
-var registerCtrl = require('../controllers/registerCtrl');
+var signUpCtrl = require('../controllers/signUpCtrl');
 var apiCtrl = require('../controllers/apiCtrl');
 
 // new_drawing (post)
 router.use('/new_drawing', newDrawingRouter);
 
 // register
-router.post('/signup', registerCtrl.post);
+router.post('/signup', signUpCtrl.userExists, signUpCtrl.register);
 
 // login
 router.post('/login',

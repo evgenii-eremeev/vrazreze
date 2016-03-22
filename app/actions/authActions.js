@@ -55,9 +55,13 @@ export function attemptSignUp(email, password) {
 					dispatch(signUpSuccess(data));
 				}
 			})
-			.fail(function(a,b,c,d) {
-			  console.log('failed to signup',a,b,c,d);
-			  dispatch(signUpFail("TODO find the error..."));
+			.fail(function(res) {
+				if (res.statusText === 'Conflict') {
+			  		dispatch(signUpFail("Данный e-mail уже был зарегистрирован"));
+				} else {
+		  			dispatch(signUpFail("Что-то пошло не так"));
+				}
+
 			});
   }
 }
