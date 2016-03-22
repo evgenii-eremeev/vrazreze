@@ -26472,6 +26472,8 @@
 
 	var _categoriesActions = __webpack_require__(504);
 
+	var _authActions = __webpack_require__(507);
+
 	var _Navigation = __webpack_require__(243);
 
 	var _Navigation2 = _interopRequireDefault(_Navigation);
@@ -26484,6 +26486,7 @@
 	        var dispatch = this.props.dispatch;
 
 	        dispatch((0, _categoriesActions.fetchCategories)());
+	        dispatch((0, _authActions.checkSessionStatus)());
 	    },
 	    render: function render() {
 	        return _react2.default.createElement(
@@ -44900,10 +44903,6 @@
 	var NAVIGATE_AWAY_FROM_AUTH_FORM = exports.NAVIGATE_AWAY_FROM_AUTH_FORM = 'NAVIGATE_AWAY_FROM_AUTH_FORM';
 
 	/*
-	 * other constants
-	 */
-
-	/*
 	 * action creators
 	 */
 
@@ -44993,13 +44992,10 @@
 
 			$.ajax({
 				type: 'POST',
-				url: '/checkSession',
+				url: '/check_session',
 				data: {}
 			}).done(function (result) {
 				dispatch(checkedSessionStatus(result));
-			}).fail(function (a, b, c, d) {
-				// console.log('failed to check',a,b,c,d);
-				dispatch(checkedSessionStatus("TODO find the error..."));
 			});
 		};
 	}

@@ -12,7 +12,10 @@ var apiCtrl = require('../controllers/apiCtrl');
 // new_drawing (post)
 router.use('/new_drawing', newDrawingRouter);
 
-// register
+// check_session
+router.post('/check_session', signUpCtrl.checkSession);
+
+// signup
 router.post('/signup', signUpCtrl.userExists, signUpCtrl.register);
 
 // login

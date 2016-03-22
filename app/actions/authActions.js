@@ -19,11 +19,6 @@ export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 export const NAVIGATE_AWAY_FROM_AUTH_FORM = 'NAVIGATE_AWAY_FROM_AUTH_FORM';
 
 /*
- * other constants
- */
-
-
-/*
  * action creators
  */
 
@@ -121,15 +116,11 @@ export function checkSessionStatus(email, password) {
 
     $.ajax({
 			type: 'POST',
-			url: '/checkSession',
+			url: '/check_session',
 			data: {}
         })
 			.done(function(result) {
 				dispatch(checkedSessionStatus(result));
-			})
-			.fail(function(a,b,c,d) {
-			  // console.log('failed to check',a,b,c,d);
-			  dispatch(checkedSessionStatus("TODO find the error..."));
 			});
   }
 }

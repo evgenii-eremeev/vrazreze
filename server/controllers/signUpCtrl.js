@@ -3,6 +3,17 @@ const User = require('../models/user');
 
 const signUpCtrl = (function () {
 
+    function checkSession (req, res) {
+        var isLoggedIn = req.isAuthenticated();
+        if (isLoggedIn) {
+            return res.json({
+                isLoggedIn: isLoggedIn,
+                userObject: req.user
+            });
+        }
+        return res.json({isLoggedIn: isLoggedIn});
+    }
+
     function userExists (req, res, next) {
         User
             .findOne({ username: req.body.username })
@@ -31,7 +42,8 @@ const signUpCtrl = (function () {
         ); // end User.register
     } // end post
 
-    const publicAPI = { userExists, register };
+
+    const publicAPI = { userExists, register, checkSession };
     return publicAPI;
 })();
 
