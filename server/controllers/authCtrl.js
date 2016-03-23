@@ -1,7 +1,7 @@
 const passport = require('passport');
 const User = require('../models/user');
 
-const signUpCtrl = (function () {
+const authCtrl = (function () {
 
     function checkSession (req, res) {
         var isLoggedIn = req.isAuthenticated();
@@ -28,7 +28,7 @@ const signUpCtrl = (function () {
             });
     }
 
-    function register (req, res) {
+    function signup (req, res) {
         User.register(
             new User({ username: req.body.username }),
             req.body.password,
@@ -40,11 +40,11 @@ const signUpCtrl = (function () {
                 });
             }
         ); // end User.register
-    } // end post
+    }
 
 
-    const publicAPI = { userExists, register, checkSession };
+    const publicAPI = { userExists, signup, checkSession };
     return publicAPI;
 })();
 
-module.exports = signUpCtrl;
+module.exports = authCtrl;
