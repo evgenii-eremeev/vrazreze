@@ -7,7 +7,7 @@ const AdminDropdown = React.createClass({
         return (
             <NavDropdown eventKey={0} title="Admin" id="basic-nav-dropdown">
                 <LinkContainer to='/admin/manage_categories'>
-                    <MenuItem eventKey={0.1}>Добавить категорию</MenuItem>
+                    <MenuItem eventKey={0.1}>Управление категориями</MenuItem>
                 </LinkContainer>
                 <LinkContainer to='/admin/new_drawing'>
                     <MenuItem eventKey={0.2}>Добавить чертеж</MenuItem>

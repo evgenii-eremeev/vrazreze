@@ -43561,6 +43561,7 @@
 	        ) : _react2.default.createElement(
 	            _reactBootstrap.Nav,
 	            { pullRight: true },
+	            _react2.default.createElement(_AdminDropdown2.default, null),
 	            _react2.default.createElement(
 	                _reactRouterBootstrap.LinkContainer,
 	                { to: '/login' },
@@ -44673,14 +44674,19 @@
 		value: true
 	});
 	exports.validateEmail = validateEmail;
+	exports.validateCategoryUrl = validateCategoryUrl;
 	var emailRegex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-
+	var categoryUrlRegex = /^[\w\.-]{1,40}$/;
 	/**
 	* Given a trimmed string, returns true if the string matches
 	* a proper email format.
 	*/
 	function validateEmail(email) {
 		return emailRegex.test(email);
+	}
+
+	function validateCategoryUrl(url) {
+		return categoryUrlRegex.test(url);
 	}
 
 /***/ },
@@ -45401,7 +45407,7 @@
 	                _react2.default.createElement(
 	                    _reactBootstrap.MenuItem,
 	                    { eventKey: 0.1 },
-	                    'Добавить категорию'
+	                    'Управление категориями'
 	                )
 	            ),
 	            _react2.default.createElement(
@@ -45531,20 +45537,229 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactBootstrap = __webpack_require__(244);
+
+	var _reactRedux = __webpack_require__(227);
+
+	var _regexValidators = __webpack_require__(505);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var initialFormState = {
+	    serverError: null,
+	    errorMessage: null,
+	    isNameFieldIncorrect: false,
+	    isUrlFieldIncorrect: false
+	};
 
 	var ManageCategories = _react2.default.createClass({
 	    displayName: 'ManageCategories',
+	    getInitialState: function getInitialState() {
+	        return Object.assign({}, initialFormState);
+	    },
+	    getInputContainerClass: function getInputContainerClass(inputIncorrect) {
+	        return "form-group " + (inputIncorrect ? "has-error" : "");
+	    },
+	    findErrorsInLoginForm: function findErrorsInLoginForm(formData) {
+	        var newState = Object.assign({}, initialFormState);
+	        var categories = this.props.categories;
+
+	        if (formData.name === "") {
+	            newState.errorMessage = "Наименование не может быть пустым";
+	            newState.isNameFieldIncorrect = true;
+	        }
+	        // is name unique?
+	        else if (!categories.items.every(function (c) {
+	                return c.name !== formData.name;
+	            })) {
+	                newState.errorMessage = "Наименование не может повторяться";
+	                newState.isNameFieldIncorrect = true;
+	            } else if (formData.url === "") {
+	                newState.errorMessage = "Ссылка не может быть пустой";
+	                newState.isUrlFieldIncorrect = true;
+	            }
+	            // is url unique?
+	            else if (!categories.items.every(function (c) {
+	                    return c.url !== formData.url;
+	                })) {
+	                    newState.errorMessage = "Ссылка не может повторяться";
+	                    newState.isUrlFieldIncorrect = true;
+	                }
+	                // is category url contains valid symbols?
+	                else if (!(0, _regexValidators.validateCategoryUrl)(formData.url)) {
+	                        newState.errorMessage = "Ссылка может состоять из символов: a-z A-z 0-9 _ . -";
+	                        newState.isUrlFieldIncorrect = true;
+	                    }
+	        return newState;
+	    },
+	    onAddCategoryClick: function onAddCategoryClick() {
+	        var formData = {
+	            position: this.refs.position.value.trim(),
+	            name: this.refs.name.value.trim(),
+	            url: this.refs.url.value.trim()
+	        };
+
+	        var newState = this.findErrorsInLoginForm(formData);
+	        this.setState(newState);
+	        if (!newState.errorMessage) {
+	            // this.props.onClickLogin(formData);
+	        }
+	    },
 	    render: function render() {
+	        var categories = this.props.categories;
+
+	        var errorLabel = undefined;
+	        var loader = undefined;
+
+	        if (this.props.isFetchingData) {
+	            loader = _react2.default.createElement(
+	                'p',
+	                null,
+	                'Секунду...'
+	            );
+	        }
+
+	        if (this.state.errorMessage) {
+	            errorLabel = _react2.default.createElement(
+	                'div',
+	                { className: this.getInputContainerClass(true) },
+	                _react2.default.createElement(
+	                    'label',
+	                    { className: 'control-label' },
+	                    this.state.errorMessage
+	                )
+	            );
+	        } else if (this.state.serverError) {
+	            errorLabel = _react2.default.createElement(
+	                'div',
+	                { className: this.getInputContainerClass(true) },
+	                _react2.default.createElement(
+	                    'label',
+	                    { className: 'control-label' },
+	                    this.state.serverError
+	                )
+	            );
+	        }
+
 	        return _react2.default.createElement(
-	            'h1',
-	            null,
-	            'manage categs'
+	            'div',
+	            { style: { maxWidth: 700, margin: '0 auto', padding: '0 10px' } },
+	            _react2.default.createElement(
+	                'h1',
+	                null,
+	                'Управление категориями'
+	            ),
+	            _react2.default.createElement(
+	                'table',
+	                { className: 'table table-hover' },
+	                _react2.default.createElement(
+	                    'thead',
+	                    null,
+	                    _react2.default.createElement(
+	                        'tr',
+	                        null,
+	                        _react2.default.createElement(
+	                            'th',
+	                            { style: { width: '15%' } },
+	                            '#'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Наименование'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Ссылка'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Действие'
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'tbody',
+	                    null,
+	                    categories.items.map(function (category, idx) {
+	                        return _react2.default.createElement(
+	                            'tr',
+	                            { key: idx },
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                category.position
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                category.name
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                category.url
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                '×'
+	                            )
+	                        );
+	                    }),
+	                    _react2.default.createElement(
+	                        'tr',
+	                        { key: 99 },
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            _react2.default.createElement('input', {
+	                                className: 'form-control',
+	                                type: 'number',
+	                                ref: 'position',
+	                                value: categories.items.length
+	                            })
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            { className: this.getInputContainerClass(this.state.isNameFieldIncorrect) },
+	                            _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'name' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            { className: this.getInputContainerClass(this.state.isUrlFieldIncorrect) },
+	                            _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'url' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            _react2.default.createElement(
+	                                'button',
+	                                {
+	                                    className: 'btn btn-success',
+	                                    onClick: this.onAddCategoryClick
+	                                },
+	                                '+'
+	                            )
+	                        )
+	                    )
+	                )
+	            ),
+	            errorLabel,
+	            loader
 	        );
 	    }
 	});
 
-	exports.default = ManageCategories;
+	function mapStateToProps(state) {
+	    return {
+	        categories: state.categories
+	    };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(ManageCategories);
 
 /***/ }
 /******/ ]);
