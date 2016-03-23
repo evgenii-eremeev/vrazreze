@@ -15,7 +15,8 @@ import rootReducer from './app/reducers/rootReducer';
 // Components
 import App from './app/components/App';
 import Home from './app/components/Home';
-import NewDrawing from './app/components/NewDrawing';
+import NewDrawing from './app/components/admin/NewDrawing';
+import ManageCategories from './app/components/admin/ManageCategories';
 import MainLogin from './app/components/auth/MainLogin';
 import MainSignUp from './app/components/auth/MainSignUp';
 import Categories from './app/components/categories/Categories';
@@ -39,10 +40,11 @@ ReactDOM.render(
         <Router history={history}>
             <Route path="/" component={App}>
                 <IndexRoute component={Home}/>
-                <Route path="new_drawing" component={NewDrawing} />
-                <Route path="login" component={MainLogin} />
-                <Route path="signup" component={MainSignUp} />
-                <Route path="categories" component={Categories} >
+                <Route path="/admin/new_drawing" component={NewDrawing} />
+                <Route path="/admin/manage_categories" component={ManageCategories} />
+                <Route path="/login" component={MainLogin} />
+                <Route path="/signup" component={MainSignUp} />
+                <Route path="/categories" component={Categories} >
                     <Route path="/categories/:categoryUrl" component={Category} />
                 </Route>
             </Route>

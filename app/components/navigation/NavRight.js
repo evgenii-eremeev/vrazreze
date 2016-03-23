@@ -4,19 +4,19 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { connect } from 'react-redux';
 
 import { attemptLogout } from '../../actions/authActions';
+import AdminDropdown from './AdminDropdown';
 
 const NavRight = React.createClass({
 
     onLogoutClick () {
         this.props.dispatch(attemptLogout());
     },
+
     render () {
         return (
             this.props.userAuthSession.isLoggedIn ?
                 <Nav pullRight>
-                    <LinkContainer to='new_drawing'>
-                        <NavItem eventKey={1}>Добавить</NavItem>
-                    </LinkContainer>
+                    <AdminDropdown />
                     <NavItem eventKey={1}>
                         {this.props.userAuthSession.userObject.username}
                     </NavItem>

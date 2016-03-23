@@ -78,9 +78,13 @@
 
 	var _Home2 = _interopRequireDefault(_Home);
 
-	var _NewDrawing = __webpack_require__(491);
+	var _NewDrawing = __webpack_require__(513);
 
 	var _NewDrawing2 = _interopRequireDefault(_NewDrawing);
+
+	var _ManageCategories = __webpack_require__(514);
+
+	var _ManageCategories2 = _interopRequireDefault(_ManageCategories);
 
 	var _MainLogin = __webpack_require__(508);
 
@@ -103,14 +107,14 @@
 	// Set up store
 
 
+	// Components
+	// React + React Router
+	var routeMiddleware = (0, _reactRouterRedux.routerMiddleware)(_reactRouter.browserHistory);
+
 	// Reducers
 
 
 	// Redux
-	var routeMiddleware = (0, _reactRouterRedux.routerMiddleware)(_reactRouter.browserHistory);
-
-	// Components
-	// React + React Router
 
 	var createStoreWithMiddleware = (0, _redux.applyMiddleware)(_reduxThunk2.default, // lets us dispatch() functions
 	routeMiddleware)(_redux.createStore);
@@ -130,12 +134,13 @@
 	            _reactRouter.Route,
 	            { path: '/', component: _App2.default },
 	            _react2.default.createElement(_reactRouter.IndexRoute, { component: _Home2.default }),
-	            _react2.default.createElement(_reactRouter.Route, { path: 'new_drawing', component: _NewDrawing2.default }),
-	            _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _MainLogin2.default }),
-	            _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _MainSignUp2.default }),
+	            _react2.default.createElement(_reactRouter.Route, { path: '/admin/new_drawing', component: _NewDrawing2.default }),
+	            _react2.default.createElement(_reactRouter.Route, { path: '/admin/manage_categories', component: _ManageCategories2.default }),
+	            _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _MainLogin2.default }),
+	            _react2.default.createElement(_reactRouter.Route, { path: '/signup', component: _MainSignUp2.default }),
 	            _react2.default.createElement(
 	                _reactRouter.Route,
-	                { path: 'categories', component: _Categories2.default },
+	                { path: '/categories', component: _Categories2.default },
 	                _react2.default.createElement(_reactRouter.Route, { path: '/categories/:categoryUrl', component: _Category2.default })
 	            )
 	        )
@@ -43527,6 +43532,10 @@
 
 	var _authActions = __webpack_require__(507);
 
+	var _AdminDropdown = __webpack_require__(512);
+
+	var _AdminDropdown2 = _interopRequireDefault(_AdminDropdown);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var NavRight = _react2.default.createClass({
@@ -43538,15 +43547,7 @@
 	        return this.props.userAuthSession.isLoggedIn ? _react2.default.createElement(
 	            _reactBootstrap.Nav,
 	            { pullRight: true },
-	            _react2.default.createElement(
-	                _reactRouterBootstrap.LinkContainer,
-	                { to: 'new_drawing' },
-	                _react2.default.createElement(
-	                    _reactBootstrap.NavItem,
-	                    { eventKey: 1 },
-	                    'Добавить'
-	                )
-	            ),
+	            _react2.default.createElement(_AdminDropdown2.default, null),
 	            _react2.default.createElement(
 	                _reactBootstrap.NavItem,
 	                { eventKey: 1 },
@@ -43803,104 +43804,7 @@
 	exports.default = Home;
 
 /***/ },
-/* 491 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactBootstrap = __webpack_require__(244);
-
-	var _reactRedux = __webpack_require__(227);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var NewDrawing = _react2.default.createClass({
-	    displayName: 'NewDrawing',
-	    onNewDrawingSubmit: function onNewDrawingSubmit(e) {
-	        e.preventDefault();
-	        var form = document.getElementById('newDrawingForm');
-	        var formData = new FormData(form);
-
-	        $.ajax({
-	            url: '/new_drawing',
-	            type: 'POST',
-	            data: formData,
-	            async: true,
-	            cache: false,
-	            contentType: false,
-	            processData: false,
-	            success: function success(data) {
-	                console.log(data);
-	                form.reset();
-	            },
-	            error: function error(xhr, message, err) {
-	                console.error(err);
-	            }
-	        });
-	    },
-	    render: function render() {
-	        return _react2.default.createElement(
-	            'div',
-	            null,
-	            _react2.default.createElement(
-	                'h1',
-	                { style: { textAlign: 'center' } },
-	                'Новый чертеж'
-	            ),
-	            _react2.default.createElement('br', null),
-	            _react2.default.createElement(
-	                'form',
-	                { role: 'form',
-	                    id: 'newDrawingForm',
-	                    method: 'post',
-	                    enctype: 'multipart/form-data',
-	                    style: { maxWidth: 500, margin: '0 auto', padding: '0 10px' },
-	                    onSubmit: this.onNewDrawingSubmit
-	                },
-	                _react2.default.createElement(_reactBootstrap.Input, { type: 'text', name: 'title', label: 'Название', required: true }),
-	                _react2.default.createElement(
-	                    _reactBootstrap.Input,
-	                    { type: 'select', name: 'category', label: 'Категория' },
-	                    this.props.categories.items.map(function (category, idx) {
-	                        return _react2.default.createElement(
-	                            'option',
-	                            { value: category.name, key: idx },
-	                            category.name
-	                        );
-	                    })
-	                ),
-	                _react2.default.createElement(_reactBootstrap.Input, { type: 'textarea',
-	                    name: 'description',
-	                    label: 'Описание',
-	                    rows: 4,
-	                    required: true }),
-	                _react2.default.createElement(_reactBootstrap.Input, { type: 'text', name: 'drawing_composition', label: 'Состав работы' }),
-	                _react2.default.createElement(_reactBootstrap.Input, { type: 'number', name: 'price', label: 'Цена' }),
-	                _react2.default.createElement(_reactBootstrap.Input, { type: 'text', name: 'tags', label: 'Ключевые слова' }),
-	                _react2.default.createElement(_reactBootstrap.Input, { type: 'file', name: 'picture', label: 'Изображение', help: 'Форматы: .jpg .png .gif' }),
-	                _react2.default.createElement(_reactBootstrap.ButtonInput, { type: 'submit', value: 'Добавить', bsStyle: 'primary' })
-	            )
-	        );
-	    }
-	});
-
-	function mapStateToProps(state) {
-	    return {
-	        categories: state.categories
-	    };
-	}
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps)(NewDrawing);
-
-/***/ },
+/* 491 */,
 /* 492 */,
 /* 493 */,
 /* 494 */
@@ -45464,6 +45368,183 @@
 	});
 
 	exports.default = SignUpForm;
+
+/***/ },
+/* 512 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactBootstrap = __webpack_require__(244);
+
+	var _reactRouterBootstrap = __webpack_require__(487);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var AdminDropdown = _react2.default.createClass({
+	    displayName: 'AdminDropdown',
+	    render: function render() {
+	        return _react2.default.createElement(
+	            _reactBootstrap.NavDropdown,
+	            { eventKey: 0, title: 'Admin', id: 'basic-nav-dropdown' },
+	            _react2.default.createElement(
+	                _reactRouterBootstrap.LinkContainer,
+	                { to: '/admin/manage_categories' },
+	                _react2.default.createElement(
+	                    _reactBootstrap.MenuItem,
+	                    { eventKey: 0.1 },
+	                    'Добавить категорию'
+	                )
+	            ),
+	            _react2.default.createElement(
+	                _reactRouterBootstrap.LinkContainer,
+	                { to: '/admin/new_drawing' },
+	                _react2.default.createElement(
+	                    _reactBootstrap.MenuItem,
+	                    { eventKey: 0.2 },
+	                    'Добавить чертеж'
+	                )
+	            )
+	        );
+	    }
+	});
+
+	exports.default = AdminDropdown;
+
+/***/ },
+/* 513 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactBootstrap = __webpack_require__(244);
+
+	var _reactRedux = __webpack_require__(227);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var NewDrawing = _react2.default.createClass({
+	    displayName: 'NewDrawing',
+	    onNewDrawingSubmit: function onNewDrawingSubmit(e) {
+	        e.preventDefault();
+	        var form = document.getElementById('newDrawingForm');
+	        var formData = new FormData(form);
+
+	        $.ajax({
+	            url: '/new_drawing',
+	            type: 'POST',
+	            data: formData,
+	            async: true,
+	            cache: false,
+	            contentType: false,
+	            processData: false,
+	            success: function success(data) {
+	                console.log(data);
+	                form.reset();
+	            },
+	            error: function error(xhr, message, err) {
+	                console.error(err);
+	            }
+	        });
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement(
+	                'h1',
+	                { style: { textAlign: 'center' } },
+	                'Новый чертеж'
+	            ),
+	            _react2.default.createElement('br', null),
+	            _react2.default.createElement(
+	                'form',
+	                { role: 'form',
+	                    id: 'newDrawingForm',
+	                    method: 'post',
+	                    enctype: 'multipart/form-data',
+	                    style: { maxWidth: 500, margin: '0 auto', padding: '0 10px' },
+	                    onSubmit: this.onNewDrawingSubmit
+	                },
+	                _react2.default.createElement(_reactBootstrap.Input, { type: 'text', name: 'title', label: 'Название', required: true }),
+	                _react2.default.createElement(
+	                    _reactBootstrap.Input,
+	                    { type: 'select', name: 'category', label: 'Категория' },
+	                    this.props.categories.items.map(function (category, idx) {
+	                        return _react2.default.createElement(
+	                            'option',
+	                            { value: category.name, key: idx },
+	                            category.name
+	                        );
+	                    })
+	                ),
+	                _react2.default.createElement(_reactBootstrap.Input, { type: 'textarea',
+	                    name: 'description',
+	                    label: 'Описание',
+	                    rows: 4,
+	                    required: true }),
+	                _react2.default.createElement(_reactBootstrap.Input, { type: 'text', name: 'drawing_composition', label: 'Состав работы' }),
+	                _react2.default.createElement(_reactBootstrap.Input, { type: 'number', name: 'price', label: 'Цена' }),
+	                _react2.default.createElement(_reactBootstrap.Input, { type: 'text', name: 'tags', label: 'Ключевые слова' }),
+	                _react2.default.createElement(_reactBootstrap.Input, { type: 'file', name: 'picture', label: 'Изображение', help: 'Форматы: .jpg .png .gif' }),
+	                _react2.default.createElement(_reactBootstrap.ButtonInput, { type: 'submit', value: 'Добавить', bsStyle: 'primary' })
+	            )
+	        );
+	    }
+	});
+
+	function mapStateToProps(state) {
+	    return {
+	        categories: state.categories
+	    };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(NewDrawing);
+
+/***/ },
+/* 514 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ManageCategories = _react2.default.createClass({
+	    displayName: 'ManageCategories',
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'h1',
+	            null,
+	            'manage categs'
+	        );
+	    }
+	});
+
+	exports.default = ManageCategories;
 
 /***/ }
 /******/ ]);
