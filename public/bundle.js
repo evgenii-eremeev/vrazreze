@@ -45537,9 +45537,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactBootstrap = __webpack_require__(244);
-
 	var _reactRedux = __webpack_require__(227);
+
+	var _EditCategory = __webpack_require__(516);
+
+	var _EditCategory2 = _interopRequireDefault(_EditCategory);
 
 	var _regexValidators = __webpack_require__(505);
 
@@ -45705,7 +45707,7 @@
 	                            _react2.default.createElement(
 	                                'td',
 	                                null,
-	                                '×'
+	                                _react2.default.createElement(_EditCategory2.default, { category: category })
 	                            )
 	                        );
 	                    }),
@@ -45738,7 +45740,7 @@
 	                            _react2.default.createElement(
 	                                'button',
 	                                {
-	                                    className: 'btn btn-success',
+	                                    className: 'btn btn-small btn-success',
 	                                    onClick: this.onAddCategoryClick
 	                                },
 	                                '+'
@@ -45760,6 +45762,104 @@
 	}
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(ManageCategories);
+
+/***/ },
+/* 515 */,
+/* 516 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactBootstrap = __webpack_require__(244);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var EditCategory = _react2.default.createClass({
+	    displayName: 'EditCategory',
+	    getInitialState: function getInitialState() {
+	        return { showModal: false };
+	    },
+	    getInputContainerClass: function getInputContainerClass(inputIncorrect) {
+	        return "form-group " + (inputIncorrect ? "has-error" : "");
+	    },
+	    close: function close() {
+	        this.setState({ showModal: false });
+	    },
+	    open: function open() {
+	        this.setState({ showModal: true });
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement(
+	                _reactBootstrap.Button,
+	                {
+	                    bsStyle: 'primary',
+	                    bsSize: 'small',
+	                    onClick: this.open
+	                },
+	                'Edit'
+	            ),
+	            _react2.default.createElement(
+	                _reactBootstrap.Modal,
+	                { show: this.state.showModal, onHide: this.close },
+	                _react2.default.createElement(
+	                    _reactBootstrap.Modal.Header,
+	                    { closeButton: true },
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Modal.Title,
+	                        null,
+	                        'Изменить категорию'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _reactBootstrap.Modal.Body,
+	                    null,
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: this.getInputContainerClass(this.state.isEmailFieldIncorrect) },
+	                        _react2.default.createElement(
+	                            'label',
+	                            { className: 'control-label' },
+	                            'E-mail'
+	                        ),
+	                        _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'email', value: this.props.category.name })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: this.getInputContainerClass(this.state.isPasswordFieldIncorrect) },
+	                        _react2.default.createElement(
+	                            'label',
+	                            { className: 'control-label' },
+	                            'Пароль'
+	                        ),
+	                        _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'password', value: this.props.category.url })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _reactBootstrap.Modal.Footer,
+	                    null,
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Button,
+	                        { onClick: this.close },
+	                        'Close'
+	                    )
+	                )
+	            )
+	        );
+	    }
+	});
+
+	exports.default = EditCategory;
 
 /***/ }
 /******/ ]);

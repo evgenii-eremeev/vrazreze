@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
-import { Grid, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
+import EditCategory from './EditCategory';
 import { validateCategoryUrl } from '../../utils/regexValidators';
 
 const initialFormState = {
@@ -106,7 +106,7 @@ const ManageCategories = React.createClass({
                                 <td >{ category.position }</td>
                                 <td>{ category.name }</td>
                                 <td>{ category.url }</td>
-                                <td>&times;</td>
+                                <td><EditCategory category={category}/></td>
                             </tr>
                         ))}
                         <tr key={99}>
@@ -126,7 +126,7 @@ const ManageCategories = React.createClass({
                             </td>
                             <td>
                                 <button
-                                    className="btn btn-success"
+                                    className="btn btn-small btn-success"
                                     onClick={this.onAddCategoryClick}
                                     >
                                     +
