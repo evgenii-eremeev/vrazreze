@@ -45543,117 +45543,28 @@
 
 	var _EditCategory2 = _interopRequireDefault(_EditCategory);
 
-	var _regexValidators = __webpack_require__(505);
+	var _AddCategory = __webpack_require__(517);
+
+	var _AddCategory2 = _interopRequireDefault(_AddCategory);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var initialFormState = {
-	    serverError: null,
-	    errorMessage: null,
-	    isNameFieldIncorrect: false,
-	    isUrlFieldIncorrect: false
-	};
-
 	var ManageCategories = _react2.default.createClass({
 	    displayName: 'ManageCategories',
-	    getInitialState: function getInitialState() {
-	        return Object.assign({}, initialFormState);
-	    },
-	    getInputContainerClass: function getInputContainerClass(inputIncorrect) {
-	        return "form-group " + (inputIncorrect ? "has-error" : "");
-	    },
-	    findErrorsInLoginForm: function findErrorsInLoginForm(formData) {
-	        var newState = Object.assign({}, initialFormState);
-	        var categories = this.props.categories;
-
-	        if (formData.name === "") {
-	            newState.errorMessage = "Наименование не может быть пустым";
-	            newState.isNameFieldIncorrect = true;
-	        }
-	        // is name unique?
-	        else if (!categories.items.every(function (c) {
-	                return c.name !== formData.name;
-	            })) {
-	                newState.errorMessage = "Наименование не может повторяться";
-	                newState.isNameFieldIncorrect = true;
-	            } else if (formData.url === "") {
-	                newState.errorMessage = "Ссылка не может быть пустой";
-	                newState.isUrlFieldIncorrect = true;
-	            }
-	            // is url unique?
-	            else if (!categories.items.every(function (c) {
-	                    return c.url !== formData.url;
-	                })) {
-	                    newState.errorMessage = "Ссылка не может повторяться";
-	                    newState.isUrlFieldIncorrect = true;
-	                }
-	                // is category url contains valid symbols?
-	                else if (!(0, _regexValidators.validateCategoryUrl)(formData.url)) {
-	                        newState.errorMessage = "Ссылка может состоять из символов: a-z A-z 0-9 _ . -";
-	                        newState.isUrlFieldIncorrect = true;
-	                    }
-	        return newState;
-	    },
-	    onAddCategoryClick: function onAddCategoryClick() {
-	        var formData = {
-	            position: this.refs.position.value.trim(),
-	            name: this.refs.name.value.trim(),
-	            url: this.refs.url.value.trim()
-	        };
-
-	        var newState = this.findErrorsInLoginForm(formData);
-	        this.setState(newState);
-	        if (!newState.errorMessage) {
-	            // this.props.onClickLogin(formData);
-	        }
-	    },
 	    render: function render() {
 	        var categories = this.props.categories;
-
-	        var errorLabel = undefined;
-	        var loader = undefined;
-
-	        if (this.props.isFetchingData) {
-	            loader = _react2.default.createElement(
-	                'p',
-	                null,
-	                'Секунду...'
-	            );
-	        }
-
-	        if (this.state.errorMessage) {
-	            errorLabel = _react2.default.createElement(
-	                'div',
-	                { className: this.getInputContainerClass(true) },
-	                _react2.default.createElement(
-	                    'label',
-	                    { className: 'control-label' },
-	                    this.state.errorMessage
-	                )
-	            );
-	        } else if (this.state.serverError) {
-	            errorLabel = _react2.default.createElement(
-	                'div',
-	                { className: this.getInputContainerClass(true) },
-	                _react2.default.createElement(
-	                    'label',
-	                    { className: 'control-label' },
-	                    this.state.serverError
-	                )
-	            );
-	        }
 
 	        return _react2.default.createElement(
 	            'div',
 	            { style: { maxWidth: 700, margin: '0 auto', padding: '0 10px' } },
 	            _react2.default.createElement(
 	                'h1',
-	                null,
+	                { style: { textAlign: 'center' } },
 	                'Управление категориями'
 	            ),
 	            _react2.default.createElement(
 	                'table',
-	                { className: 'table table-hover' },
+	                { className: 'table table-hover categories' },
 	                _react2.default.createElement(
 	                    'thead',
 	                    null,
@@ -45662,7 +45573,7 @@
 	                        null,
 	                        _react2.default.createElement(
 	                            'th',
-	                            { style: { width: '15%' } },
+	                            { style: { width: '12%' } },
 	                            '#'
 	                        ),
 	                        _react2.default.createElement(
@@ -45677,8 +45588,8 @@
 	                        ),
 	                        _react2.default.createElement(
 	                            'th',
-	                            null,
-	                            'Действие'
+	                            { style: { textAlign: 'center' } },
+	                            'Редактировать'
 	                        )
 	                    )
 	                ),
@@ -45706,51 +45617,14 @@
 	                            ),
 	                            _react2.default.createElement(
 	                                'td',
-	                                null,
+	                                { style: { textAlign: 'center' } },
 	                                _react2.default.createElement(_EditCategory2.default, { category: category })
 	                            )
 	                        );
-	                    }),
-	                    _react2.default.createElement(
-	                        'tr',
-	                        { key: 99 },
-	                        _react2.default.createElement(
-	                            'td',
-	                            null,
-	                            _react2.default.createElement('input', {
-	                                className: 'form-control',
-	                                type: 'number',
-	                                ref: 'position',
-	                                value: categories.items.length
-	                            })
-	                        ),
-	                        _react2.default.createElement(
-	                            'td',
-	                            { className: this.getInputContainerClass(this.state.isNameFieldIncorrect) },
-	                            _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'name' })
-	                        ),
-	                        _react2.default.createElement(
-	                            'td',
-	                            { className: this.getInputContainerClass(this.state.isUrlFieldIncorrect) },
-	                            _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'url' })
-	                        ),
-	                        _react2.default.createElement(
-	                            'td',
-	                            null,
-	                            _react2.default.createElement(
-	                                'button',
-	                                {
-	                                    className: 'btn btn-small btn-success',
-	                                    onClick: this.onAddCategoryClick
-	                                },
-	                                '+'
-	                            )
-	                        )
-	                    )
+	                    })
 	                )
 	            ),
-	            errorLabel,
-	            loader
+	            _react2.default.createElement(_AddCategory2.default, { categories: categories })
 	        );
 	    }
 	});
@@ -45780,19 +45654,20 @@
 
 	var _reactBootstrap = __webpack_require__(244);
 
+	var _regexValidators = __webpack_require__(505);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var initialFormState = {
 	    errorMessage: null,
 	    isNameFieldIncorrect: false,
-	    isUrlFieldIncorrect: false,
-	    showModal: false
+	    isUrlFieldIncorrect: false
 	};
-	// TODO fields don't changes
+
 	var EditCategory = _react2.default.createClass({
 	    displayName: 'EditCategory',
 	    getInitialState: function getInitialState() {
-	        return Object.assign({}, initialFormState);
+	        return Object.assign({}, initialFormState, { showModal: false });
 	    },
 	    getInputContainerClass: function getInputContainerClass(inputIncorrect) {
 	        return "form-group " + (inputIncorrect ? "has-error" : "");
@@ -45805,7 +45680,6 @@
 	    },
 	    findErrorsInEditForm: function findErrorsInEditForm(formData) {
 	        var newState = Object.assign({}, initialFormState);
-	        var categories = this.props.categories;
 
 	        if (formData.name === "") {
 	            newState.errorMessage = "Наименование не может быть пустым";
@@ -45815,7 +45689,7 @@
 	            newState.isUrlFieldIncorrect = true;
 	        }
 	        // is category url contains valid symbols?
-	        else if (!validateCategoryUrl(formData.url)) {
+	        else if (!(0, _regexValidators.validateCategoryUrl)(formData.url)) {
 	                newState.errorMessage = "Ссылка может состоять из символов: a-z A-z 0-9 _ . -";
 	                newState.isUrlFieldIncorrect = true;
 	            }
@@ -45831,7 +45705,7 @@
 	        var newState = this.findErrorsInEditForm(formData);
 	        this.setState(newState);
 	        if (!newState.errorMessage) {
-	            this.props.onClickEdit(formData);
+	            this.props.onEditClick(formData);
 	        }
 	    },
 	    render: function render() {
@@ -45880,7 +45754,7 @@
 	                    bsSize: 'small',
 	                    onClick: this.open
 	                },
-	                'Edit'
+	                _react2.default.createElement('span', { className: 'glyphicon glyphicon-pencil' })
 	            ),
 	            _react2.default.createElement(
 	                _reactBootstrap.Modal,
@@ -45909,33 +45783,33 @@
 	                    null,
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: this.getInputContainerClass(this.state.isEmailFieldIncorrect) },
+	                        null,
 	                        _react2.default.createElement(
 	                            'label',
 	                            { className: 'control-label' },
 	                            'Позиция'
 	                        ),
-	                        _react2.default.createElement('input', { className: 'form-control', type: 'number', ref: 'position', value: category.position })
+	                        _react2.default.createElement('input', { className: 'form-control', type: 'number', ref: 'position', defaultValue: category.position })
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: this.getInputContainerClass(this.state.isEmailFieldIncorrect) },
+	                        { className: this.getInputContainerClass(this.state.isNameFieldIncorrect) },
 	                        _react2.default.createElement(
 	                            'label',
 	                            { className: 'control-label' },
 	                            'Название'
 	                        ),
-	                        _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'name', value: category.name })
+	                        _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'name', defaultValue: category.name })
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: this.getInputContainerClass(this.state.isPasswordFieldIncorrect) },
+	                        { className: this.getInputContainerClass(this.state.isUrlFieldIncorrect) },
 	                        _react2.default.createElement(
 	                            'label',
 	                            { className: 'control-label' },
 	                            'Ссылка'
 	                        ),
-	                        _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'url', value: category.url })
+	                        _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'url', defaultValue: category.url })
 	                    )
 	                ),
 	                _react2.default.createElement(
@@ -45960,6 +45834,217 @@
 	});
 
 	exports.default = EditCategory;
+
+/***/ },
+/* 517 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactBootstrap = __webpack_require__(244);
+
+	var _regexValidators = __webpack_require__(505);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var initialFormState = {
+	    errorMessage: null,
+	    isNameFieldIncorrect: false,
+	    isUrlFieldIncorrect: false
+	};
+
+	var AddCategory = _react2.default.createClass({
+	    displayName: 'AddCategory',
+	    getInitialState: function getInitialState() {
+	        return Object.assign({}, initialFormState, { showModal: false });
+	    },
+	    getInputContainerClass: function getInputContainerClass(inputIncorrect) {
+	        return "form-group " + (inputIncorrect ? "has-error" : "");
+	    },
+	    close: function close() {
+	        this.setState({ showModal: false });
+	    },
+	    open: function open() {
+	        this.setState({ showModal: true });
+	    },
+	    findErrorsInEditForm: function findErrorsInEditForm(formData) {
+	        var newState = Object.assign({}, initialFormState);
+	        var categories = this.props.categories;
+
+	        if (formData.name === "") {
+	            newState.errorMessage = "Наименование не может быть пустым";
+	            newState.isNameFieldIncorrect = true;
+	        }
+	        // is name unique?
+	        else if (!categories.items.every(function (c) {
+	                return c.name !== formData.name;
+	            })) {
+	                newState.errorMessage = "Наименование не может повторяться";
+	                newState.isNameFieldIncorrect = true;
+	            } else if (formData.url === "") {
+	                newState.errorMessage = "Ссылка не может быть пустой";
+	                newState.isUrlFieldIncorrect = true;
+	            }
+	            // is url unique?
+	            else if (!categories.items.every(function (c) {
+	                    return c.url !== formData.url;
+	                })) {
+	                    newState.errorMessage = "Ссылка не может повторяться";
+	                    newState.isUrlFieldIncorrect = true;
+	                }
+	                // is category url contains valid symbols?
+	                else if (!(0, _regexValidators.validateCategoryUrl)(formData.url)) {
+	                        newState.errorMessage = "Ссылка может состоять из символов: a-z A-z 0-9 _ . -";
+	                        newState.isUrlFieldIncorrect = true;
+	                    }
+	        return newState;
+	    },
+	    handleOnAddClick: function handleOnAddClick() {
+	        var formData = {
+	            position: this.refs.position.value.trim(),
+	            name: this.refs.name.value.trim(),
+	            url: this.refs.url.value.trim()
+	        };
+
+	        var newState = this.findErrorsInEditForm(formData);
+	        this.setState(newState);
+	        if (!newState.errorMessage) {
+	            // this.props.onAddClick(formData);
+	        }
+	    },
+	    render: function render() {
+	        var category = this.props.category;
+
+
+	        var errorLabel = undefined;
+	        var loader = undefined;
+
+	        if (this.props.isFetchingData) {
+	            loader = _react2.default.createElement(
+	                'p',
+	                null,
+	                'Секунду...'
+	            );
+	        }
+
+	        if (this.state.errorMessage) {
+	            errorLabel = _react2.default.createElement(
+	                'div',
+	                { className: this.getInputContainerClass(true) },
+	                _react2.default.createElement(
+	                    'label',
+	                    { className: 'control-label' },
+	                    this.state.errorMessage
+	                )
+	            );
+	        } else if (this.props.serverError) {
+	            errorLabel = _react2.default.createElement(
+	                'div',
+	                { className: this.getInputContainerClass(true) },
+	                _react2.default.createElement(
+	                    'label',
+	                    { className: 'control-label' },
+	                    this.props.serverError
+	                )
+	            );
+	        }
+	        return _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement(
+	                _reactBootstrap.Button,
+	                {
+	                    bsStyle: 'success',
+	                    bsSize: 'large',
+	                    onClick: this.open
+	                },
+	                'Добавить'
+	            ),
+	            _react2.default.createElement(
+	                _reactBootstrap.Modal,
+	                { show: this.state.showModal, onHide: this.close },
+	                _react2.default.createElement(
+	                    _reactBootstrap.Modal.Header,
+	                    { closeButton: true },
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Modal.Title,
+	                        null,
+	                        'Добавить категорию'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _reactBootstrap.Modal.Body,
+	                    null,
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        _react2.default.createElement(
+	                            'label',
+	                            { className: 'control-label' },
+	                            'Позиция'
+	                        ),
+	                        _react2.default.createElement('input', {
+	                            className: 'form-control',
+	                            type: 'number',
+	                            ref: 'position',
+	                            defaultValue: this.props.categories.items.length
+	                        })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: this.getInputContainerClass(this.state.isNameFieldIncorrect) },
+	                        _react2.default.createElement(
+	                            'label',
+	                            { className: 'control-label' },
+	                            'Название'
+	                        ),
+	                        _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'name' })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: this.getInputContainerClass(this.state.isUrlFieldIncorrect) },
+	                        _react2.default.createElement(
+	                            'label',
+	                            { className: 'control-label' },
+	                            'Ссылка'
+	                        ),
+	                        _react2.default.createElement('input', { className: 'form-control', type: 'text', ref: 'url' })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _reactBootstrap.Modal.Footer,
+	                    null,
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'pull-left' },
+	                        loader,
+	                        errorLabel
+	                    ),
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Button,
+	                        { onClick: this.handleOnAddClick, bsStyle: 'primary' },
+	                        'Добавить'
+	                    ),
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Button,
+	                        { onClick: this.close },
+	                        'Закрыть'
+	                    )
+	                )
+	            )
+	        );
+	    }
+	});
+
+	exports.default = AddCategory;
 
 /***/ }
 /******/ ]);

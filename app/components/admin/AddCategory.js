@@ -9,7 +9,7 @@ const initialFormState = {
     isUrlFieldIncorrect: false
 };
 
-const EditCategory = React.createClass({
+const AddCategory = React.createClass({
 
     getInitialState() {
         return Object.assign(
@@ -33,13 +33,23 @@ const EditCategory = React.createClass({
 
     findErrorsInEditForm(formData) {
         let newState = Object.assign({}, initialFormState);
-
+        const { categories } = this.props;
         if (formData.name === "") {
             newState.errorMessage = "Наименование не может быть пустым";
             newState.isNameFieldIncorrect = true;
         }
+        // is name unique?
+        else if (!categories.items.every(c => c.name !== formData.name)) {
+            newState.errorMessage = "Наименование не может повторяться";
+            newState.isNameFieldIncorrect = true;
+        }
         else if (formData.url === "") {
             newState.errorMessage = "Ссылка не может быть пустой";
+            newState.isUrlFieldIncorrect = true;
+        }
+        // is url unique?
+        else if (!categories.items.every(c => c.url !== formData.url)) {
+            newState.errorMessage = "Ссылка не может повторяться";
             newState.isUrlFieldIncorrect = true;
         }
         // is category url contains valid symbols?
@@ -50,7 +60,7 @@ const EditCategory = React.createClass({
         return newState;
     },
 
-    handleOnEditClick () {
+    handleOnAddClick () {
         const formData = {
             position : this.refs.position.value.trim(),
             name : this.refs.name.value.trim(),
@@ -60,7 +70,7 @@ const EditCategory = React.createClass({
         let newState = this.findErrorsInEditForm(formData);
         this.setState(newState);
         if (!newState.errorMessage){
-            this.props.onEditClick(formData);
+            // this.props.onAddClick(formData);
         }
     },
 
@@ -91,36 +101,42 @@ const EditCategory = React.createClass({
         return (
             <div>
                 <Button
-                    bsStyle="primary"
-                    bsSize="small"
+                    bsStyle="success"
+                    bsSize="large"
                     onClick={this.open}
                     >
-                    <span className="glyphicon glyphicon-pencil"></span>
+                    Добавить
                 </Button>
 
                 <Modal show={this.state.showModal} onHide={this.close}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Изменить категорию</Modal.Title>
-                        <p><small>id: { category._id }</small></p>
+                        <Modal.Title>Добавить категорию</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <div>
                             <label className="control-label">Позиция</label>
-                            <input className="form-control" type="number" ref="position" defaultValue={category.position}/>
+                            <input
+                                className="form-control"
+                                type="number"
+                                ref="position"
+                                defaultValue={this.props.categories.items.length}
+                                />
                         </div>
                         <div className={this.getInputContainerClass(this.state.isNameFieldIncorrect)}>
                             <label className="control-label">Название</label>
-                            <input className="form-control" type="text" ref="name" defaultValue={category.name}/>
+                            <input className="form-control" type="text" ref="name"/>
                         </div>
                         <div className={this.getInputContainerClass(this.state.isUrlFieldIncorrect)}>
                             <label className="control-label">Ссылка</label>
-                            <input className="form-control" type="text" ref="url" defaultValue={category.url}/>
+                            <input className="form-control" type="text" ref="url"/>
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        {loader}
-                        {errorLabel}
-                        <Button onClick={this.handleOnEditClick} bsStyle="primary">Сохранить</Button>
+                        <div className="pull-left">
+                            {loader}
+                            {errorLabel}
+                        </div>
+                        <Button onClick={this.handleOnAddClick} bsStyle="primary">Добавить</Button>
                         <Button onClick={this.close}>Закрыть</Button>
                     </Modal.Footer>
                 </Modal>
@@ -129,4 +145,4 @@ const EditCategory = React.createClass({
     }
 })
 
-export default EditCategory;
+export default AddCategory;
