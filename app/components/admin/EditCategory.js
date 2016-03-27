@@ -57,17 +57,25 @@ const EditCategory = React.createClass({
             name : this.refs.name.value.trim(),
             url : this.refs.url.value.trim()
         };
+        let isChanged = formData.position === category.position &&
+            formData.name === formData.name &&
+            formData.url === formData.url;
 
         let newState = this.findErrorsInEditForm(formData);
         this.setState(newState);
-        if (!newState.errorMessage){
-            onUpdateClick(category._id, formData);
+        if (!newState.errorMessage & !isChanged){
+            onUpdateClick(category._id, formData)
+                .then(() => {
+                    this.setState({
+                        showModal: false
+                    });
+                });
         }
     },
 
     handleOnDeleteClick () {
         const { category, onDeleteClick } = this.props;
-        let confirmed = confirm("Точно? Восстановить нельзя ведь будет.");
+        let confirmed = confirm("Подтвердить удаление категории?");
         if (confirmed) {
             onDeleteClick(category._id);
         }

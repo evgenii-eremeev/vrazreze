@@ -12,6 +12,7 @@ const ManageCategories = React.createClass({
 
     render () {
         const { categories, dispatch } = this.props;
+
         return (
             <div style={{maxWidth: 700, margin: '0 auto', padding: '0 10px'}}>
                 <h1 style={{textAlign: 'center'}}>Управление категориями</h1>
@@ -36,10 +37,10 @@ const ManageCategories = React.createClass({
                                         onDeleteClick={categoryId => (
                                             dispatch(deleteCategory(categoryId))
                                         )}
-                                        onUpdateClick={(categoryId, formData) => {
+                                        onUpdateClick={(categoryId, formData) => (
                                             dispatch(updateCategory(categoryId, formData))
-                                        }}
-                                        isFetchingData={categories.isFetchingData}
+                                        )}
+                                        isFetchingData={categories.isFetching}
                                         serverError={categories.error}
                                         />
                                 </td>
@@ -52,7 +53,7 @@ const ManageCategories = React.createClass({
                     onAddClick={formData => (
                         dispatch(addCategory(formData))
                     )}
-                    isFetchingData={categories.isFetchingData}
+                    isFetchingData={categories.isFetching}
                     serverError={categories.error}
                     />
             </div>

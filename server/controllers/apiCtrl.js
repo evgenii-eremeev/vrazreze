@@ -54,7 +54,7 @@ const apiCtrl = (function apiCtrl () {
     }
 
     function updateCategory(req, res) {
-        Categories.findByIdAndUpdate(
+        Category.findByIdAndUpdate(
             req.params.categoryId,
             // same as { $set: {...}}
             {
@@ -62,7 +62,7 @@ const apiCtrl = (function apiCtrl () {
                 url: req.body.formData.url,
                 position: req.body.formData.position
             },
-            function(err, category) {
+            function(error, category) {
                 if (error) { throw error; }
                 res.status(200).end();
             }
