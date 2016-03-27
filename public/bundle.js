@@ -44017,7 +44017,7 @@
 	            null,
 	            drawing.title
 	        ),
-	        _react2.default.createElement("img", { src: "uploads/" + drawing.picture, style: { maxWidth: 200 } }),
+	        _react2.default.createElement("img", { src: "/uploads/" + drawing.picture, style: { maxWidth: 200 } }),
 	        _react2.default.createElement(
 	            "p",
 	            null,
@@ -44589,12 +44589,22 @@
 	    var action = arguments[1];
 
 	    switch (action.type) {
+
+	        case _categoriesActions.START_ADDING_CATEGORY:
 	        case _categoriesActions.START_FETCHING_CATEGORIES:
-	            return Object.assign({}, defaultCategoriesState, { isFetching: true });
+	            return Object.assign({}, state, { isFetching: true });
+
+	        case _categoriesActions.ADD_CATEGORY_SUCCESS:
 	        case _categoriesActions.FETCH_CATEGORIES_SUCCESS:
 	            return Object.assign({}, defaultCategoriesState, { items: action.items });
+
+	        case _categoriesActions.ADD_CATEGORY_FAIL:
 	        case _categoriesActions.FETCH_CATEGORIES_FAIL:
-	            return Object.assign({}, defaultCategoriesState, { error: action.error });
+	            return Object.assign({}, state, {
+	                error: action.error,
+	                isFetching: false
+	            });
+
 	        default:
 	            return state;
 	    }
@@ -44611,11 +44621,15 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.FETCH_CATEGORIES_FAIL = exports.FETCH_CATEGORIES_SUCCESS = exports.START_FETCHING_CATEGORIES = undefined;
+	exports.ADD_CATEGORY_FAIL = exports.ADD_CATEGORY_SUCCESS = exports.START_ADDING_CATEGORY = exports.FETCH_CATEGORIES_FAIL = exports.FETCH_CATEGORIES_SUCCESS = exports.START_FETCHING_CATEGORIES = undefined;
 	exports.startFetchingCategories = startFetchingCategories;
 	exports.fetchCategoriesSuccess = fetchCategoriesSuccess;
 	exports.fetchCategoriesFail = fetchCategoriesFail;
+	exports.startAddingCategory = startAddingCategory;
+	exports.addCategorySuccess = addCategorySuccess;
+	exports.addCategoryFail = addCategoryFail;
 	exports.fetchCategories = fetchCategories;
+	exports.addCategory = addCategory;
 
 	var _isomorphicFetch = __webpack_require__(500);
 
@@ -44627,6 +44641,9 @@
 	var START_FETCHING_CATEGORIES = exports.START_FETCHING_CATEGORIES = "START_FETCHING_CATEGORIES";
 	var FETCH_CATEGORIES_SUCCESS = exports.FETCH_CATEGORIES_SUCCESS = "FETCH_CATEGORIES_SUCCESS";
 	var FETCH_CATEGORIES_FAIL = exports.FETCH_CATEGORIES_FAIL = "FETCH_CATEGORIES_FAIL";
+	var START_ADDING_CATEGORY = exports.START_ADDING_CATEGORY = "START_ADDING_CATEGORY";
+	var ADD_CATEGORY_SUCCESS = exports.ADD_CATEGORY_SUCCESS = "ADD_CATEGORY_FAIL";
+	var ADD_CATEGORY_FAIL = exports.ADD_CATEGORY_FAIL = "ADD_CATEGORY_FAIL";
 
 	// sync action creators
 	function startFetchingCategories() {
@@ -44650,6 +44667,27 @@
 		};
 	}
 
+	function startAddingCategory() {
+		return {
+			type: START_ADDING_CATEGORY,
+			isFetching: true
+		};
+	}
+
+	function addCategorySuccess(items) {
+		return {
+			type: ADD_CATEGORY_SUCCESS,
+			items: items
+		};
+	}
+
+	function addCategoryFail(error) {
+		return {
+			type: ADD_CATEGORY_FAIL,
+			error: error
+		};
+	}
+
 	// async action creators
 	function fetchCategories() {
 		return function (dispatch) {
@@ -44660,6 +44698,27 @@
 				return dispatch(fetchCategoriesSuccess(json));
 			}).catch(function (error) {
 				return dispatch(fetchCategoriesFail("Error fetching categories..."));
+			});
+		};
+	}
+
+	function addCategory(formData) {
+		return function (dispatch) {
+			dispatch(startAddingCategory());
+
+			return (0, _isomorphicFetch2.default)('/api/add_category', {
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				method: 'POST',
+				body: JSON.stringify(formData)
+			}).then(function (response) {
+				return response.json();
+			}).then(function (json) {
+				return dispatch(fetchCategories());
+			}).catch(function (error) {
+				return dispatch(addCategoryFail("Server error. Can't add category"));
 			});
 		};
 	}
@@ -45539,6 +45598,8 @@
 
 	var _reactRedux = __webpack_require__(227);
 
+	var _categoriesActions = __webpack_require__(504);
+
 	var _EditCategory = __webpack_require__(516);
 
 	var _EditCategory2 = _interopRequireDefault(_EditCategory);
@@ -45552,7 +45613,9 @@
 	var ManageCategories = _react2.default.createClass({
 	    displayName: 'ManageCategories',
 	    render: function render() {
-	        var categories = this.props.categories;
+	        var _props = this.props;
+	        var categories = _props.categories;
+	        var dispatch = _props.dispatch;
 
 	        return _react2.default.createElement(
 	            'div',
@@ -45564,7 +45627,7 @@
 	            ),
 	            _react2.default.createElement(
 	                'table',
-	                { className: 'table table-hover categories' },
+	                { className: 'table table-hover' },
 	                _react2.default.createElement(
 	                    'thead',
 	                    null,
@@ -45624,7 +45687,12 @@
 	                    })
 	                )
 	            ),
-	            _react2.default.createElement(_AddCategory2.default, { categories: categories })
+	            _react2.default.createElement(_AddCategory2.default, {
+	                categories: categories,
+	                onAddClick: function onAddClick(formData) {
+	                    return dispatch((0, _categoriesActions.addCategory)(formData));
+	                }
+	            })
 	        );
 	    }
 	});
@@ -45908,6 +45976,8 @@
 	        return newState;
 	    },
 	    handleOnAddClick: function handleOnAddClick() {
+	        var _this = this;
+
 	        var formData = {
 	            position: this.refs.position.value.trim(),
 	            name: this.refs.name.value.trim(),
@@ -45917,7 +45987,9 @@
 	        var newState = this.findErrorsInEditForm(formData);
 	        this.setState(newState);
 	        if (!newState.errorMessage) {
-	            // this.props.onAddClick(formData);
+	            this.props.onAddClick(formData).then(function () {
+	                _this.setState({ showModal: false });
+	            });
 	        }
 	    },
 	    render: function render() {
@@ -45958,7 +46030,7 @@
 	        }
 	        return _react2.default.createElement(
 	            'div',
-	            null,
+	            { style: { marginBottom: 30 } },
 	            _react2.default.createElement(
 	                _reactBootstrap.Button,
 	                {

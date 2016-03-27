@@ -70,7 +70,10 @@ const AddCategory = React.createClass({
         let newState = this.findErrorsInEditForm(formData);
         this.setState(newState);
         if (!newState.errorMessage){
-            // this.props.onAddClick(formData);
+            this.props.onAddClick(formData)
+                .then(() => {
+                    this.setState({ showModal: false });
+                });
         }
     },
 
@@ -99,7 +102,7 @@ const AddCategory = React.createClass({
             );
         }
         return (
-            <div>
+            <div style={{marginBottom: 30}}>
                 <Button
                     bsStyle="success"
                     bsSize="large"

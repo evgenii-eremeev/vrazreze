@@ -1,8 +1,8 @@
 // action types
 import {
-    START_FETCHING_CATEGORIES,
-    FETCH_CATEGORIES_SUCCESS,
-    FETCH_CATEGORIES_FAIL
+    START_FETCHING_CATEGORIES, FETCH_CATEGORIES_SUCCESS,
+    FETCH_CATEGORIES_FAIL, START_ADDING_CATEGORY,
+    ADD_CATEGORY_SUCCESS, ADD_CATEGORY_FAIL
 } from '../actions/categoriesActions';
 
 const defaultCategoriesState = {
@@ -16,24 +16,34 @@ function categoriesReducer(
     action
 ) {
     switch (action.type) {
+
+        case START_ADDING_CATEGORY:
         case START_FETCHING_CATEGORIES:
             return Object.assign(
                 {},
-                defaultCategoriesState,
+                state,
                 { isFetching: true }
             );
+
+        case ADD_CATEGORY_SUCCESS:
         case FETCH_CATEGORIES_SUCCESS:
             return Object.assign(
                 {},
                 defaultCategoriesState,
                 { items: action.items }
             );
+
+        case ADD_CATEGORY_FAIL:
         case FETCH_CATEGORIES_FAIL:
             return Object.assign(
                 {},
-                defaultCategoriesState,
-                { error: action.error }
+                state,
+                {
+                    error: action.error,
+                    isFetching: false
+                }
             );
+
         default:
             return state;
         }

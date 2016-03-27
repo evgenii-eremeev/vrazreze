@@ -39,6 +39,9 @@ router.get('/api/categories', apiCtrl.categories);
 // category:url
 router.get('/api/category/:url', apiCtrl.category);
 
+// add_category
+router.post('/api/add_category', apiCtrl.addCategory);
+
 // 'any uri, because we use react-router'
 // Should be placed at the very end for the rest 'get' requests work
 router.get('*', function(req, res) {

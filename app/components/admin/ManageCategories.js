@@ -1,17 +1,19 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
+import { addCategory } from '../../actions/categoriesActions';
+
 import EditCategory from './EditCategory';
 import AddCategory from './AddCategory';
 
 const ManageCategories = React.createClass({
 
     render () {
-        const { categories } = this.props;
+        const { categories, dispatch } = this.props;
         return (
             <div style={{maxWidth: 700, margin: '0 auto', padding: '0 10px'}}>
                 <h1 style={{textAlign: 'center'}}>Управление категориями</h1>
-                <table className="table table-hover categories">
+                <table className="table table-hover">
                     <thead>
                         <tr>
                             <th style={{ width: '12%'}}>#</th>
@@ -31,7 +33,12 @@ const ManageCategories = React.createClass({
                         ))}
                     </tbody>
                 </table>
-                <AddCategory categories={categories}/>
+                <AddCategory
+                    categories={categories}
+                    onAddClick={(formData) => (
+                        dispatch(addCategory(formData))
+                    )}
+                    />
             </div>
         );
     }

@@ -31,9 +31,22 @@ const apiCtrl = (function apiCtrl () {
             });
     }
 
+    function addCategory(req, res) {
+        const category = new Category({
+            name: req.body.name,
+            url: req.body.url,
+            position: req.body.position
+        });
+        category.save(function(err, category) {
+            if (err) { throw err; }
+            res.json(category);
+        });
+    }
+
     const publicAPI = {
         categories,
-        category
+        category,
+        addCategory
     };
     return publicAPI;
 })();
