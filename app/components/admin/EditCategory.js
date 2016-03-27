@@ -51,6 +51,7 @@ const EditCategory = React.createClass({
     },
 
     handleOnEditClick () {
+        const { category, onUpdateClick } = this.props;
         const formData = {
             position : this.refs.position.value.trim(),
             name : this.refs.name.value.trim(),
@@ -60,7 +61,15 @@ const EditCategory = React.createClass({
         let newState = this.findErrorsInEditForm(formData);
         this.setState(newState);
         if (!newState.errorMessage){
-            this.props.onEditClick(formData);
+            onUpdateClick(category._id, formData);
+        }
+    },
+
+    handleOnDeleteClick () {
+        const { category, onDeleteClick } = this.props;
+        let confirmed = confirm("Точно? Восстановить нельзя ведь будет.");
+        if (confirmed) {
+            onDeleteClick(category._id);
         }
     },
 
@@ -118,10 +127,12 @@ const EditCategory = React.createClass({
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        {loader}
-                        {errorLabel}
+                        <div className="pull-left">
+                            {loader}
+                            {errorLabel}
+                        </div>
                         <Button onClick={this.handleOnEditClick} bsStyle="primary">Сохранить</Button>
-                        <Button onClick={this.close}>Закрыть</Button>
+                        <Button onClick={this.handleOnDeleteClick} bsStyle="danger">Удалить</Button>
                     </Modal.Footer>
                 </Modal>
             </div>

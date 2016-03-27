@@ -1,7 +1,9 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { addCategory } from '../../actions/categoriesActions';
+import {
+    addCategory, deleteCategory, updateCategory
+} from '../../actions/categoriesActions';
 
 import EditCategory from './EditCategory';
 import AddCategory from './AddCategory';
@@ -28,16 +30,30 @@ const ManageCategories = React.createClass({
                                 <td >{ category.position }</td>
                                 <td>{ category.name }</td>
                                 <td>{ category.url }</td>
-                                <td style={{ textAlign: 'center'}}><EditCategory category={category}/></td>
+                                <td style={{ textAlign: 'center'}}>
+                                    <EditCategory
+                                        category={category}
+                                        onDeleteClick={categoryId => (
+                                            dispatch(deleteCategory(categoryId))
+                                        )}
+                                        onUpdateClick={(categoryId, formData) => {
+                                            dispatch(updateCategory(categoryId, formData))
+                                        }}
+                                        isFetchingData={categories.isFetchingData}
+                                        serverError={categories.error}
+                                        />
+                                </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
                 <AddCategory
                     categories={categories}
-                    onAddClick={(formData) => (
+                    onAddClick={formData => (
                         dispatch(addCategory(formData))
                     )}
+                    isFetchingData={categories.isFetchingData}
+                    serverError={categories.error}
                     />
             </div>
         );

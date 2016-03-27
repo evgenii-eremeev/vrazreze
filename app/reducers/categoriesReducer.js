@@ -2,7 +2,9 @@
 import {
     START_FETCHING_CATEGORIES, FETCH_CATEGORIES_SUCCESS,
     FETCH_CATEGORIES_FAIL, START_ADDING_CATEGORY,
-    ADD_CATEGORY_SUCCESS, ADD_CATEGORY_FAIL
+    ADD_CATEGORY_FAIL, START_DELETING_CATEGORY,
+    DELETE_CATEGORY_FAIL, START_UPDATING_CATEGORY,
+    UPDATE_CATEGORY_FAIL
 } from '../actions/categoriesActions';
 
 const defaultCategoriesState = {
@@ -17,6 +19,8 @@ function categoriesReducer(
 ) {
     switch (action.type) {
 
+        case START_UPDATING_CATEGORY:
+        case START_DELETING_CATEGORY:
         case START_ADDING_CATEGORY:
         case START_FETCHING_CATEGORIES:
             return Object.assign(
@@ -25,7 +29,6 @@ function categoriesReducer(
                 { isFetching: true }
             );
 
-        case ADD_CATEGORY_SUCCESS:
         case FETCH_CATEGORIES_SUCCESS:
             return Object.assign(
                 {},
@@ -33,6 +36,8 @@ function categoriesReducer(
                 { items: action.items }
             );
 
+        case UPDATE_CATEGORY_FAIL:
+        case DELETE_CATEGORY_FAIL:
         case ADD_CATEGORY_FAIL:
         case FETCH_CATEGORIES_FAIL:
             return Object.assign(

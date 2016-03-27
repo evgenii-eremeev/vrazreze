@@ -44590,14 +44590,17 @@
 
 	    switch (action.type) {
 
+	        case _categoriesActions.START_UPDATING_CATEGORY:
+	        case _categoriesActions.START_DELETING_CATEGORY:
 	        case _categoriesActions.START_ADDING_CATEGORY:
 	        case _categoriesActions.START_FETCHING_CATEGORIES:
 	            return Object.assign({}, state, { isFetching: true });
 
-	        case _categoriesActions.ADD_CATEGORY_SUCCESS:
 	        case _categoriesActions.FETCH_CATEGORIES_SUCCESS:
 	            return Object.assign({}, defaultCategoriesState, { items: action.items });
 
+	        case _categoriesActions.UPDATE_CATEGORY_FAIL:
+	        case _categoriesActions.DELETE_CATEGORY_FAIL:
 	        case _categoriesActions.ADD_CATEGORY_FAIL:
 	        case _categoriesActions.FETCH_CATEGORIES_FAIL:
 	            return Object.assign({}, state, {
@@ -44621,15 +44624,20 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.ADD_CATEGORY_FAIL = exports.ADD_CATEGORY_SUCCESS = exports.START_ADDING_CATEGORY = exports.FETCH_CATEGORIES_FAIL = exports.FETCH_CATEGORIES_SUCCESS = exports.START_FETCHING_CATEGORIES = undefined;
+	exports.UPDATE_CATEGORY_FAIL = exports.START_UPDATING_CATEGORY = exports.DELETE_CATEGORY_FAIL = exports.START_DELETING_CATEGORY = exports.ADD_CATEGORY_FAIL = exports.START_ADDING_CATEGORY = exports.FETCH_CATEGORIES_FAIL = exports.FETCH_CATEGORIES_SUCCESS = exports.START_FETCHING_CATEGORIES = undefined;
 	exports.startFetchingCategories = startFetchingCategories;
 	exports.fetchCategoriesSuccess = fetchCategoriesSuccess;
 	exports.fetchCategoriesFail = fetchCategoriesFail;
 	exports.startAddingCategory = startAddingCategory;
-	exports.addCategorySuccess = addCategorySuccess;
 	exports.addCategoryFail = addCategoryFail;
+	exports.startDeletingCategory = startDeletingCategory;
+	exports.deleteCategoryFail = deleteCategoryFail;
+	exports.startUpdatingCategory = startUpdatingCategory;
+	exports.updateCategoryFail = updateCategoryFail;
 	exports.fetchCategories = fetchCategories;
 	exports.addCategory = addCategory;
+	exports.deleteCategory = deleteCategory;
+	exports.updateCategory = updateCategory;
 
 	var _isomorphicFetch = __webpack_require__(500);
 
@@ -44642,10 +44650,14 @@
 	var FETCH_CATEGORIES_SUCCESS = exports.FETCH_CATEGORIES_SUCCESS = "FETCH_CATEGORIES_SUCCESS";
 	var FETCH_CATEGORIES_FAIL = exports.FETCH_CATEGORIES_FAIL = "FETCH_CATEGORIES_FAIL";
 	var START_ADDING_CATEGORY = exports.START_ADDING_CATEGORY = "START_ADDING_CATEGORY";
-	var ADD_CATEGORY_SUCCESS = exports.ADD_CATEGORY_SUCCESS = "ADD_CATEGORY_FAIL";
 	var ADD_CATEGORY_FAIL = exports.ADD_CATEGORY_FAIL = "ADD_CATEGORY_FAIL";
+	var START_DELETING_CATEGORY = exports.START_DELETING_CATEGORY = "START_DELETING_CATEGORY";
+	var DELETE_CATEGORY_FAIL = exports.DELETE_CATEGORY_FAIL = "DELETE_CATEGORY_FAIL";
+	var START_UPDATING_CATEGORY = exports.START_UPDATING_CATEGORY = "START_UPDATING_CATEGORY";
+	var UPDATE_CATEGORY_FAIL = exports.UPDATE_CATEGORY_FAIL = "UPDATE_CATEGORY_FAIL";
 
 	// sync action creators
+	// fetching
 	function startFetchingCategories() {
 		return {
 			type: START_FETCHING_CATEGORIES,
@@ -44666,7 +44678,7 @@
 			error: error
 		};
 	}
-
+	// adding
 	function startAddingCategory() {
 		return {
 			type: START_ADDING_CATEGORY,
@@ -44674,16 +44686,37 @@
 		};
 	}
 
-	function addCategorySuccess(items) {
-		return {
-			type: ADD_CATEGORY_SUCCESS,
-			items: items
-		};
-	}
-
 	function addCategoryFail(error) {
 		return {
 			type: ADD_CATEGORY_FAIL,
+			error: error
+		};
+	}
+	// deleting
+	function startDeletingCategory() {
+		return {
+			type: START_DELETING_CATEGORY,
+			isFetching: true
+		};
+	}
+
+	function deleteCategoryFail(error) {
+		return {
+			type: DELETE_CATEGORY_FAIL,
+			error: error
+		};
+	}
+	// updating
+	function startUpdatingCategory() {
+		return {
+			type: START_UPDATING_CATEGORY,
+			isFetching: true
+		};
+	}
+
+	function updateCategoryFail(error) {
+		return {
+			type: UPDATE_CATEGORY_FAIL,
 			error: error
 		};
 	}
@@ -44712,13 +44745,50 @@
 					'Content-Type': 'application/json'
 				},
 				method: 'POST',
-				body: JSON.stringify(formData)
+				body: JSON.stringify({ formData: formData })
 			}).then(function (response) {
-				return response.json();
-			}).then(function (json) {
+				return response.ok;
+			}).then(function () {
 				return dispatch(fetchCategories());
 			}).catch(function (error) {
 				return dispatch(addCategoryFail("Server error. Can't add category"));
+			});
+		};
+	}
+
+	function deleteCategory(categoryId) {
+		return function (dispatch) {
+			dispatch(startDeletingCategory());
+
+			return (0, _isomorphicFetch2.default)('/api/delete_category/' + categoryId, {
+				method: 'DELETE'
+			}).then(function (response) {
+				return response.ok;
+			}).then(function () {
+				return dispatch(fetchCategories());
+			}).catch(function (error) {
+				return dispatch(addCategoryFail("Server error. Can't delete category"));
+			});
+		};
+	}
+
+	function updateCategory(categoryId, formData) {
+		return function (dispatch) {
+			dispatch(startUpdatingCategory());
+
+			return (0, _isomorphicFetch2.default)('/api/update_category/' + categoryId, {
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				method: 'POST',
+				body: JSON.stringify({ formData: formData })
+			}).then(function (response) {
+				return response.ok;
+			}).then(function () {
+				return dispatch(fetchCategories());
+			}).catch(function (error) {
+				return dispatch(updateCategoryFail("Server error. Can't update category"));
 			});
 		};
 	}
@@ -45681,7 +45751,17 @@
 	                            _react2.default.createElement(
 	                                'td',
 	                                { style: { textAlign: 'center' } },
-	                                _react2.default.createElement(_EditCategory2.default, { category: category })
+	                                _react2.default.createElement(_EditCategory2.default, {
+	                                    category: category,
+	                                    onDeleteClick: function onDeleteClick(categoryId) {
+	                                        return dispatch((0, _categoriesActions.deleteCategory)(categoryId));
+	                                    },
+	                                    onUpdateClick: function onUpdateClick(categoryId, formData) {
+	                                        dispatch((0, _categoriesActions.updateCategory)(categoryId, formData));
+	                                    },
+	                                    isFetchingData: categories.isFetchingData,
+	                                    serverError: categories.error
+	                                })
 	                            )
 	                        );
 	                    })
@@ -45691,7 +45771,9 @@
 	                categories: categories,
 	                onAddClick: function onAddClick(formData) {
 	                    return dispatch((0, _categoriesActions.addCategory)(formData));
-	                }
+	                },
+	                isFetchingData: categories.isFetchingData,
+	                serverError: categories.error
 	            })
 	        );
 	    }
@@ -45764,6 +45846,10 @@
 	        return newState;
 	    },
 	    handleOnEditClick: function handleOnEditClick() {
+	        var _props = this.props;
+	        var category = _props.category;
+	        var onUpdateClick = _props.onUpdateClick;
+
 	        var formData = {
 	            position: this.refs.position.value.trim(),
 	            name: this.refs.name.value.trim(),
@@ -45773,7 +45859,17 @@
 	        var newState = this.findErrorsInEditForm(formData);
 	        this.setState(newState);
 	        if (!newState.errorMessage) {
-	            this.props.onEditClick(formData);
+	            onUpdateClick(category._id, formData);
+	        }
+	    },
+	    handleOnDeleteClick: function handleOnDeleteClick() {
+	        var _props2 = this.props;
+	        var category = _props2.category;
+	        var onDeleteClick = _props2.onDeleteClick;
+
+	        var confirmed = confirm("Точно? Восстановить нельзя ведь будет.");
+	        if (confirmed) {
+	            onDeleteClick(category._id);
 	        }
 	    },
 	    render: function render() {
@@ -45883,8 +45979,12 @@
 	                _react2.default.createElement(
 	                    _reactBootstrap.Modal.Footer,
 	                    null,
-	                    loader,
-	                    errorLabel,
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'pull-left' },
+	                        loader,
+	                        errorLabel
+	                    ),
 	                    _react2.default.createElement(
 	                        _reactBootstrap.Button,
 	                        { onClick: this.handleOnEditClick, bsStyle: 'primary' },
@@ -45892,8 +45992,8 @@
 	                    ),
 	                    _react2.default.createElement(
 	                        _reactBootstrap.Button,
-	                        { onClick: this.close },
-	                        'Закрыть'
+	                        { onClick: this.handleOnDeleteClick, bsStyle: 'danger' },
+	                        'Удалить'
 	                    )
 	                )
 	            )

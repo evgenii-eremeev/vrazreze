@@ -33,20 +33,48 @@ const apiCtrl = (function apiCtrl () {
 
     function addCategory(req, res) {
         const category = new Category({
-            name: req.body.name,
-            url: req.body.url,
-            position: req.body.position
+            name: req.body.formData.name,
+            url: req.body.formData.url,
+            position: req.body.formData.position
         });
         category.save(function(err, category) {
-            if (err) { throw err; }
+
             res.json(category);
         });
+    }
+
+    function deleteCategory(req, res) {
+        Category.findByIdAndRemove(
+            req.params.categoryId,
+            function(err, category) {
+                if (err) { throw err; }
+                res.status(200).end();
+            }
+        );
+    }
+
+    function updateCategory(req, res) {
+        Categories.findByIdAndUpdate(
+            req.params.categoryId,
+            // same as { $set: {...}}
+            {
+                name: req.body.formData.name,
+                url: req.body.formData.url,
+                position: req.body.formData.position
+            },
+            function(err, category) {
+                if (error) { throw error; }
+                res.status(200).end();
+            }
+        );
     }
 
     const publicAPI = {
         categories,
         category,
-        addCategory
+        addCategory,
+        deleteCategory,
+        updateCategory
     };
     return publicAPI;
 })();
