@@ -1,12 +1,15 @@
 var webpack = require('webpack');
 
 module.exports = {
-    entry: './app.js',
+    entry: [
+        './app.js',
+        'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true'
+    ],
 
     output: {
-        path: 'public',
+        path: __dirname + '/public',
         filename: 'bundle.js',
-        publicPath: ''
+        publicPath: '/'
     },
 
     module: {
@@ -15,11 +18,20 @@ module.exports = {
         ]
     },
 
+
+
     // add this handful of plugins that optimize the build
     // when we're in production
     plugins: process.env.NODE_ENV === 'production' ? [
         new webpack.optimize.DedupePlugin(),
         new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.optimize.UglifyJsPlugin()
-        ] : []
+        ] : [
+            // Webpack 1.0
+        new webpack.optimize.OccurenceOrderPlugin(),
+        // Webpack 2.0 fixed this mispelling
+        // new webpack.optimize.OccurrenceOrderPlugin(),
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoErrorsPlugin()
+        ]
 };

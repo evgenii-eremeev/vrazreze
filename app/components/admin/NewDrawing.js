@@ -9,7 +9,7 @@ const NewDrawing = React.createClass({
         e.preventDefault();
         let form = document.getElementById('newDrawingForm');
         let formData = new FormData(form);
-
+        const { dispatch } = this.props;
         $.ajax({
             url: '/new_drawing',
             type: 'POST',
@@ -20,7 +20,7 @@ const NewDrawing = React.createClass({
             processData: false,
             success: function (data) {
                 form.reset();
-                this.props.dispatch(push('/categories'))
+                dispatch(push('/categories'));
             },
             error: function (xhr, message, err) {
                 console.error(err);
