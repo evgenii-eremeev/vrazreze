@@ -45,6 +45,9 @@ router.post('/api/add_category', apiCtrl.addCategory);
 // delete_category
 router.delete('/api/delete_category/:categoryId', apiCtrl.deleteCategory);
 
+// delete_drawing
+router.delete('/api/delete_drawing/:drawingId', apiCtrl.deleteDrawing);
+
 // update_category
 router.post('/api/update_category/:categoryId', apiCtrl.updateCategory);
 

@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Input, ButtonInput } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 
 const NewDrawing = React.createClass({
 
@@ -18,8 +19,8 @@ const NewDrawing = React.createClass({
             contentType: false,
             processData: false,
             success: function (data) {
-                console.log(data);
                 form.reset();
+                this.props.dispatch(push('/categories'))
             },
             error: function (xhr, message, err) {
                 console.error(err);

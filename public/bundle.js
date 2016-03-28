@@ -86,19 +86,23 @@
 
 	var _ManageCategories2 = _interopRequireDefault(_ManageCategories);
 
-	var _MainLogin = __webpack_require__(503);
+	var _ManageDrawings = __webpack_require__(503);
+
+	var _ManageDrawings2 = _interopRequireDefault(_ManageDrawings);
+
+	var _MainLogin = __webpack_require__(504);
 
 	var _MainLogin2 = _interopRequireDefault(_MainLogin);
 
-	var _MainSignUp = __webpack_require__(505);
+	var _MainSignUp = __webpack_require__(506);
 
 	var _MainSignUp2 = _interopRequireDefault(_MainSignUp);
 
-	var _Categories = __webpack_require__(507);
+	var _Categories = __webpack_require__(508);
 
 	var _Categories2 = _interopRequireDefault(_Categories);
 
-	var _Category = __webpack_require__(509);
+	var _Category = __webpack_require__(510);
 
 	var _Category2 = _interopRequireDefault(_Category);
 
@@ -107,14 +111,14 @@
 	// Set up store
 
 
-	// Components
-	// React + React Router
-	var routeMiddleware = (0, _reactRouterRedux.routerMiddleware)(_reactRouter.browserHistory);
-
 	// Reducers
 
 
 	// Redux
+	var routeMiddleware = (0, _reactRouterRedux.routerMiddleware)(_reactRouter.browserHistory);
+
+	// Components
+	// React + React Router
 
 	var createStoreWithMiddleware = (0, _redux.applyMiddleware)(_reduxThunk2.default, // lets us dispatch() functions
 	routeMiddleware)(_redux.createStore);
@@ -136,6 +140,7 @@
 	            _react2.default.createElement(_reactRouter.IndexRoute, { component: _Home2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/admin/new_drawing', component: _NewDrawing2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/admin/manage_categories', component: _ManageCategories2.default }),
+	            _react2.default.createElement(_reactRouter.Route, { path: '/admin/manage_drawings', component: _ManageDrawings2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _MainLogin2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/signup', component: _MainSignUp2.default }),
 	            _react2.default.createElement(
@@ -26482,15 +26487,21 @@
 	    var action = arguments[1];
 
 	    switch (action.type) {
+
+	        case _drawingsActions.START_DELETING_DRAWING:
 	        case _drawingsActions.START_FETCHING_DRAWINGS:
-	            return Object.assign({}, defaultDrawingsState, { isFetching: true });
+	            return Object.assign({}, state, { isFetching: true });
+
 	        case _drawingsActions.FETCH_DRAWINGS_SUCCESS:
 	            return Object.assign({}, defaultDrawingsState, {
 	                items: action.items,
 	                categoryUrl: action.categoryUrl
 	            });
+
+	        case _drawingsActions.DELETE_DRAWING_FAIL:
 	        case _drawingsActions.FETCH_DRAWINGS_FAIL:
-	            return Object.assign({}, defaultDrawingsState, { error: action.error });
+	            return Object.assign({}, state, { error: action.error });
+
 	        default:
 	            return state;
 	    }
@@ -26507,11 +26518,14 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.FETCH_DRAWINGS_FAIL = exports.FETCH_DRAWINGS_SUCCESS = exports.START_FETCHING_DRAWINGS = undefined;
+	exports.DELETE_DRAWING_FAIL = exports.START_DELETING_DRAWING = exports.FETCH_DRAWINGS_FAIL = exports.FETCH_DRAWINGS_SUCCESS = exports.START_FETCHING_DRAWINGS = undefined;
 	exports.startFetchingDrawings = startFetchingDrawings;
 	exports.fetchDrawingsSuccess = fetchDrawingsSuccess;
 	exports.fetchDrawingsFail = fetchDrawingsFail;
+	exports.startDeletingDrawing = startDeletingDrawing;
+	exports.deleteDrawingFail = deleteDrawingFail;
 	exports.fetchDrawings = fetchDrawings;
+	exports.deleteDrawing = deleteDrawing;
 
 	var _isomorphicFetch = __webpack_require__(242);
 
@@ -26523,8 +26537,11 @@
 	var START_FETCHING_DRAWINGS = exports.START_FETCHING_DRAWINGS = "START_FETCHING_DRAWINGS";
 	var FETCH_DRAWINGS_SUCCESS = exports.FETCH_DRAWINGS_SUCCESS = "FETCH_DRAWINGS_SUCCESS";
 	var FETCH_DRAWINGS_FAIL = exports.FETCH_DRAWINGS_FAIL = "FETCH_DRAWINGS_FAIL";
+	var START_DELETING_DRAWING = exports.START_DELETING_DRAWING = "START_DELETING_DRAWING";
+	var DELETE_DRAWING_FAIL = exports.DELETE_DRAWING_FAIL = "DELETE_DRAWING_FAIL";
 
 	// sync action creators
+	// fetching
 	function startFetchingDrawings() {
 		return {
 			type: START_FETCHING_DRAWINGS,
@@ -26547,6 +26564,21 @@
 		};
 	}
 
+	// deleting
+	function startDeletingDrawing() {
+		return {
+			type: START_DELETING_DRAWING,
+			isFetching: true
+		};
+	}
+
+	function deleteDrawingFail(error) {
+		return {
+			type: DELETE_DRAWING_FAIL,
+			error: error
+		};
+	}
+
 	// async action creators
 	function fetchDrawings(categoryUrl) {
 		return function (dispatch) {
@@ -26557,6 +26589,21 @@
 				return dispatch(fetchDrawingsSuccess(categoryUrl, json));
 			}).catch(function (error) {
 				return dispatch(fetchDrawingsFail("Error fetching drawings..."));
+			});
+		};
+	}
+
+	function deleteDrawing(drawingId, categoryUrl) {
+		return function (dispatch) {
+			dispatch(startDeletingDrawing());
+			return (0, _isomorphicFetch2.default)('/api/delete_drawing/' + drawingId, {
+				method: 'DELETE'
+			}).then(function (response) {
+				return response.ok;
+			}).then(function () {
+				return dispatch(fetchDrawings(categoryUrl));
+			}).catch(function (error) {
+				return dispatch(deleteDrawingFail("Server error. Can't delete drawing"));
 			});
 		};
 	}
@@ -44801,6 +44848,15 @@
 	                    { eventKey: 0.2 },
 	                    'Добавить чертеж'
 	                )
+	            ),
+	            _react2.default.createElement(
+	                _reactRouterBootstrap.LinkContainer,
+	                { to: '/admin/manage_drawings' },
+	                _react2.default.createElement(
+	                    _reactBootstrap.MenuItem,
+	                    { eventKey: 0.3 },
+	                    'Управление чертежами'
+	                )
 	            )
 	        );
 	    }
@@ -44857,6 +44913,8 @@
 
 	var _reactRedux = __webpack_require__(227);
 
+	var _reactRouterRedux = __webpack_require__(234);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var NewDrawing = _react2.default.createClass({
@@ -44875,8 +44933,8 @@
 	            contentType: false,
 	            processData: false,
 	            success: function success(data) {
-	                console.log(data);
 	                form.reset();
+	                this.props.dispatch((0, _reactRouterRedux.push)('/categories'));
 	            },
 	            error: function error(xhr, message, err) {
 	                console.error(err);
@@ -45551,9 +45609,163 @@
 
 	var _reactRedux = __webpack_require__(227);
 
+	var _drawingsActions = __webpack_require__(241);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var MangageDrawings = _react2.default.createClass({
+	    displayName: 'MangageDrawings',
+	    render: function render() {
+	        var _props = this.props;
+	        var drawings = _props.drawings;
+	        var categories = _props.categories;
+	        var dispatch = _props.dispatch;
+
+	        return _react2.default.createElement(
+	            'div',
+	            { style: { maxWidth: 800, margin: '0 auto', padding: '0 10px' } },
+	            _react2.default.createElement(
+	                'h1',
+	                { style: { textAlign: 'center' } },
+	                'Управление чертежами'
+	            ),
+	            categories.items.map(function (category, idx) {
+	                return _react2.default.createElement(
+	                    'button',
+	                    {
+	                        key: idx,
+	                        className: 'btn btn-default',
+	                        style: { margin: 5 },
+	                        onClick: function onClick() {
+	                            return dispatch((0, _drawingsActions.fetchDrawings)(category.url));
+	                        }
+	                    },
+	                    category.name
+	                );
+	            }),
+	            _react2.default.createElement(
+	                'table',
+	                { className: 'table table-hover' },
+	                _react2.default.createElement(
+	                    'thead',
+	                    null,
+	                    _react2.default.createElement(
+	                        'tr',
+	                        null,
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Картинка'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Дата создания'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Название'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Описание'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Цена'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            { style: { textAlign: 'center' } },
+	                            'Редактировать'
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'tbody',
+	                    null,
+	                    drawings.items.map(function (drawing, idx) {
+	                        return _react2.default.createElement(
+	                            'tr',
+	                            { key: idx },
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                _react2.default.createElement('img', { src: "/uploads/" + drawing.picture, style: { maxWidth: 75 } })
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                new Date(drawing.created).toLocaleString()
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                drawing.title
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                drawing.description
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                drawing.price
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                { style: { textAlign: 'center' } },
+	                                _react2.default.createElement(
+	                                    'button',
+	                                    {
+	                                        className: 'btn btn-danger btn-small',
+	                                        onClick: function onClick() {
+	                                            dispatch((0, _drawingsActions.deleteDrawing)(drawing._id, drawings.categoryUrl));
+	                                        }
+	                                    },
+	                                    'Del'
+	                                )
+	                            )
+	                        );
+	                    })
+	                )
+	            )
+	        );
+	    }
+	});
+
+	function mapStateToProps(state) {
+	    return {
+	        drawings: state.drawings,
+	        categories: state.categories
+	    };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(MangageDrawings);
+
+/***/ },
+/* 504 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(227);
+
 	var _reactRouterRedux = __webpack_require__(234);
 
-	var _LoginForm = __webpack_require__(504);
+	var _LoginForm = __webpack_require__(505);
 
 	var _LoginForm2 = _interopRequireDefault(_LoginForm);
 
@@ -45601,7 +45813,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(MainLogin);
 
 /***/ },
-/* 504 */
+/* 505 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45743,7 +45955,7 @@
 	exports.default = LoginForm;
 
 /***/ },
-/* 505 */
+/* 506 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45760,7 +45972,7 @@
 
 	var _reactRouterRedux = __webpack_require__(234);
 
-	var _SignUpForm = __webpack_require__(506);
+	var _SignUpForm = __webpack_require__(507);
 
 	var _SignUpForm2 = _interopRequireDefault(_SignUpForm);
 
@@ -45807,7 +46019,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(MainSignUp);
 
 /***/ },
-/* 506 */
+/* 507 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45974,7 +46186,7 @@
 	exports.default = SignUpForm;
 
 /***/ },
-/* 507 */
+/* 508 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45989,7 +46201,7 @@
 
 	var _reactBootstrap = __webpack_require__(250);
 
-	var _SideNav = __webpack_require__(508);
+	var _SideNav = __webpack_require__(509);
 
 	var _SideNav2 = _interopRequireDefault(_SideNav);
 
@@ -46022,7 +46234,7 @@
 	exports.default = Categories;
 
 /***/ },
-/* 508 */
+/* 509 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -46091,7 +46303,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(SideNav);
 
 /***/ },
-/* 509 */
+/* 510 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -46108,7 +46320,7 @@
 
 	var _drawingsActions = __webpack_require__(241);
 
-	var _Drawing = __webpack_require__(510);
+	var _Drawing = __webpack_require__(511);
 
 	var _Drawing2 = _interopRequireDefault(_Drawing);
 
@@ -46157,7 +46369,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Category);
 
 /***/ },
-/* 510 */
+/* 511 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

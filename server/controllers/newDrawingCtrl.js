@@ -8,7 +8,6 @@ const newDrawing = (function newDrawing (){
             .findOne({ name: req.body.category })
             .exec(function (err, category) {
                 if (err) { throw err; }
-                console.log(category);
                 const drawing = new Drawing({
                     title: req.body.title,
                     author: req.user.username,

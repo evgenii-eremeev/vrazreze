@@ -17,6 +17,7 @@ import App from './app/components/App';
 import Home from './app/components/Home';
 import NewDrawing from './app/components/admin/NewDrawing';
 import ManageCategories from './app/components/admin/ManageCategories';
+import ManageDrawings from './app/components/admin/ManageDrawings';
 import MainLogin from './app/components/auth/MainLogin';
 import MainSignUp from './app/components/auth/MainSignUp';
 import Categories from './app/components/categories/Categories';
@@ -42,6 +43,7 @@ ReactDOM.render(
                 <IndexRoute component={Home}/>
                 <Route path="/admin/new_drawing" component={NewDrawing} />
                 <Route path="/admin/manage_categories" component={ManageCategories} />
+                <Route path="/admin/manage_drawings" component={ManageDrawings} />
                 <Route path="/login" component={MainLogin} />
                 <Route path="/signup" component={MainSignUp} />
                 <Route path="/categories" component={Categories} >

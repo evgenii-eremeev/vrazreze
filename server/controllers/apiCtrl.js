@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const Drawing = require('../models/drawing');
 const Category = require('../models/category');
 
@@ -29,6 +31,20 @@ const apiCtrl = (function apiCtrl () {
                         res.json(drawings);
                     });
             });
+    }
+
+    function deleteDrawing(req, res) {
+        Drawing.findByIdAndRemove(
+            req.params.drawingId,
+            function(err, drawing) {
+                if (err) { throw err; }
+                const picPath = process.cwd() + '/public/uploads/' + drawing.picture;
+                fs.unlink(picPath, function (err) {
+                    if (err) { throw err; }
+                    res.status(200).end();
+                });
+            }
+        );
     }
 
     function addCategory(req, res) {
@@ -70,11 +86,9 @@ const apiCtrl = (function apiCtrl () {
     }
 
     const publicAPI = {
-        categories,
-        category,
-        addCategory,
-        deleteCategory,
-        updateCategory
+        categories, category, addCategory,
+        deleteCategory, updateCategory,
+        deleteDrawing
     };
     return publicAPI;
 })();
