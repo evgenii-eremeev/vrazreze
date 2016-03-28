@@ -108,7 +108,7 @@ const EditCategory = React.createClass({
         return (
             <div>
                 <Button
-                    bsStyle="primary"
+                    bsStyle="info"
                     bsSize="small"
                     onClick={this.open}
                     >

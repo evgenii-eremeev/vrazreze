@@ -14,7 +14,7 @@ const MangageDrawings = React.createClass({
                         <button
                             key={idx}
                             className="btn btn-default"
-                            style={{margin: 5}}
+                            style={{margin: 3}}
                             onClick={() => (
                                 dispatch(fetchDrawings(category.url))
                             )}
