@@ -6,7 +6,7 @@ import NavRight from './NavRight';
 const Navigation = React.createClass({
     render () {
         return (
-            <Navbar inverse>
+            <Navbar>
                 <Navbar.Header>
                     <Navbar.Brand>
                         <IndexLink to='/'>Чертежи</IndexLink>
