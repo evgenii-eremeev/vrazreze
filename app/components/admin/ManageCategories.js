@@ -16,38 +16,40 @@ const ManageCategories = React.createClass({
         return (
             <div style={{maxWidth: 700, margin: '0 auto', padding: '0 10px'}}>
                 <h1 style={{textAlign: 'center'}}>Управление категориями</h1>
-                <table className="table table-hover">
-                    <thead>
-                        <tr>
-                            <th style={{ width: '12%'}}>#</th>
-                            <th>Наименование</th>
-                            <th>Ссылка</th>
-                            <th style={{ textAlign: 'center'}}>Редактировать</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {categories.items.map((category, idx) => (
-                            <tr key={idx}>
-                                <td >{ category.position }</td>
-                                <td>{ category.name }</td>
-                                <td>{ category.url }</td>
-                                <td style={{ textAlign: 'center'}}>
-                                    <EditCategory
-                                        category={category}
-                                        onDeleteClick={categoryId => (
-                                            dispatch(deleteCategory(categoryId))
-                                        )}
-                                        onUpdateClick={(categoryId, formData) => (
-                                            dispatch(updateCategory(categoryId, formData))
-                                        )}
-                                        isFetchingData={categories.isFetching}
-                                        serverError={categories.error}
-                                        />
-                                </td>
+                <div className="table-responsive">
+                    <table className="table table-hover table-responsive">
+                        <thead>
+                            <tr>
+                                <th style={{ width: '12%'}}>#</th>
+                                <th>Наименование</th>
+                                <th>Ссылка</th>
+                                <th style={{ textAlign: 'center'}}>Редактировать</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {categories.items.map((category, idx) => (
+                                <tr key={idx}>
+                                    <td >{ category.position }</td>
+                                    <td>{ category.name }</td>
+                                    <td>{ category.url }</td>
+                                    <td style={{ textAlign: 'center'}}>
+                                        <EditCategory
+                                            category={category}
+                                            onDeleteClick={categoryId => (
+                                                dispatch(deleteCategory(categoryId))
+                                            )}
+                                            onUpdateClick={(categoryId, formData) => (
+                                                dispatch(updateCategory(categoryId, formData))
+                                            )}
+                                            isFetchingData={categories.isFetching}
+                                            serverError={categories.error}
+                                            />
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
                 <AddCategory
                     categories={categories}
                     onAddClick={formData => (

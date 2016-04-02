@@ -4,7 +4,7 @@
   "description": "интернет магазин чертежей",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "nodemon --watch server server",
     "test": "mocha --compilers js:babel-register --recursive"
   },
   "repository": {

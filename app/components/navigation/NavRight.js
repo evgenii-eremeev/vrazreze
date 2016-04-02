@@ -26,7 +26,6 @@ const NavRight = React.createClass({
                 </Nav>
                 :
                 <Nav pullRight>
-                    <AdminDropdown />
                     <LinkContainer to='/login'>
                         <NavItem eventKey={1}>Вход</NavItem>
                     </LinkContainer>

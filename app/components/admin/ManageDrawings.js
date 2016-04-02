@@ -4,60 +4,77 @@ import { connect } from 'react-redux';
 import { fetchDrawings, deleteDrawing } from '../../actions/drawingsActions';
 
 const MangageDrawings = React.createClass({
+
+    getInitialState () {
+        return {
+            active: null
+        };
+    },
+
     render () {
         const { drawings, categories, dispatch } = this.props;
         return (
             <div style={{maxWidth: 800, margin: '0 auto', padding: '0 10px'}}>
                 <h1 style={{textAlign: 'center'}}>Управление чертежами</h1>
 
-                {categories.items.map((category, idx) => (
-                        <button
+                <ul className="nav nav-pills">
+                    {categories.items.map((category, idx) => (
+                        <li
+                            role="presentation"
                             key={idx}
-                            className="btn btn-default"
-                            style={{margin: 3}}
-                            onClick={() => (
-                                dispatch(fetchDrawings(category.url))
-                            )}
+                            className={ idx === this.state.active ? "active" : "" }
                             >
-                            { category.name }
-                        </button>
-                ))}
+                            <a href="#"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    this.setState({
+                                        active: idx
+                                    });
+                                    return dispatch(fetchDrawings(category.url));
+                                }}>
+                                { category.name }
+                            </a>
+                        </li>
+                    ))}
+                </ul>
 
-                <table className="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Картинка</th>
-                            <th>Дата создания</th>
-                            <th>Название</th>
-                            <th>Описание</th>
-                            <th>Цена</th>
-                            <th style={{ textAlign: 'center'}}>Редактировать</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {drawings.items.map((drawing, idx) => (
-                            <tr key={idx}>
-                                <td>
-                                    <img src={"/uploads/" + drawing.picture} style={{maxWidth: 75}}/>
-                                </td>
-                                <td>{ new Date(drawing.created).toLocaleString() }</td>
-                                <td>{ drawing.title }</td>
-                                <td>{ drawing.description }</td>
-                                <td>{ drawing.price }</td>
-                                <td style={{ textAlign: 'center'}}>
-                                    <button
-                                        className="btn btn-danger btn-small"
-                                        onClick={() => {
-                                            dispatch(deleteDrawing(drawing._id, drawings.categoryUrl))
-                                        }}
-                                        >
-                                        Del
-                                    </button>
-                                </td>
+                <div className="table-responsive">
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Картинка</th>
+                                <th>Дата создания</th>
+                                <th>Название</th>
+                                <th>Описание</th>
+                                <th>Цена</th>
+                                <th style={{ textAlign: 'center'}}>Редактировать</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {drawings.items.map((drawing, idx) => (
+                                <tr key={idx}>
+                                    <td>
+                                        <img src={"/uploads/" + drawing.picture} style={{maxWidth: 75}}/>
+                                    </td>
+                                    <td>{ new Date(drawing.created).toLocaleString() }</td>
+                                    <td>{ drawing.title }</td>
+                                    <td>{ drawing.description.slice(0, 70) + '...' }</td>
+                                    <td>{ drawing.price }</td>
+                                    <td style={{ textAlign: 'center' }}>
+                                        <button
+                                            className="btn btn-danger btn-small"
+                                            onClick={() => {
+                                                dispatch(deleteDrawing(drawing._id, drawings.categoryUrl))
+                                            }}
+                                            >
+                                            Del
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         );
     }

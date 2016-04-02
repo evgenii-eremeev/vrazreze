@@ -20,6 +20,7 @@ const Category = React.createClass({
 
     render () {
         const { drawings } = this.props;
+
         return (
             drawings.isFetching ?
                 <p>Загружаем...</p> :
