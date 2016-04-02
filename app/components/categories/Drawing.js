@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
 
 const Drawing = ({
-    drawing
+    drawing,
+    onAddToCartClick
 }) => {
     return (
         <div className="well" style={{paddingTop: 0, paddingBottom: 0, overflow: 'auto'}}>
@@ -13,16 +14,17 @@ const Drawing = ({
                     />
                 <button
                     className="btn btn-success"
-                    style={{display: 'block', marginTop: 15}}
+                    style={{display: 'block', margin: '12px 0', width: 200}}
+                    onClick={onAddToCartClick}
                     >
                     Добавить в корзину
                 </button>
+                <p><strong>Цена:</strong> {drawing.price} рублей</p>
             </div>
             <div style={{padding: '0 50'}}>
                 <h2>{drawing.title}</h2>
                 <p>{drawing.description}</p>
                 <p><strong>Состав:</strong> {drawing.drawing_composition}</p>
-                <p><strong>Цена:</strong> {drawing.price} руб.</p>
             </div>
         </div>
     );

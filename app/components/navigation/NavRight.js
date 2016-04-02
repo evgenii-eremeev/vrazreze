@@ -13,10 +13,22 @@ const NavRight = React.createClass({
     },
 
     render () {
+        const { userAuthSession, cart } = this.props;
+
+        const cartButton = (
+            cart.length ?
+                <LinkContainer to='/cart'>
+                    <NavItem eventKey={-1}>Корзина <span className="badge">{cart.length}</span></NavItem>
+                </LinkContainer>
+                :
+                ""
+        );
+
         return (
-            this.props.userAuthSession.isLoggedIn ?
+            userAuthSession.isLoggedIn ?
                 <Nav pullRight>
                     <AdminDropdown />
+                    { cartButton }
                     <NavItem eventKey={1}>
                         {this.props.userAuthSession.userObject.username}
                     </NavItem>
@@ -26,6 +38,7 @@ const NavRight = React.createClass({
                 </Nav>
                 :
                 <Nav pullRight>
+                    { cartButton }
                     <LinkContainer to='/login'>
                         <NavItem eventKey={1}>Вход</NavItem>
                     </LinkContainer>
@@ -39,7 +52,8 @@ const NavRight = React.createClass({
 
 function mapStateToProps(state) {
     return {
-        userAuthSession: state.userAuthSession
+        userAuthSession: state.userAuthSession,
+        cart: state.cart
     };
 }
 

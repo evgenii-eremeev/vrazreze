@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { fetchDrawings } from '../../actions/drawingsActions';
+import { addToCart } from '../../actions/cartActions';
 
 import Drawing from './Drawing';
 
@@ -19,14 +20,20 @@ const Category = React.createClass({
     },
 
     render () {
-        const { drawings } = this.props;
+        const { drawings, dispatch } = this.props;
 
         return (
             drawings.isFetching ?
                 <p>Загружаем...</p> :
                 <div>
                     {drawings.items.map((drawing, index) => (
-                        <Drawing key={index} drawing={drawing} />
+                        <Drawing
+                            key={index}
+                            drawing={drawing}
+                            onAddToCartClick={() => (
+                                dispatch(addToCart(drawing))
+                            )}
+                            />
                     ))}
                 </div>
         );

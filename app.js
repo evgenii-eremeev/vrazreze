@@ -15,6 +15,7 @@ import rootReducer from './app/reducers/rootReducer';
 // Components
 import App from './app/components/App';
 import Home from './app/components/Home';
+import Cart from './app/components/Cart';
 import NewDrawing from './app/components/admin/NewDrawing';
 import ManageCategories from './app/components/admin/ManageCategories';
 import ManageDrawings from './app/components/admin/ManageDrawings';
@@ -22,6 +23,7 @@ import MainLogin from './app/components/auth/MainLogin';
 import MainSignUp from './app/components/auth/MainSignUp';
 import Categories from './app/components/categories/Categories';
 import Category from './app/components/categories/Category';
+
 
 // Set up store
 const routeMiddleware = routerMiddleware(browserHistory)
@@ -44,6 +46,7 @@ ReactDOM.render(
                 <Route path="/admin/new_drawing" component={NewDrawing} />
                 <Route path="/admin/manage_categories" component={ManageCategories} />
                 <Route path="/admin/manage_drawings" component={ManageDrawings} />
+                <Route path="/cart" component={Cart} />
                 <Route path="/login" component={MainLogin} />
                 <Route path="/signup" component={MainSignUp} />
                 <Route path="/categories" component={Categories} >
