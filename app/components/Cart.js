@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 import { removeFromTheCart, clearTheCart } from '../actions/cartActions';
 
@@ -30,7 +31,7 @@ const Cart = React.createClass({
                                         alt="drawing picture"
                                         />
                                     </td>
-                                    <td>{ drawing.title }</td>
+                                    <td>{drawing.title}</td>
                                     <td>{ drawing.description }</td>
                                     <td style={{ textAlign: 'center'}}>
                                         <button

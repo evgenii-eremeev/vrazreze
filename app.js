@@ -50,7 +50,7 @@ ReactDOM.render(
                 <Route path="/login" component={MainLogin} />
                 <Route path="/signup" component={MainSignUp} />
                 <Route path="/categories" component={Categories} >
-                    <Route path="/categories/:categoryUrl" component={Category} />
+                    <Route path=":categoryUrl" component={Category} />
                 </Route>
             </Route>
         </Router>

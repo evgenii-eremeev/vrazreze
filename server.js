@@ -17,9 +17,8 @@ require('dotenv').load();
 // ************************************
 // This is the real meat of the example
 // ************************************
-if (!process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'development') {
     (function() {
-
       // Step 1: Create & configure a webpack compiler
       var webpack = require('webpack');
       var webpackConfig = require(process.env.WEBPACK_CONFIG ? process.env.WEBPACK_CONFIG : './webpack.config');
@@ -63,4 +62,5 @@ mongoose.connect(process.env.MONGO_URI);
 
 app.listen(app.get('port'), function () {
     console.log("Express server running at http://localhost:" + app.get('port'));
+    console.log("NODE_ENV=" + process.env.NODE_ENV);
 });
