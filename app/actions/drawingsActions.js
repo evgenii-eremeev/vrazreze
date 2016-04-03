@@ -57,7 +57,7 @@ export function fetchDrawings(categoryUrl) {
 				fetchDrawingsSuccess(categoryUrl, json)
 			))
 			.catch(error => dispatch(
-				fetchDrawingsFail("Error fetching drawings...")
+				fetchDrawingsFail("Ошибка при загрузке чертежей")
 			));
     };
 }

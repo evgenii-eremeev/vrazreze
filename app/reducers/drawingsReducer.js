@@ -40,7 +40,10 @@ function drawingsReducer(
             return Object.assign(
                 {},
                 state,
-                { error: action.error }
+                {
+                    error: action.error,
+                    isFetching: false,
+                }
             );
 
         default:

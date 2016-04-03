@@ -24,6 +24,9 @@ const apiCtrl = (function apiCtrl () {
             .findOne({ url: req.params.url })
             .exec(function (err, category) {
                 if (err) { throw err; }
+                if (!category) {
+                    return res.sendStatus(404);
+                }
                 Drawing
                     .find({ category: category._id })
                     .exec(function (err, drawings) {

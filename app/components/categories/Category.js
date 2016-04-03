@@ -24,7 +24,10 @@ const Category = React.createClass({
 
         return (
             drawings.isFetching ?
-                <p>Загружаем...</p> :
+                <div>
+                    <p>Загружаем...</p>
+                </div>
+                :
                 <div>
                     {drawings.items.map((drawing, index) => (
                         <Drawing
@@ -35,6 +38,7 @@ const Category = React.createClass({
                             )}
                             />
                     ))}
+                    { drawings.error }
                 </div>
         );
     }
