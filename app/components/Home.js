@@ -9,7 +9,7 @@ const Home = React.createClass({
                     className="img-responsive"
                     alt="logo"
                     />
-                <p>Самые актуальные чертежи вы можете найти здесь.</p>
+                <p>Много чертежей.</p>
                 <p><Link className="btn btn-primary btn-lg" to="/categories">Чертежи по категориям</Link></p>
             </div>
 
