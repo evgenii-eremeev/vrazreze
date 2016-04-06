@@ -58,7 +58,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 // mongoose
-mongoose.connect(process.env.MONGO_URI);
+mongoose.connect('mongodb://localhost:27017/vrazreze');
 
 app.listen(app.get('port'), function () {
     console.log("Express server running at http://localhost:" + app.get('port'));
