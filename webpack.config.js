@@ -33,3 +33,4 @@ module.exports = {
         new webpack.NoErrorsPlugin()
         ]
 };
+console.log(process.env.NODE_ENV);
