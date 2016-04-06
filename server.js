@@ -14,8 +14,11 @@ var app = express();
 app.set('port', (process.env.PORT || 5000));
 require('dotenv').load();
 
-app.configure('development', function(){
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.errorHandler());
+} else {
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+
     (function webpackHotMiddleware() {
         // Step 1: Create & configure a webpack compiler
         var webpack = require('webpack');
@@ -32,13 +35,7 @@ app.configure('development', function(){
             log: console.log, path: '/__webpack_hmr', heartbeat: 10 * 1000
         }));
     })();
-
-});
-
-app.configure('production', function(){
-    app.use(express.errorHandler());
-});
-
+}
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
