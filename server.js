@@ -14,11 +14,7 @@ var app = express();
 app.set('port', (process.env.PORT || 5000));
 require('dotenv').load();
 
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.errorHandler());
-} else {
-    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-
+if (process.env.NODE_ENV !== 'production') {
     (function webpackHotMiddleware() {
         // Step 1: Create & configure a webpack compiler
         var webpack = require('webpack');
