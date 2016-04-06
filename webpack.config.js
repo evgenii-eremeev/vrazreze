@@ -25,6 +25,9 @@ module.exports = {
         new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.optimize.UglifyJsPlugin()
         ] : [
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': '"development"'
+        }),
             // Webpack 1.0
         new webpack.optimize.OccurenceOrderPlugin(),
         // Webpack 2.0 fixed this mispelling
