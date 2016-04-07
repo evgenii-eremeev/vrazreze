@@ -1,6 +1,6 @@
 {
-  "name": "petrovich2",
-  "version": "0.1.0",
+  "name": "vrazreze",
+  "version": "0.1.2",
   "description": "интернет магазин чертежей",
   "main": "server.js",
   "scripts": {
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jaycrypto/petrovich2.git"
+    "url": "git+https://github.com/jaycrypto/vrazreze.git"
   },
   "author": "jay",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jaycrypto/petrovich2/issues"
+    "url": "https://github.com/jaycrypto/vrazreze/issues"
   },
-  "homepage": "https://github.com/jaycrypto/petrovich2#readme",
+  "homepage": "https://github.com/jaycrypto/vrazreze#readme",
   "dependencies": {
     "body-parser": "^1.15.0",
     "cookie-parser": "^1.4.1",
@@ -59,10 +59,5 @@
     "webpack": "^1.12.13",
     "webpack-dev-server": "^1.14.1",
     "webpack-hot-middleware": "^2.10.0"
-  },
-  "babel": {
-    "presets": [
-      "es2015"
-    ]
   }
 }

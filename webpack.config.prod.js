@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+var path = require('path');
 
 module.exports = {
     entry: [
@@ -6,9 +7,13 @@ module.exports = {
     ],
 
     output: {
-        path: __dirname + '/public',
+        path: path.join(__dirname, '/public'),
         filename: 'bundle.js',
         publicPath: '/'
+    },
+
+    resolveLoader: {
+        root: path.join(__dirname, 'node_modules')
     },
 
     module: {
