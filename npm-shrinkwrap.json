@@ -1850,6 +1850,11 @@
       "from": "if-env@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/if-env/-/if-env-1.0.0.tgz"
     },
+    "imagemagick": {
+      "version": "0.1.3",
+      "from": "git://github.com/rsms/node-imagemagick.git",
+      "resolved": "git://github.com/rsms/node-imagemagick.git#8ad6a7f251b1d1f3e5c14358140c82246cc15e5b"
+    },
     "indent-string": {
       "version": "2.1.0",
       "from": "indent-string@>=2.1.0 <3.0.0",
@@ -2666,6 +2671,18 @@
       "version": "0.0.3",
       "from": "querystringify@>=0.0.0 <0.1.0",
       "resolved": "https://registry.npmjs.org/querystringify/-/querystringify-0.0.3.tgz"
+    },
+    "quickthumb": {
+      "version": "0.0.12",
+      "from": "quickthumb@latest",
+      "resolved": "https://registry.npmjs.org/quickthumb/-/quickthumb-0.0.12.tgz",
+      "dependencies": {
+        "mkdirp": {
+          "version": "0.3.5",
+          "from": "mkdirp@>=0.3.3 <0.4.0",
+          "resolved": "https://registry.npmjs.org/mkdirp/-/mkdirp-0.3.5.tgz"
+        }
+      }
     },
     "randomatic": {
       "version": "1.1.5",

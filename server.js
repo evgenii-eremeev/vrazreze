@@ -7,6 +7,7 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var Category = require('./server/models/category');
+var quickthumb = require('quickthumb');
 
 var routes = require('./server/routes/index');
 
@@ -43,7 +44,7 @@ app.use(require('express-session')({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static(process.cwd() + '/public'));
+app.use(quickthumb.static(process.cwd() + '/public'));
 
 app.use('/', routes);
 

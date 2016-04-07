@@ -26,9 +26,8 @@ const Cart = React.createClass({
                                 <tr key={idx}>
                                     <td>{ drawing.price }</td>
                                     <td><img
-                                        src={`/uploads/${drawing.picture}`}
-                                        style={{maxWidth: 150}}
-                                        alt="drawing picture"
+                                        src={`/pics/${drawing.picture}?dim=100x100`}
+                                        alt={"drawing picture " + drawing.title}
                                         />
                                     </td>
                                     <td>{drawing.title}</td>
