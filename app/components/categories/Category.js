@@ -33,9 +33,6 @@ const Category = React.createClass({
                         <Drawing
                             key={index}
                             drawing={drawing}
-                            onAddToCartClick={() => (
-                                dispatch(addToCart(drawing))
-                            )}
                             />
                     ))}
                     { drawings.error }

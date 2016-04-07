@@ -1,8 +1,11 @@
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
+
+import { addToCart } from '../../actions/cartActions';
 
 const Drawing = ({
     drawing,
-    onAddToCartClick
+    dispatch
 }) => {
     return (
         <div id={ drawing._id } className="well" style={{paddingTop: 0, paddingBottom: 0, overflow: 'auto'}}>
@@ -15,19 +18,21 @@ const Drawing = ({
                 <button
                     className="btn btn-success"
                     style={{display: 'block', margin: '12px 0', width: 200}}
-                    onClick={onAddToCartClick}
+                    onClick={() => (
+                        dispatch(addToCart(drawing))
+                    )}
                     >
                     Добавить в корзину
                 </button>
-                <p><strong>Цена:</strong> {drawing.price} рублей</p>
+                <p><strong>Цена:</strong>{drawing.price} рублей</p>
             </div>
             <div style={{padding: '0 50'}}>
                 <h2>{drawing.title}</h2>
                 <p>{drawing.description}</p>
-                <p><strong>Состав:</strong> {drawing.drawing_composition}</p>
+                <p><strong>Состав: </strong>{drawing.drawing_composition}</p>
             </div>
         </div>
     );
 };
 
-export default Drawing;
+export default connect()(Drawing);
