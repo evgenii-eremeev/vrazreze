@@ -8,6 +8,7 @@ var newDrawingRouter = require('./newDrawingRouter');
 // import controllers
 var authCtrl = require('../controllers/authCtrl');
 var apiCtrl = require('../controllers/apiCtrl');
+var mailCtrl = require('../controllers/mailCtrl');
 
 // new_drawing (post)
 router.use('/new_drawing', newDrawingRouter);
@@ -50,6 +51,10 @@ router.delete('/api/delete_drawing/:drawingId', apiCtrl.deleteDrawing);
 
 // update_category
 router.post('/api/update_category/:categoryId', apiCtrl.updateCategory);
+
+// MAIL
+// sendOrder
+router.post('/mail/order', mailCtrl.order);
 
 // 'any uri, because we use react-router'
 // Should be placed at the very end for the rest 'get' requests work

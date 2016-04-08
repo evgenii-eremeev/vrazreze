@@ -5,7 +5,8 @@ import { addToCart } from '../../actions/cartActions';
 
 const Drawing = ({
     drawing,
-    dispatch
+    dispatch,
+    userAuthSession
 }) => {
     return (
         <div id={ drawing._id } className="well" style={{paddingTop: 0, paddingBottom: 0, overflow: 'auto'}}>
@@ -24,7 +25,34 @@ const Drawing = ({
                     >
                     Добавить в корзину
                 </button>
-                <p><strong>Цена:</strong>{drawing.price} рублей</p>
+                <button
+                    className="btn btn-success"
+                    style={{display: 'block', margin: '12px 0', width: 200}}
+                    onClick={() => {
+                        fetch('/mail/order', {
+                            headers: {
+                              'Accept': 'application/json',
+                              'Content-Type': 'application/json'
+                            },
+                            method: 'POST',
+                            body: JSON.stringify({
+                                formData: {
+                                    user: userAuthSession.userObject,
+                                    drawing
+                                }
+                            })})
+                            .then(response => response.text())
+                            .then((text) => {
+                                alert(text)
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            })
+                    }}
+                    >
+                    Заказать
+                </button>
+                <p><strong>Цена: </strong>{drawing.price} рублей</p>
             </div>
             <div style={{padding: '0 50'}}>
                 <h2>{drawing.title}</h2>
@@ -35,4 +63,10 @@ const Drawing = ({
     );
 };
 
-export default connect()(Drawing);
+function mapStateToProps(state) {
+    return {
+        userAuthSession: state.userAuthSession,
+    };
+}
+
+export default connect(mapStateToProps)(Drawing);

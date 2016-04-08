@@ -1,3 +1,5 @@
+import fetch from 'isomorphic-fetch';
+
 /*
  * action types
  */
@@ -35,14 +37,14 @@ export function signUpFail(error) {
 }
 
 export function attemptSignUp(email, password) {
-  return (dispatch) => {
-    dispatch(clickedSignUp());
+	return (dispatch) => {
+    	dispatch(clickedSignUp());
 
-    $.ajax({
-			type: 'POST',
-			url: '/signup',
-			data: {username: email, password}
-        })
+	    $.ajax({
+				type: 'POST',
+				url: '/signup',
+				data: {username: email, password}
+	        })
 			.done(function(data) {
 				if (data.error){
 					dispatch(signUpFail(data.error));
@@ -58,7 +60,7 @@ export function attemptSignUp(email, password) {
 				}
 
 			});
-  }
+	}
 }
 
 

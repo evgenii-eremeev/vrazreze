@@ -21,7 +21,7 @@ const authCtrl = (function () {
                 if (err) { throw err; }
                 if (user) {
                     res.status(409);
-                    res.send('Conflict. User already exists.');
+                    res.send('Данный e-mail уже зарегистрирован');
                 } else {
                     next();
                 }
