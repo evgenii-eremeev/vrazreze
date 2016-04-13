@@ -11,7 +11,7 @@ const NewDrawing = React.createClass({
         let formData = new FormData(form);
         const { dispatch } = this.props;
         $.ajax({
-            url: '/new_drawing',
+            url: '/api/new_drawing',
             type: 'POST',
             data: formData,
             async: true,
@@ -19,6 +19,7 @@ const NewDrawing = React.createClass({
             contentType: false,
             processData: false,
             success: function (data) {
+                console.log(data);
                 form.reset();
                 dispatch(push('/categories'));
             },

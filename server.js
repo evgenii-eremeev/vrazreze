@@ -9,7 +9,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var Category = require('./server/models/category');
 var quickthumb = require('quickthumb');
 
-var routes = require('./server/routes/index');
+var routes = require('./server/routes');
 
 var app = express();
 app.set('port', (process.env.PORT || 5000));

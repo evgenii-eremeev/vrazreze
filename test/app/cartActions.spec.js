@@ -1,10 +1,10 @@
 import expect from 'expect';
 import deepFreeze from 'deep-freeze';
 
-import cartReducer from '../app/reducers/cartReducer';
+import cartReducer from '../../app/reducers/cartReducer';
 import {
     addToCart, clearTheCart, removeFromTheCart
-} from '../app/actions/cartActions';
+} from '../../app/actions/cartActions';
 
 describe('cartActions', function () {
 

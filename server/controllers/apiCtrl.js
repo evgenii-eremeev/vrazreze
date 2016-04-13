@@ -16,10 +16,6 @@ const apiCtrl = (function apiCtrl () {
     }
 
     function category (req, res) {
-        if (req.params.url === "undefined") {
-            res.json([]);
-            return;
-        }
         Category
             .findOne({ url: req.params.url })
             .exec(function (err, category) {
@@ -41,7 +37,7 @@ const apiCtrl = (function apiCtrl () {
             req.params.drawingId,
             function(err, drawing) {
                 if (err) { throw err; }
-                const picPath = process.cwd() + '/public/uploads/' + drawing.picture;
+                const picPath = process.cwd() + '/public/pics/' + drawing.picture;
                 fs.unlink(picPath, function (err) {
                     if (err) { throw err; }
                     res.status(200).end();

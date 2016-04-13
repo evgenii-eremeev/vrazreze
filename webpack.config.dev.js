@@ -3,7 +3,7 @@ var path = require('path');
 
 module.exports = {
     entry: [
-        './app.js',
+        './client.js',
         'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true'
     ],
 

@@ -10,8 +10,6 @@ var authCtrl = require('../controllers/authCtrl');
 var apiCtrl = require('../controllers/apiCtrl');
 var mailCtrl = require('../controllers/mailCtrl');
 
-// new_drawing (post)
-router.use('/new_drawing', newDrawingRouter);
 
 // check_session
 router.post('/check_session', authCtrl.checkSession);
@@ -46,6 +44,9 @@ router.post('/api/add_category', apiCtrl.addCategory);
 // delete_category
 router.delete('/api/delete_category/:categoryId', apiCtrl.deleteCategory);
 
+// new_drawing (post)
+router.use('/api/new_drawing', newDrawingRouter);
+
 // delete_drawing
 router.delete('/api/delete_drawing/:drawingId', apiCtrl.deleteDrawing);
 
@@ -61,6 +62,5 @@ router.post('/mail/order', mailCtrl.order);
 router.get('*', function(req, res) {
     res.sendFile(process.cwd() + '/public/index.html');
 });
-
 
 module.exports = router;

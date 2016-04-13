@@ -13,8 +13,10 @@ const newDrawing = (function newDrawing (){
                     author: req.user.username,
                     description: req.body.description,
                     category: category._id,
-                    drawing_composition: req.body.drawing_composition.split(','),
-                    tags: req.body.tags.split(','),
+                    drawing_composition: req.body.drawing_composition ?
+                        req.body.drawing_composition.split(',') : [],
+                    tags: req.body.tags ?
+                        req.body.tags.split(',') : [],
                     price: req.body.price,
                     picture: req.file ? req.file.filename : ''
                 });
