@@ -1,4 +1,5 @@
 const supertest = require('supertest');
+const expect = require('expect');
 const mongoose = require('mongoose');
 const User = require('../../server/models/user');
 
@@ -64,12 +65,7 @@ describe("apiCtrl", function () {
                 .expect(200, done);
         });
 
-        it('adds new drawing to database', function (done) {
-            const drawing = {
-                title: 'Drawing title',
-                category: 'Промышленность',
-                description: "Testing description",
-            }
+        it('returns 200 and json object', function (done) {
             server
                 .post('/api/new_drawing')
                 .set('Content-Type', 'multipart/form-data')
@@ -78,6 +74,56 @@ describe("apiCtrl", function () {
                 .field('description', 'Testing description')
                 .attach('picture', __dirname + '/../testpic.jpg')
                 .expect('Content-Type', /json/)
+                .expect(200, function(err, res) {
+                    if (err) { throw err; }
+                    lastDrawingId = res.body._id;
+                    done();
+                });
+        });
+
+        it('does write to database', function (done) {
+            server
+                .post('/api/new_drawing')
+                .set('Content-Type', 'multipart/form-data')
+                .field('title', 'Drawing for testing')
+                .field('category', 'Промышленность')
+                .field('description', 'Testing description')
+                .field('drawing_composition', '1, 2, 3')
+                .field('tags', '1, 2, 3')
+                .field('price', '200')
+                .attach('picture', __dirname + '/../testpic.jpg')
+                .expect('Content-Type', /json/)
+                .expect(function(res) {
+
+                    expect(
+                        res.body.title
+                    ).toBe('Drawing for testing');
+
+                    expect(
+                        res.body.category
+                    ).toBeA('string');
+
+                    expect(
+                        res.body.description
+                    ).toBe('Testing description');
+
+                    expect(
+                        res.body.picture
+                    ).toMatch(/picture/);
+
+                    expect(
+                        res.body.drawing_composition
+                    ).toBeA('array');
+
+                    expect(
+                        res.body.tags
+                    ).toBeA('array');
+
+                    expect(
+                        res.body.price
+                    ).toBeA('number').toBe(200);
+
+                })
                 .expect(200, function(err, res) {
                     if (err) { throw err; }
                     lastDrawingId = res.body._id;

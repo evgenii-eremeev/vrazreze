@@ -11,11 +11,15 @@ const Drawing = ({
     return (
         <div id={ drawing._id } className="well" style={{paddingTop: 0, paddingBottom: 0, overflow: 'auto'}}>
             <div className="pull-left" style={{ margin: '25px 20px 15px 0' }}>
+                {/* show placeholer if picture does't exist */}
                 <img
-                    src={"/pics/" + drawing.picture + "?dim=200x200"}
+                    src={drawing.picture ?
+                        `/pics/${drawing.picture}?dim=200x200` :
+                        'http://placehold.it/200x200'}
                     style={{ border: '2px solid lightgrey', borderRadius: 5 }}
                     alt={'picture ' + drawing.title}
                     />
+
                 <button
                     className="btn btn-success"
                     style={{display: 'block', margin: '12px 0', width: 200}}

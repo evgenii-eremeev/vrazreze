@@ -25,10 +25,13 @@ const Cart = React.createClass({
                             {cart.map((drawing, idx) => (
                                 <tr key={idx}>
                                     <td>{ drawing.price }</td>
-                                    <td><img
-                                        src={`/pics/${drawing.picture}?dim=100x100`}
-                                        alt={"drawing picture " + drawing.title}
-                                        />
+                                    {/* don't show empty picture */}
+                                    <td>
+                                        {drawing.picture ?
+                                            <img
+                                                src={`/pics/${drawing.picture}?dim=100x100`}
+                                                alt={"drawing picture " + drawing.title}
+                                                /> : ""}
                                     </td>
                                     <td>{drawing.title}</td>
                                     <td>{ drawing.description }</td>

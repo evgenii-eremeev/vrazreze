@@ -39,7 +39,10 @@ const apiCtrl = (function apiCtrl () {
                 if (err) { throw err; }
                 const picPath = process.cwd() + '/public/pics/' + drawing.picture;
                 fs.unlink(picPath, function (err) {
-                    if (err) { throw err; }
+                    if (err) {
+                        console.error("Error unlinking file", err);
+                        return res.status(206).end();
+                    }
                     res.status(200).end();
                 });
             }

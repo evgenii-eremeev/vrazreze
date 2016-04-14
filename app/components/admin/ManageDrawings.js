@@ -54,7 +54,8 @@ const MangageDrawings = React.createClass({
                             {drawings.items.map((drawing, idx) => (
                                 <tr key={idx}>
                                     <td>
-                                        <img src={`/pics/${drawing.picture}?dim=100x100`}/>
+                                        {drawing.picture ?
+                                        <img src={`/pics/${drawing.picture}?dim=100x100`}/> : ""}
                                     </td>
                                     <td>{ new Date(drawing.created).toLocaleString() }</td>
                                     <td>{ drawing.title }</td>
