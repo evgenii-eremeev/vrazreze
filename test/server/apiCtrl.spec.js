@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const supertest = require('supertest');
 const expect = require('expect');
 const mongoose = require('mongoose');
@@ -131,17 +133,95 @@ describe("apiCtrl", function () {
                 });
         });
 
-    });
+        it('does load picture to filesystem', function _it (done) {
+
+            server
+                .post('/api/new_drawing')
+                .set('Content-Type', 'multipart/form-data')
+                .field('title', 'Drawing for testing')
+                .field('category', 'Промышленность')
+                .field('description', 'Testing description')
+                .attach('picture', __dirname + '/../testpic.jpg')
+                .expect('Content-Type', /json/)
+                .expect(200, function(err, res) {
+                    if (err) { throw err; }
+                    lastDrawingId = res.body._id;
+                    const pathToPic = path.join(
+                        __dirname,
+                        '/../../public/pics/',
+                        res.body.picture
+                    );
+                    // checks if file exist
+                    fs.stat(pathToPic, function(err, stat) {
+                        if (err) { throw err; }
+                        done()
+                    });
+                });
+        }); // it
+
+    }); // describe
 
 
-    //
-    // describe('.deleteDrawing', function () {
-    //
-    //     it('returns 200 on successfull deleting', function (done) {
-    //         server
-    //             .delete('/api/category')
-    //     });
-    // });
+    describe('.deleteDrawing', function _describeDeleteDrawing () {
+        let lastDrawingId;
+        let lastDrawingPicture;
+        this.timeout(5000);
+
+        before(function _before (done) {
+            const user = {
+                username: 'test',
+                password: '123'
+            }
+            server
+                .post('/signup')
+                .send(user)
+                .expect('Content-Type', /json/)
+                .expect(200, done);
+        });
+
+        after(function _after (done) {
+            User.findOneAndRemove({username: 'test'}, done);
+        });
+
+        beforeEach(function _beforeEach (done) {
+            server
+                .post('/api/new_drawing')
+                .set('Content-Type', 'multipart/form-data')
+                .field('title', 'Drawing for testing')
+                .field('category', 'Промышленность')
+                .field('description', 'Testing description')
+                .attach('picture', __dirname + '/../testpic.jpg')
+                .expect(200, function _expect (err, res) {
+                    if (err) { throw err; }
+                    lastDrawingId = res.body._id;
+                    lastDrawingPicture = res.body._id;
+                    done();
+                });
+        });
+
+        it('returns 200 on successfull deleting', function _it (done) {
+            server
+                .delete(path.join('/api/delete_drawing/', lastDrawingId))
+                .expect(200, done);
+        }); // it
+
+        it('deletes picture from filesystem', function _it (done) {
+            server
+                .delete(path.join('/api/delete_drawing/', lastDrawingId))
+                .expect(200, function _expect (err, res) {
+                    if (err) { throw err; }
+                    const pathToPic = path.join(
+                        __dirname,
+                        '/../../public/pics/',
+                        lastDrawingPicture
+                    );
+                    fs.stat(pathToPic, function _fsstat(err, stat) {
+                        expect(err.code).toBe("ENOENT");
+                        done();
+                    });
+                });
+        }); // it
+    }); // describe
 
 
 });

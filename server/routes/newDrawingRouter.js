@@ -1,3 +1,4 @@
+var path = require('path');
 var express = require('express');
 var router = express.Router();
 
@@ -12,8 +13,7 @@ var storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         var filename = file.fieldname + '-';
-        filename += Date.now() + '.';
-        filename += file.originalname.split('.').slice(-1);
+        filename += Date.now() + path.extname(file.originalname);
         cb(null, filename);
     }
 });

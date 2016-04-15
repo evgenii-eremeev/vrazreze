@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 
 const Drawing = require('../models/drawing');
 const Category = require('../models/category');
@@ -37,11 +38,15 @@ const apiCtrl = (function apiCtrl () {
             req.params.drawingId,
             function(err, drawing) {
                 if (err) { throw err; }
-                const picPath = process.cwd() + '/public/pics/' + drawing.picture;
+                const picPath = path.join(
+                    process.cwd(),
+                    '/public/pics/',
+                    drawing.picture
+                );
                 fs.unlink(picPath, function (err) {
                     if (err) {
                         console.error("Error unlinking file", err);
-                        return res.status(206).end();
+                        return res.status(206).end('Error unlinking file');
                     }
                     res.status(200).end();
                 });
