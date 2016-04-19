@@ -53,8 +53,16 @@ describe("apiCtrl", function () {
             server
                 .post('/signup')
                 .send(user)
-                .expect('Content-Type', /json/)
-                .expect(200, done);
+                .expect(200, function _changeRole (err, res) {
+                    User.update(
+                        { username: 'test' }, 
+                        { $set: { role: 'admin' }},
+                        function _updateUser (err, doc) {
+                            if (err) { throw err; }
+                            done();
+                        }
+                    );
+                });
         });
 
         after(function (done) {
@@ -166,7 +174,7 @@ describe("apiCtrl", function () {
         let lastDrawingPicture;
         this.timeout(5000);
 
-        before(function _before (done) {
+        before(function(done) {
             const user = {
                 username: 'test',
                 password: '123'
@@ -174,8 +182,16 @@ describe("apiCtrl", function () {
             server
                 .post('/signup')
                 .send(user)
-                .expect('Content-Type', /json/)
-                .expect(200, done);
+                .expect(200, function _changeRole (err, res) {
+                    User.update(
+                        { username: 'test' }, 
+                        { $set: { role: 'admin' }},
+                        function _updateUser (err, doc) {
+                            if (err) { throw err; }
+                            done();
+                        }
+                    );
+                });
         });
 
         after(function _after (done) {
