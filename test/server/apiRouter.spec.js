@@ -398,4 +398,57 @@ describe("apiRouter", function () {
     });
     
     
+    describe('/api/delete_category/:categoryId', function () {
+        
+        this.timeout(5000);
+        let recentCategoryId;
+        
+        const formData = {
+            name: 'Power stations',
+            url: 'pstations',
+            position: 99
+        };
+        
+        before(createSuperUser);
+        after(deleteUser);
+        
+        beforeEach(function (done) {
+            server
+                .post('/api/add_category')
+                .set('Accept', 'application/json')
+                .send({ formData: formData })
+                .expect(200, function(err, res) {
+                    if (err) { throw err; }
+                    recentCategoryId = res.body._id;
+                    console.log(recentCategoryId);
+                    done();
+                });
+        });
+        
+        
+        it('returns 200 on success', function (done) {
+            server
+                .delete(path.join('/api/delete_category', recentCategoryId))
+                .expect(200, done);
+        });
+        
+        it('returns 404 on failure', function (done) {
+            server
+                .delete(path.join('/api/delete_category', '123')) 
+                .expect(404, done);
+        });
+        
+        it('no records left in database', function (done) {
+            server
+                .delete(path.join('/api/delete_category', recentCategoryId))
+                .expect(200, function(err, res) {
+                    expect(
+                        Category.find({ _id: recentCategoryId }).count()
+                    ).toBe(0);
+                    done();
+                });
+        });
+        
+    });
+    
 });

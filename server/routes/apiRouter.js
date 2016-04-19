@@ -89,11 +89,13 @@ router.delete(
     isLoggedIn, 
     isAdmin, 
     function _deleteCategory(req, res) {
-        
+       
         Category.findByIdAndRemove(
             req.params.categoryId,
             function(err, category) {
-                if (err) { throw err; }
+                if (err) { 
+                    return res.status(404).end('No such category');   
+                }
                 res.status(200).end();
             }
         );
