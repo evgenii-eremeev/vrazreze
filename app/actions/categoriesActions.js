@@ -100,6 +100,7 @@ export function addCategory(formData) {
 			  'Accept': 'application/json',
 			  'Content-Type': 'application/json'
 			},
+			credentials : 'same-origin',
 			method: 'POST',
 			body: JSON.stringify({formData})
 		})
@@ -117,6 +118,7 @@ export function deleteCategory(categoryId) {
 
 		return fetch('/api/delete_category/' + categoryId, {
 			method: 'DELETE',
+			credentials : 'same-origin',
 		})
 		.then(response => response.ok)
 		.then(() => dispatch(fetchCategories()))
@@ -135,6 +137,7 @@ export function updateCategory(categoryId, formData) {
 			  'Accept': 'application/json',
 			  'Content-Type': 'application/json'
 			},
+			credentials : 'same-origin',
 			method: 'POST',
 			body: JSON.stringify({formData})
 		})
