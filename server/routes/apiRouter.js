@@ -70,15 +70,15 @@ router.post(
         
         Category.findByIdAndUpdate(
             req.params.categoryId,
-            // same as { $set: {...}}
             {
-                name: req.body.formData.name,
+                name: req.body.formData.name, // same as { $set: {...}}
                 url: req.body.formData.url,
                 position: req.body.formData.position
             },
+            { new: true }, // returns updated model in callback
             function(error, category) {
                 if (error) { throw error; }
-                res.status(200).end();
+                res.json(category);
             }
         );
 });

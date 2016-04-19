@@ -1,12 +1,40 @@
+"use strict";
+
 const fs = require('fs');
 const path = require('path');
 const supertest = require('supertest');
 const expect = require('expect');
 const mongoose = require('mongoose');
+
 const User = require('../../server/models/user');
+const Category = require('../../server/models/category');
 
 const server = supertest.agent("http://localhost:5000");
 mongoose.connect('mongodb://localhost:27017/vrazreze');
+
+function createSuperUser(done) {
+    const user = {
+        username: 'test',
+        password: '123'
+    }
+    server
+        .post('/signup')
+        .send(user)
+        .expect(200, function _changeRole (err, res) {
+            User.update(
+                { username: 'test' }, 
+                { $set: { role: 'admin' }},
+                function _updateUser (err, doc) {
+                    if (err) { throw err; }
+                    done();
+                }
+            );
+        });
+}
+
+function deleteUser(done) {
+    User.findOneAndRemove({username: 'test'}, done);
+}
 
 describe("apiRouter", function () {
 
@@ -41,33 +69,13 @@ describe("apiRouter", function () {
 
     }); // describe
 
-    describe('/api/delete_drawing/:drawingId (admin)', function () {
+    describe('/api/new_drawing (admin)', function () {
         let lastDrawingId;
         this.timeout(5000);
 
-        before(function(done) {
-            const user = {
-                username: 'test',
-                password: '123'
-            }
-            server
-                .post('/signup')
-                .send(user)
-                .expect(200, function _changeRole (err, res) {
-                    User.update(
-                        { username: 'test' }, 
-                        { $set: { role: 'admin' }},
-                        function _updateUser (err, doc) {
-                            if (err) { throw err; }
-                            done();
-                        }
-                    );
-                });
-        });
+        before(createSuperUser);
 
-        after(function (done) {
-            User.findOneAndRemove({username: 'test'}, done);
-        });
+        after(deleteUser);
 
         afterEach(function (done) {
             server
@@ -169,34 +177,14 @@ describe("apiRouter", function () {
 
     }); // describe
     
-    describe('/api/new_drawing (admin)', function _describeDeleteDrawing () {
+    describe('/api/delete_drawing/:drawingId (admin)', function _describeDeleteDrawing () {
         let lastDrawingId;
         let lastDrawingPicture;
         this.timeout(5000);
 
-        before(function(done) {
-            const user = {
-                username: 'test',
-                password: '123'
-            }
-            server
-                .post('/signup')
-                .send(user)
-                .expect(200, function _changeRole (err, res) {
-                    User.update(
-                        { username: 'test' }, 
-                        { $set: { role: 'admin' }},
-                        function _updateUser (err, doc) {
-                            if (err) { throw err; }
-                            done();
-                        }
-                    );
-                });
-        });
+        before(createSuperUser);
 
-        after(function _after (done) {
-            User.findOneAndRemove({username: 'test'}, done);
-        });
+        after(deleteUser);
 
         beforeEach(function _beforeEach (done) {
             server
@@ -253,9 +241,7 @@ describe("apiRouter", function () {
                 .expect(200, done);
         });
         
-        after(function (done) {
-            User.findOneAndRemove({username: 'test'}, done);
-        });
+        after(deleteUser);
         
         it('post to /api/new_drawing responds with 403 Forbidden', function (done) {
             server
@@ -304,8 +290,111 @@ describe("apiRouter", function () {
 
     }); // describe
     
+    describe('/api/add_category', function () {
+        this.timeout(5000);
+
+        before(createSuperUser);
+
+        after(deleteUser);
+                
+        const formData = {
+            name: 'Power stations',
+            url: 'pstations',
+            position: 99
+        };
+        
+        afterEach(function (done) {
+            Category.findOneAndRemove({ name: formData.name }, done)
+        });
+
+        
+        it('return 200 and json content type', function (done) {
+            server
+                .post('/api/add_category')
+                .set('Accept', 'application/json')
+                .send({formData: formData})
+                .expect('Content-Type', /json/)
+                .expect(200, done);
+        });
+        
+        
+        it('returns right category', function (done) {
+            server
+                .post('/api/add_category')
+                .send({formData: formData})
+                .expect(200, function (err, res) {
+                    if (err) { throw err; }
+                    expect(res.body.name).toBe(formData.name);
+                    expect(res.body.url).toBe(formData.url);
+                    expect(res.body.position).toBe(formData.position);
+                    done();
+                });
+        });
+        
+            
+          
+    });
+    
     describe('/api/update_category/:categoryId', function () {
-        // TODO
+        this.timeout(5000);
+        
+        let recentCategoryId;
+        const formDataBefore = {
+            name: 'Power stations',
+            url: 'pstations',
+            position: 99
+        };
+        
+        const formDataAfter = {
+            name: 'Cool Stations',
+            url: 'cstations',
+            position: 49
+        }
+
+        before(createSuperUser);
+        after(deleteUser);
+        
+        beforeEach(function (done) {
+            server
+                .post('/api/add_category')
+                .set('Accept', 'application/json')
+                .send({ formData: formDataBefore })
+                .expect(200, function(err, res) {
+                    if (err) { throw err; }
+                    recentCategoryId = res.body._id;
+                    console.log(recentCategoryId);
+                    done();
+                });
+        });
+        
+        afterEach(function (done) {
+            Category.findOneAndRemove({ _id: recentCategoryId }, done)
+        });
+        
+        it('return 200 and json content type', function (done) {
+            server
+                .post(path.join('/api/update_category', recentCategoryId))
+                .set('Accept', 'application/json')
+                .send({formData: formDataAfter})
+                .expect('Content-Type', /json/)
+                .expect(200, done);
+        });
+        
+        
+        it('returns right category', function (done) {
+            server
+                .post(path.join('/api/update_category', recentCategoryId))
+                .set('Accept', 'application/json')
+                .send({formData: formDataAfter})
+                .expect(200, function (err, res) {
+                    if (err) { throw err; }
+                    expect(res.body.name).toBe(formDataAfter.name);
+                    expect(res.body.url).toBe(formDataAfter.url);
+                    expect(res.body.position).toBe(formDataAfter.position);
+                    done();
+                });
+        });
+        
     });
     
     
