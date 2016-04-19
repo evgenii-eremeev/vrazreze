@@ -66,7 +66,8 @@ export function deleteDrawing(drawingId, categoryUrl) {
 	return (dispatch) => {
 		dispatch(startDeletingDrawing());
 		return fetch('/api/delete_drawing/' + drawingId, {
-			method: 'DELETE'
+			method: 'DELETE',
+			credentials : 'same-origin',
 		})
 		.then(response => response.ok)
 		.then(() => dispatch(
