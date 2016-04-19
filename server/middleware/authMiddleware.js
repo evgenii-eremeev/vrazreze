@@ -3,19 +3,21 @@ const User = require('../models/user');
 // route middleware to make sure a user is logged in
 exports.isLoggedIn = function _isLoggedIn (req, res, next) {
     // if user is authenticated in the session, carry on
-    console.log(req.user)
     if (req.isAuthenticated()) {
         return next();
     } else {
-        res.send("Login required");
+        return res.status(403).end("Login required");
     }
-}
+};
 
-// TODO
+// don't allow make critical requiest avarage users
 exports.isAdmin = function _isAdmin (req, res, next) {
-    console.log(req.user);
-    next();
-}
+    if (req.user.role === 'admin') {
+        return next();
+    } else {
+        return res.status(403).end("Admin rights required");
+    }
+};
 
 
 // returns 409 'Conflict' if user already exist 
@@ -31,4 +33,4 @@ exports.userExists = function _userExists (req, res, next) {
                 next();
             }
         });
-}
+};

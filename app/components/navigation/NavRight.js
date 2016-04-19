@@ -14,7 +14,7 @@ const NavRight = React.createClass({
 
     render () {
         const { userAuthSession, cart } = this.props;
-
+        const { userObject } = userAuthSession;
         const cartButton = (
             cart.length ?
                 <LinkContainer to='/cart'>
@@ -23,14 +23,14 @@ const NavRight = React.createClass({
                 :
                 ""
         );
-
+        
         return (
             userAuthSession.isLoggedIn ?
                 <Nav pullRight>
-                    <AdminDropdown />
+                    { userObject.role === 'admin' ? <AdminDropdown /> : "" }
                     { cartButton }
                     <NavItem eventKey={1}>
-                        {this.props.userAuthSession.userObject.username}
+                        { userObject.username }
                     </NavItem>
                     <NavItem eventKey={2} onClick={this.onLogoutClick}>
                         Выйти

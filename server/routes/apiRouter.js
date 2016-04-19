@@ -45,94 +45,117 @@ router.get('/api/category/:url', function _category (req, res) {
 });
 
 // add_category
-router.post('/api/add_category', isLoggedIn, function _addCategory(req, res) {
-    console.log(req.user);
-    const category = new Category({
-        name: req.body.formData.name,
-        url: req.body.formData.url,
-        position: req.body.formData.position
-    });
-    category.save(function(err, category) {
-        res.json(category);
-    });
-});
-
-// delete_category
-router.delete('/api/delete_category/:categoryId', isLoggedIn, function _deleteCategory(req, res) {
-    Category.findByIdAndRemove(
-        req.params.categoryId,
-        function(err, category) {
-            if (err) { throw err; }
-            res.status(200).end();
-        }
-    );
-});
-
-// new_drawing
-router.post('/api/new_drawing', 
-            isLoggedIn, 
-            upload.single('picture'), 
-            function _newDrawing (req, res) {
-    Category
-        .findOne({ name: req.body.category })
-        .exec(function (err, category) {
-            if (err) { throw err; }
-            const drawing = new Drawing({
-                title: req.body.title,
-                author: req.user.username,
-                description: req.body.description,
-                category: category._id,
-                drawing_composition: req.body.drawing_composition ?
-                    req.body.drawing_composition.split(',') : [],
-                tags: req.body.tags ?
-                    req.body.tags.split(',') : [],
-                price: req.body.price,
-                picture: req.file ? req.file.filename : ''
-            });
-            drawing.save(function (err, drawing) {
-                if (err) { throw err; }
-                res.json(drawing);
-            });
-        });
-});
-
-// delete_drawing
-router.delete('/api/delete_drawing/:drawingId', function _deleteDrawing(req, res) {
-    Drawing.findByIdAndRemove(
-        req.params.drawingId,
-        function(err, drawing) {
-            if (err) { throw err; }
-            const picPath = path.join(
-                process.cwd(),
-                '/public/pics/',
-                drawing.picture
-            );
-            fs.unlink(picPath, function (err) {
-                if (err) {
-                    console.error("Error unlinking file", err);
-                    return res.status(206).end('Error unlinking file');
-                }
-                res.status(200).end();
-            });
-        }
-    );
-});
-
-// update_category
-router.post('/api/update_category/:categoryId', function updateCategory(req, res) {
-    Category.findByIdAndUpdate(
-        req.params.categoryId,
-        // same as { $set: {...}}
-        {
+router.post(
+    '/api/add_category', 
+    isLoggedIn, 
+    isAdmin, 
+    function _addCategory(req, res) {
+    
+        const category = new Category({
             name: req.body.formData.name,
             url: req.body.formData.url,
             position: req.body.formData.position
-        },
-        function(error, category) {
-            if (error) { throw error; }
-            res.status(200).end();
-        }
-    );
+        });
+        category.save(function(err, category) {
+            res.json(category);
+        });
 });
+
+// update_category
+router.post(
+    '/api/update_category/:categoryId',
+    isLoggedIn,
+    isAdmin,
+    function updateCategory(req, res) {
+        
+        Category.findByIdAndUpdate(
+            req.params.categoryId,
+            // same as { $set: {...}}
+            {
+                name: req.body.formData.name,
+                url: req.body.formData.url,
+                position: req.body.formData.position
+            },
+            function(error, category) {
+                if (error) { throw error; }
+                res.status(200).end();
+            }
+        );
+});
+
+// delete_category
+router.delete(
+    '/api/delete_category/:categoryId', 
+    isLoggedIn, 
+    isAdmin, 
+    function _deleteCategory(req, res) {
+        
+        Category.findByIdAndRemove(
+            req.params.categoryId,
+            function(err, category) {
+                if (err) { throw err; }
+                res.status(200).end();
+            }
+        );
+});
+
+// new_drawing
+router.post(
+    '/api/new_drawing', 
+    isLoggedIn,
+    isAdmin,
+    upload.single('picture'), 
+    function _newDrawing (req, res) {
+        
+        Category
+            .findOne({ name: req.body.category })
+            .exec(function (err, category) {
+                if (err) { throw err; }
+                const drawing = new Drawing({
+                    title: req.body.title,
+                    author: req.user.username,
+                    description: req.body.description,
+                    category: category._id,
+                    drawing_composition: req.body.drawing_composition ?
+                        req.body.drawing_composition.split(',') : [],
+                    tags: req.body.tags ?
+                        req.body.tags.split(',') : [],
+                    price: req.body.price,
+                    picture: req.file ? req.file.filename : ''
+                });
+                drawing.save(function (err, drawing) {
+                    if (err) { throw err; }
+                    res.json(drawing);
+                });
+            });
+});
+
+// delete_drawing
+router.delete(
+    '/api/delete_drawing/:drawingId', 
+    isLoggedIn,
+    isAdmin,
+    function _deleteDrawing(req, res) {
+        
+        Drawing.findByIdAndRemove(
+            req.params.drawingId,
+            function(err, drawing) {
+                if (err) { throw err; }
+                const picPath = path.join(
+                    process.cwd(),
+                    '/public/pics/',
+                    drawing.picture
+                );
+                fs.unlink(picPath, function (err) {
+                    if (err) {
+                        console.error("Error unlinking file", err);
+                        return res.status(206).end('Error unlinking file');
+                    }
+                    res.status(200).end();
+                });
+            }
+        );
+});
+
 
 module.exports = router
