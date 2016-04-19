@@ -362,7 +362,6 @@ describe("apiRouter", function () {
                 .expect(200, function(err, res) {
                     if (err) { throw err; }
                     recentCategoryId = res.body._id;
-                    console.log(recentCategoryId);
                     done();
                 });
         });
@@ -420,11 +419,17 @@ describe("apiRouter", function () {
                 .expect(200, function(err, res) {
                     if (err) { throw err; }
                     recentCategoryId = res.body._id;
-                    console.log(recentCategoryId);
                     done();
                 });
         });
         
+        afterEach(function (done) {
+            if (recentCategoryId) {
+                Category.findOneAndRemove({ _id: recentCategoryId }, done)
+            } else {
+                done()
+            }
+        });
         
         it('returns 200 on success', function (done) {
             server
@@ -438,14 +443,17 @@ describe("apiRouter", function () {
                 .expect(404, done);
         });
         
-        it('no records left in database', function (done) {
+        it('no category left in database', function (done) {
             server
                 .delete(path.join('/api/delete_category', recentCategoryId))
                 .expect(200, function(err, res) {
-                    expect(
-                        Category.find({ _id: recentCategoryId }).count()
-                    ).toBe(0);
-                    done();
+                    if (err) { throw err; }
+                    Category.find({ _id: recentCategoryId }, function (err, data) {
+                        if (err) { throw err; }
+                        expect(data.length).toBe(0);
+                        done();
+                    });
+
                 });
         });
         
