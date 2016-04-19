@@ -41,7 +41,7 @@ describe("apiCtrl", function () {
 
     }); // describe
 
-    describe('.newDrawing', function () {
+    describe('.newDrawing (admin)', function () {
         let lastDrawingId;
         this.timeout(5000);
 
@@ -168,8 +168,8 @@ describe("apiCtrl", function () {
         }); // it
 
     }); // describe
-
-    describe('.deleteDrawing', function _describeDeleteDrawing () {
+    
+    describe('.deleteDrawing (admin)', function _describeDeleteDrawing () {
         let lastDrawingId;
         let lastDrawingPicture;
         this.timeout(5000);
@@ -238,12 +238,69 @@ describe("apiCtrl", function () {
         }); // it
     }); // describe
 
-    // describe('.newDrawing (admin rights)', function () {
+     describe('Not admin', function () {
         
-    //     it('returns 403 Forbidden if user not admin', function () {
+        this.timeout(5000);
+        
+        before(function(done) {
+            const user = {
+                username: 'test',
+                password: '123'
+            }
+            server
+                .post('/signup')
+                .send(user)
+                .expect(200, done);
+        });
+        
+        after(function (done) {
+            User.findOneAndRemove({username: 'test'}, done);
+        });
+        
+        it('post to /api/new_drawing responds with 403 Forbidden', function (done) {
+            server
+                .post('/api/new_drawing')
+                .set('Content-Type', 'multipart/form-data')
+                .field('title', 'Drawing for testing')
+                .field('category', 'Промышленность')
+                .field('description', 'Testing description')
+                .attach('picture', __dirname + '/../testpic.jpg')
+                .expect(403, done);
+        });
+        
+        
+        it('post to /api/add_category responds with 403 Forbidden', function (done) {
+            server
+                .post('/api/add_category')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .send({foo: 'bar'})
+                .expect(403, done);
+        });
+        
+        it('post to /api/update_category/:categoryId responds with 403 Forbidden', function (done) {
+            server
+                .post('/api/update_category/id123')
+                .send({foo: 'bar'})
+                .expect(403, done);
+        });
+        
+        it('delete to /api/delete_category/:categoryId responds with 403 Forbidden', function (done) {
+            server
+                .delete('/api/delete_category/id123')
+                .send({foo: 'bar'})
+                .expect(403, done);
+        });
+        
+        
+        it('delete to /api/delete_drawing/:drawingId responds with 403 Forbidden', function (done) {
+            server
+                .delete('/api/delete_drawing/:id123')
+                .send({foo: 'bar'})
+                .expect(403, done);
+        });
+        
+        
 
-    //     });
-
-    // });
-
+    }); // describe
 });
