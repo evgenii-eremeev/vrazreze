@@ -8,6 +8,9 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var Category = require('./server/models/category');
 var quickthumb = require('quickthumb');
+var session = require('express-session');
+
+var MongoStore = require('connect-mongo')(session);
 
 var routes = require('./server/routes');
 
@@ -34,6 +37,12 @@ if (process.env.NODE_ENV !== 'production') {
     })();
 }
 
+// passport config
+var User = require('./server/models/user');
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 
 // mongoose
 mongoose.connect('mongodb://localhost:27017/vrazreze');
@@ -41,8 +50,9 @@ mongoose.connect('mongodb://localhost:27017/vrazreze');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(require('express-session')({
+app.use(session({
     secret: 'keyboard cat',
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
     resave: false,
     saveUninitialized: true
 }));
@@ -51,12 +61,6 @@ app.use(passport.session());
 app.use(quickthumb.static(process.cwd() + '/public'));
 
 app.use('/', routes);
-
-// passport config
-var User = require('./server/models/user');
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
 
 
 app.listen(app.get('port'), function () {
