@@ -34,13 +34,17 @@ if (process.env.NODE_ENV !== 'production') {
     })();
 }
 
+
+// mongoose
+mongoose.connect('mongodb://localhost:27017/vrazreze');
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(require('express-session')({
     secret: 'keyboard cat',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: true
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -54,8 +58,6 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// mongoose
-mongoose.connect('mongodb://localhost:27017/vrazreze');
 
 app.listen(app.get('port'), function () {
     console.log("Express server running at http://localhost:" + app.get('port'));

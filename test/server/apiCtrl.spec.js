@@ -20,7 +20,7 @@ describe("apiCtrl", function () {
                 .expect(200, done);
         });
 
-    });
+    }); // describe
 
     describe('.category', function () {
 
@@ -39,7 +39,7 @@ describe("apiCtrl", function () {
                 .expect(404, done);
         });
 
-    });
+    }); // describe
 
     describe('.newDrawing', function () {
         let lastDrawingId;
@@ -161,7 +161,6 @@ describe("apiCtrl", function () {
 
     }); // describe
 
-
     describe('.deleteDrawing', function _describeDeleteDrawing () {
         let lastDrawingId;
         let lastDrawingPicture;
@@ -223,5 +222,12 @@ describe("apiCtrl", function () {
         }); // it
     }); // describe
 
+    // describe('.newDrawing (admin rights)', function () {
+        
+    //     it('returns 403 Forbidden if user not admin', function () {
+
+    //     });
+
+    // });
 
 });

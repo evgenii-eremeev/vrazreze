@@ -1,64 +1,26 @@
-var express = require('express');
-var passport = require('passport');
-var router = express.Router();
+"use strict";
+
+const express = require('express');
+const passport = require('passport');
+const router = express.Router();
 
 // import routes
-var newDrawingRouter = require('./newDrawingRouter');
+const apiRouter = require('./apiRouter');
+const authRouter = require('./authRouter');
 
 // import controllers
-var authCtrl = require('../controllers/authCtrl');
-var apiCtrl = require('../controllers/apiCtrl');
-var mailCtrl = require('../controllers/mailCtrl');
+const mailCtrl = require('../controllers/mailCtrl');
 
+router.use('/', authRouter);
 
-// check_session
-router.post('/check_session', authCtrl.checkSession);
-
-// signup
-router.post('/signup', authCtrl.userExists, authCtrl.signup);
-
-// login
-router.post('/login',
-            passport.authenticate('local'),
-            function(req, res) {
-                console.log(req.user.username + " is logged in");
-                res.json(req.user);
-});
-
-// logout
-router.post('/logout', function(req, res) {
-    req.logout();
-    res.send("Logout successfully!")
-});
-
-// API
-// categories
-router.get('/api/categories', apiCtrl.categories);
-
-// category:url
-router.get('/api/category/:url', apiCtrl.category);
-
-// add_category
-router.post('/api/add_category', apiCtrl.addCategory);
-
-// delete_category
-router.delete('/api/delete_category/:categoryId', apiCtrl.deleteCategory);
-
-// new_drawing (post)
-router.use('/api/new_drawing', newDrawingRouter);
-
-// delete_drawing
-router.delete('/api/delete_drawing/:drawingId', apiCtrl.deleteDrawing);
-
-// update_category
-router.post('/api/update_category/:categoryId', apiCtrl.updateCategory);
+router.use('/', apiRouter);
 
 // MAIL
 // sendOrder
 router.post('/mail/order', mailCtrl.order);
 
 // 'any uri, because we use react-router'
-// Should be placed at the very end for the rest 'get' requests work
+// Should be placed at the very end for the rest 'get' requests to work
 router.get('*', function(req, res) {
     res.sendFile(process.cwd() + '/public/index.html');
 });
