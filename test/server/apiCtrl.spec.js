@@ -8,9 +8,9 @@ const User = require('../../server/models/user');
 const server = supertest.agent("http://localhost:5000");
 mongoose.connect('mongodb://localhost:27017/vrazreze');
 
-describe("apiCtrl", function () {
+describe("apiRouter", function () {
 
-    describe('.categories', function () {
+    describe('/api/categories', function () {
 
         it('returns 200 and json object', function (done) {
             server
@@ -22,7 +22,7 @@ describe("apiCtrl", function () {
 
     }); // describe
 
-    describe('.category', function () {
+    describe('/api/category/:categoryId', function () {
 
         it('returns 200 and json object', function (done) {
             server
@@ -41,7 +41,7 @@ describe("apiCtrl", function () {
 
     }); // describe
 
-    describe('.newDrawing (admin)', function () {
+    describe('/api/delete_drawing/:drawingId (admin)', function () {
         let lastDrawingId;
         this.timeout(5000);
 
@@ -169,7 +169,7 @@ describe("apiCtrl", function () {
 
     }); // describe
     
-    describe('.deleteDrawing (admin)', function _describeDeleteDrawing () {
+    describe('/api/new_drawing (admin)', function _describeDeleteDrawing () {
         let lastDrawingId;
         let lastDrawingPicture;
         this.timeout(5000);
@@ -238,7 +238,7 @@ describe("apiCtrl", function () {
         }); // it
     }); // describe
 
-     describe('Not admin', function () {
+    describe('Not admin', function () {
         
         this.timeout(5000);
         
@@ -303,4 +303,10 @@ describe("apiCtrl", function () {
         
 
     }); // describe
+    
+    describe('/api/update_category/:categoryId', function () {
+        // TODO
+    });
+    
+    
 });
