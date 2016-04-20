@@ -6,7 +6,7 @@ import { removeFromTheCart, clearTheCart } from '../actions/cartActions';
 
 const Cart = React.createClass({
     render () {
-        const { dispatch, cart } = this.props;
+        const { dispatch, cart, userAuthSession } = this.props;
         return (
             <div>
                 <h1 style={{textAlign: 'center'}}>Корзина</h1>
@@ -21,6 +21,7 @@ const Cart = React.createClass({
                                 <th style={{ textAlign: 'center'}}>Удалить</th>
                             </tr>
                         </thead>
+                        
                         <tbody>
                             {cart.map((drawing, idx) => (
                                 <tr key={idx}>
@@ -53,7 +54,31 @@ const Cart = React.createClass({
                 <p><strong>Всего:</strong> {cart.reduce((accum, drawing) => (
                     accum + drawing.price
                 ), 0)} рублей</p>
-                <button className="btn btn-success">Оформить заказ</button>
+                <button
+                    className="btn btn-success pull-left"
+                    style={{display: 'block', margin: '12px 0', width: 200}}
+                    onClick={() => {
+                        fetch('/mail/order', {
+                            headers: {
+                              'Accept': 'application/json',
+                              'Content-Type': 'application/json'
+                            },
+                            method: 'POST',
+                            body: JSON.stringify({
+                                user: userAuthSession.userObject,
+                                cart
+                            })})
+                            .then(response => response.text())
+                            .then((text) => {
+                                alert(text)
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            })
+                    }}
+                    >
+                    Заказать
+                </button>
                 <button
                     className="btn btn-default pull-right"
                     style={{margin: '0 15px'}}
@@ -71,7 +96,8 @@ const Cart = React.createClass({
 
 function mapStateToProps(state) {
     return {
-        cart: state.cart
+        cart: state.cart,
+        userAuthSession: state.userAuthSession
     };
 }
 

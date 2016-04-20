@@ -29,33 +29,6 @@ const Drawing = ({
                     >
                     Добавить в корзину
                 </button>
-                <button
-                    className="btn btn-success"
-                    style={{display: 'block', margin: '12px 0', width: 200}}
-                    onClick={() => {
-                        fetch('/mail/order', {
-                            headers: {
-                              'Accept': 'application/json',
-                              'Content-Type': 'application/json'
-                            },
-                            method: 'POST',
-                            body: JSON.stringify({
-                                formData: {
-                                    user: userAuthSession.userObject,
-                                    drawing
-                                }
-                            })})
-                            .then(response => response.text())
-                            .then((text) => {
-                                alert(text)
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                            })
-                    }}
-                    >
-                    Заказать
-                </button>
                 <p><strong>Цена: </strong>{drawing.price} рублей</p>
             </div>
             <div style={{padding: '0 50'}}>
