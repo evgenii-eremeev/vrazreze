@@ -12,8 +12,6 @@ var session = require('express-session');
 
 var MongoStore = require('connect-mongo')(session);
 
-var routes = require('./server/routes');
-
 var app = express();
 app.set('port', (process.env.PORT || 5000));
 require('dotenv').load();
@@ -60,7 +58,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(quickthumb.static(process.cwd() + '/public'));
 
-app.use('/', routes);
+require('./server/routes')(app);
+
+// 'any uri, because we use react-router'
+// Should be placed at the very end for the rest 'get' requests to work
+app.get('*', function(req, res) {
+    res.sendFile(process.cwd() + '/public/index.html');
+});
 
 
 app.listen(app.get('port'), function () {
