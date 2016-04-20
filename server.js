@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var Category = require('./server/models/category');
 var quickthumb = require('quickthumb');
 var session = require('express-session');
 
