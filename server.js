@@ -1,16 +1,16 @@
 'use strict';
 
-var express = require("express");
-var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
-var mongoose = require('mongoose');
-var passport = require('passport');
-var quickthumb = require('quickthumb');
-var session = require('express-session');
+const express = require("express");
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const mongoose = require('mongoose');
+const passport = require('passport');
+const quickthumb = require('quickthumb');
+const session = require('express-session');
 
-var MongoStore = require('connect-mongo')(session);
+const MongoStore = require('connect-mongo')(session);
 
-var app = express();
+const app = express();
 app.set('port', (process.env.PORT || 5000));
 require('dotenv').load();
 
