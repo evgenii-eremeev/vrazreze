@@ -4,13 +4,11 @@ const fs = require('fs');
 const path = require('path');
 const supertest = require('supertest');
 const expect = require('expect');
-const mongoose = require('mongoose');
 
 const User = require('../../server/models/user');
 const Category = require('../../server/models/category');
 
 const server = supertest.agent("http://localhost:5000");
-mongoose.connect('mongodb://localhost:27017/vrazreze');
 
 function createSuperUser(done) {
     const user = {
@@ -79,7 +77,7 @@ describe("apiRouter", function () {
 
         afterEach(function (done) {
             server
-                .delete('/api/delete_drawing/' + lastDrawingId)
+                .del('/api/delete_drawing/' + lastDrawingId)
                 .expect(200, done);
         });
 
@@ -204,13 +202,13 @@ describe("apiRouter", function () {
 
         it('returns 200 on successfull deleting', function _it (done) {
             server
-                .delete(path.join('/api/delete_drawing/', lastDrawingId))
+                .del(path.join('/api/delete_drawing/', lastDrawingId))
                 .expect(200, done);
         }); // it
 
         it('deletes picture from filesystem', function _it (done) {
             server
-                .delete(path.join('/api/delete_drawing/', lastDrawingId))
+                .del(path.join('/api/delete_drawing/', lastDrawingId))
                 .expect(200, function _expect (err, res) {
                     if (err) { throw err; }
                     const pathToPic = path.join(
@@ -273,7 +271,7 @@ describe("apiRouter", function () {
         
         it('delete to /api/delete_category/:categoryId responds with 403 Forbidden', function (done) {
             server
-                .delete('/api/delete_category/id123')
+                .del('/api/delete_category/id123')
                 .send({foo: 'bar'})
                 .expect(403, done);
         });
@@ -281,7 +279,7 @@ describe("apiRouter", function () {
         
         it('delete to /api/delete_drawing/:drawingId responds with 403 Forbidden', function (done) {
             server
-                .delete('/api/delete_drawing/:id123')
+                .del('/api/delete_drawing/:id123')
                 .send({foo: 'bar'})
                 .expect(403, done);
         });
@@ -433,19 +431,19 @@ describe("apiRouter", function () {
         
         it('returns 200 on success', function (done) {
             server
-                .delete(path.join('/api/delete_category', recentCategoryId))
+                .del(path.join('/api/delete_category', recentCategoryId))
                 .expect(200, done);
         });
         
         it('returns 404 on failure', function (done) {
             server
-                .delete(path.join('/api/delete_category', '123')) 
+                .del(path.join('/api/delete_category', '123')) 
                 .expect(404, done);
         });
         
         it('no category left in database', function (done) {
             server
-                .delete(path.join('/api/delete_category', recentCategoryId))
+                .del(path.join('/api/delete_category', recentCategoryId))
                 .expect(200, function(err, res) {
                     if (err) { throw err; }
                     Category.find({ _id: recentCategoryId }, function (err, data) {

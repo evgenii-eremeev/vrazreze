@@ -16,18 +16,17 @@ router.post('/check_session', function _checkSession (req, res) {
             userObject: req.user
         });
     }
-    return res.json({isLoggedIn: isLoggedIn});
+    return res.json({ isLoggedIn: isLoggedIn });
 });
 
 // signup
-router.post('/signup', userExists, function signup (req, res) {
+router.post('/signup', userExists, function _signup (req, res) {
     User.register(
         new User({ username: req.body.username }),
         req.body.password,
         function (err, action) {
             if (err) { throw err; }
             passport.authenticate('local')(req, res, function () {
-                console.log(req.user.username + " is registered");
                 res.json(req.user);
             });
         }
@@ -35,15 +34,15 @@ router.post('/signup', userExists, function signup (req, res) {
 });
 
 // login
-router.post('/login',
-            passport.authenticate('local'),
-            function(req, res) {
-    console.log(req.user.username + " is logged in");
-    res.json(req.user);
+router.post(
+    '/login',
+    passport.authenticate('local'),
+    function _login (req, res) {
+        res.json(req.user);
 });
 
 // logout
-router.post('/logout', function(req, res) {
+router.post('/logout', function _logout (req, res) {
     req.logout();
     res.send("Logout successfully!")
 });
