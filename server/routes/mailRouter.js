@@ -13,7 +13,6 @@ module.exports = function _moduleExports(app) {
         sendOrder(req.body.user, req.body.cart)
             .then(info => {
                 console.log('Order is sent');
-                console.log('sendOrder', info)
                 res.status(200).end("Запрос отправлен");
             })
             .catch(error => {
