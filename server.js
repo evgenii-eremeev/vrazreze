@@ -5,7 +5,6 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var mongoose = require('mongoose');
 var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
 var quickthumb = require('quickthumb');
 var session = require('express-session');
 
@@ -35,11 +34,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // passport config
-var User = require('./server/models/user');
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-
+require('./server/config/passport')(passport);
 
 // mongoose
 mongoose.connect('mongodb://localhost:27017/vrazreze');
