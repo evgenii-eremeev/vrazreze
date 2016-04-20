@@ -1,6 +1,11 @@
+// sendOrder
+
+const express = require('express');
+const router = express.Router();
+
 const sendOrder = require('../mail/sendOrder');
 
-exports.order = function (req, res) {
+router.post('/mail/order', function (req, res) {
     const formData = req.body.formData;
     if (!formData.user) {
         return res.status(400).end("User not specified");
@@ -15,4 +20,6 @@ exports.order = function (req, res) {
             console.log('Error on sending order:', error);
             res.end('Что-то пошло не так, попробуйте снова');
         })
-}
+});
+
+module.exports = router;
