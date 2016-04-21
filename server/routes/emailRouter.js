@@ -1,6 +1,6 @@
 "use strict";
 
-const sendOrder = require('../mail/sendOrder');
+const sendOrder = require('../email/sendOrder');
 
 module.exports = function _moduleExports(app) {
     
