@@ -1,0 +1,18 @@
+h1 {
+  text-align: center;
+  color: grey;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table, th, td {
+    border: 1px solid grey;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}

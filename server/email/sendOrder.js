@@ -15,7 +15,7 @@ function sendOrder(user, cart) {
         user: user,
         cart: cart
     };
-    
+
     // return a Promise object which resolves to nodemailer 'info' object
     // info.accepted, info.rejected, info.response, info.envelope, info.messageId
     // will be resoled in mailRouter
@@ -27,12 +27,12 @@ function sendOrder(user, cart) {
                 return transporter.sendMail({
                     from: `вразрезе.рф <${process.env.MAIL_ADDRESS}>`,
                     to: 'e.i.eremeev@gmail.com',
-                    subject: 'Пробный заказ!',
+                    subject: results.subject,
                     html: results.html
                 })
             })
     ); // return
-        
+
 } // sendOrder
 
 module.exports = sendOrder;

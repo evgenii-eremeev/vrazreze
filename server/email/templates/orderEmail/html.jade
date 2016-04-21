@@ -1,3 +1,15 @@
-h1 First try!
-p User: #{user.username}
-p Items in cart: #{cart.length}
+h1 Заказ
+table
+  thead
+    tr
+      th Цена
+      th Наименование
+      th Ссылка
+  tbody
+    each drawing in cart
+      tr 
+        td= drawing.price
+        td= drawing.title
+        td /ссылка/
+
+p Ответить: #{user.username}

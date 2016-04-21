@@ -1,12 +1,35 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import fetch from 'isomorphic-fetch';
 
 import { removeFromTheCart, clearTheCart } from '../actions/cartActions';
 
 const Cart = React.createClass({
+
+    onOrderClickHandler () {
+        const { userAuthSession, cart } = this.props;
+        fetch('/mail/order', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                user: userAuthSession.userObject,
+                cart
+            })})
+            .then(response => response.text())
+            .then((text) => {
+                alert(text)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    },
+
     render () {
-        const { dispatch, cart, userAuthSession } = this.props;
+        const { dispatch, cart } = this.props;
         return (
             <div>
                 <h1 style={{textAlign: 'center'}}>Корзина</h1>
@@ -21,7 +44,7 @@ const Cart = React.createClass({
                                 <th style={{ textAlign: 'center'}}>Удалить</th>
                             </tr>
                         </thead>
-                        
+
                         <tbody>
                             {cart.map((drawing, idx) => (
                                 <tr key={idx}>
@@ -58,23 +81,11 @@ const Cart = React.createClass({
                     className="btn btn-success pull-left"
                     style={{display: 'block', margin: '12px 0', width: 200}}
                     onClick={() => {
-                        fetch('/mail/order', {
-                            headers: {
-                              'Accept': 'application/json',
-                              'Content-Type': 'application/json'
-                            },
-                            method: 'POST',
-                            body: JSON.stringify({
-                                user: userAuthSession.userObject,
-                                cart
-                            })})
-                            .then(response => response.text())
-                            .then((text) => {
-                                alert(text)
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                            })
+                        if (cart.length > 0) {
+                            this.onOrderClickHandler()
+                        } else {
+                            alert('Корзина пуста');
+                        }
                     }}
                     >
                     Заказать
