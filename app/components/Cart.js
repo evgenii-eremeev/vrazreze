@@ -73,7 +73,8 @@ const Cart = React.createClass({
                             <Col sm={5}>
                                 <p>{ drawing.description }</p>
                             </Col>
-                            <Clearfix visibleXsBlock><p></p></Clearfix>
+                            {/* clearfix */}
+                            <br style={{clear: 'both'}} />
                             <Col sm={2} xs={6}>
                                 <strong>{ drawing.price } руб.</strong>
                             </Col>
