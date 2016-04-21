@@ -57,7 +57,7 @@ const Cart = React.createClass({
                                 </h4>
                             </Col>
 
-                            <Col sm={3} xs={4}>
+                            <Col sm={3}>
                                 {/* don't show empty picture */}
                                 {drawing.picture ?
                                     <img
@@ -65,17 +65,21 @@ const Cart = React.createClass({
                                         alt={"drawing picture " + drawing.title}
                                         style={{
                                             borderRadius: 5,
-                                            marginBottom: 10
+                                            float: 'left',
+                                            margin: "0 10px 10px 0"
                                         }}
                                         /> : ""}
                             </Col>
-                            <Col sm={5} xs={6}>{ drawing.description }</Col>
-                            <Col sm={2} xs={2}>
+                            <Col sm={5}>
+                                <p>{ drawing.description }</p>
+                            </Col>
+                            <Clearfix visibleXsBlock></Clearfix>
+                            <Col sm={2} xs={6}>
                                 <strong>{ drawing.price } руб.</strong>
                             </Col>
-                            <Col sm={2} xs={12}>
+                            <Col sm={2} xs={6}>
                                 <button
-                                    className="btn btn-sm btn-danger"
+                                    className="btn btn-sm btn-danger pull-right"
                                     onClick={() => (
                                         dispatch(removeFromTheCart(idx))
                                     )}
