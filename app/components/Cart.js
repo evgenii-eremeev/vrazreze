@@ -105,9 +105,7 @@ const Cart = React.createClass({
                     >
                     Заказать
                 </button>
-
             </div>
-
         );
     }
 });
