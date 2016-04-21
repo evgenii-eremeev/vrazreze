@@ -35,5 +35,4 @@ function sendOrder(user, cart) {
         
 } // sendOrder
 
-
 module.exports = sendOrder;
