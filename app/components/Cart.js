@@ -57,7 +57,7 @@ const Cart = React.createClass({
                                 </h4>
                             </Col>
 
-                            <Col sm={3}>
+                            <Col sm={3} xs={4}>
                                 {/* don't show empty picture */}
                                 {drawing.picture ?
                                     <img
@@ -70,7 +70,7 @@ const Cart = React.createClass({
                                         }}
                                         /> : ""}
                             </Col>
-                            <Col sm={5}>
+                            <Col sm={5} xs={8}>
                                 <p>{ drawing.description }</p>
                             </Col>
                             <Clearfix visibleXsBlock></Clearfix>
