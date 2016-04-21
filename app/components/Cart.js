@@ -57,7 +57,7 @@ const Cart = React.createClass({
                                 </h4>
                             </Col>
 
-                            <Col sm={3} xs={4}>
+                            <Col sm={3}>
                                 {/* don't show empty picture */}
                                 {drawing.picture ?
                                     <img
@@ -65,17 +65,21 @@ const Cart = React.createClass({
                                         alt={"drawing picture " + drawing.title}
                                         style={{
                                             borderRadius: 5,
-                                            marginBottom: 10
+                                            float: 'left',
+                                            margin: "0 10px 10px 0"
                                         }}
                                         /> : ""}
                             </Col>
-                            <Col sm={5} xs={6}>{ drawing.description }</Col>
-                            <Col sm={2} xs={2}>
-                                <strong>{ drawing.price } руб.</strong>
+                            <Col sm={5}>
+                                <p>{ drawing.description }</p>
                             </Col>
-                            <Col sm={2} xs={12}>
+                            <Clearfix visibleXsBlock />
+                            <Col sm={2} xs={6}>
+                                <strong style={{fontSize: 18}}>{ drawing.price } руб.</strong>
+                            </Col>
+                            <Col sm={2} xs={6}>
                                 <button
-                                    className="btn btn-sm btn-danger"
+                                    className="btn btn-danger pull-right"
                                     onClick={() => (
                                         dispatch(removeFromTheCart(idx))
                                     )}
@@ -87,9 +91,9 @@ const Cart = React.createClass({
                     ))}
                 </Grid>
                 <hr />
-                <p><strong>Всего:</strong> { sumBy(cart, 'price') } рублей</p>
+                <p style={{fontSize: 18}}><strong>Всего:</strong> { sumBy(cart, 'price') } рублей</p>
                 <button
-                    className="btn btn-success pull-left"
+                    className="btn btn-success btn-lg pull-left"
                     style={{display: 'block', margin: '12px 0 60px 0', width: 200}}
                     onClick={() => {
                         if (cart.length > 0) {
