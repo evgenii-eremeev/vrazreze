@@ -1,30 +1,12 @@
 'use strict';
 
 const path = require('path');
-const nodemailer = require('nodemailer');
 const EmailTemplate = require('email-templates').EmailTemplate
-
-// load auth data
-require('dotenv').load();
-
-// config smtp
-const smtpConfig = {
-    host: 'smtp.yandex.ru',
-    port: 465,
-    secure: true, // use SSL
-    auth: {
-        user: process.env.MAIL_ADDRESS, // edit in .env file
-        pass: process.env.MAIL_PASSWORD
-    }
-};
-
-// create reusable transporter object using the default SMTP transport
-const transporter = nodemailer.createTransport(smtpConfig);
+const transporter = require('./transporter');
 
 // create orderEmail template
 const templateDir = path.join(__dirname, 'templates', 'orderEmail');
 const orderEmail = new EmailTemplate(templateDir);
-
 
 function sendOrder(user, cart) {
     // locals is the container for variables that could be used in template
