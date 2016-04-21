@@ -1,7 +1,8 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { Grid, Row, Col, Clearfix } from 'react-bootstrap';
 import fetch from 'isomorphic-fetch';
+import { sumBy } from 'lodash';
 
 import { removeFromTheCart, clearTheCart } from '../actions/cartActions';
 
@@ -32,54 +33,64 @@ const Cart = React.createClass({
         const { dispatch, cart } = this.props;
         return (
             <div>
-                <h1 style={{textAlign: 'center'}}>Корзина</h1>
-                <div className="table-responsive">
-                    <table className="table table-hover table-responsive">
-                        <thead>
-                            <tr>
-                                <th>Цена</th>
-                                <th>Изображение</th>
-                                <th>Наименование</th>
-                                <th>Описание</th>
-                                <th style={{ textAlign: 'center'}}>Удалить</th>
-                            </tr>
-                        </thead>
+                <h1 style={{textAlign: 'center', marginBottom: 20}}>
+                    Корзина
+                </h1>
+                <Grid fluid={true}>
+                    {cart.map((drawing, idx) => (
+                        <Row
+                            key={idx}
+                            style={{
+                                marginBottom: 10,
+                                padding: "10px 0",
+                                border: "1px solid #aaa",
+                                borderRadius: 7,
+                                boxShadow: "5px 5px 7px #ccc"
+                            }}
+                            >
+                            <Col sm={12} xs={12}>
+                                <h4 style={{
+                                        fontWeight: "bold",
+                                        padding: "10px 0"
+                                    }}>
+                                    { drawing.title }
+                                </h4>
+                            </Col>
 
-                        <tbody>
-                            {cart.map((drawing, idx) => (
-                                <tr key={idx}>
-                                    <td>{ drawing.price }</td>
-                                    {/* don't show empty picture */}
-                                    <td>
-                                        {drawing.picture ?
-                                            <img
-                                                src={`/pics/${drawing.picture}?dim=100x100`}
-                                                alt={"drawing picture " + drawing.title}
-                                                /> : ""}
-                                    </td>
-                                    <td>{drawing.title}</td>
-                                    <td>{ drawing.description }</td>
-                                    <td style={{ textAlign: 'center'}}>
-                                        <button
-                                            className="btn btn-sm btn-danger"
-                                            onClick={() => (
-                                                dispatch(removeFromTheCart(idx))
-                                            )}
-                                            >
-                                            Удалить
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-                <p><strong>Всего:</strong> {cart.reduce((accum, drawing) => (
-                    accum + drawing.price
-                ), 0)} рублей</p>
+                            <Col sm={3} xs={4}>
+                                {/* don't show empty picture */}
+                                {drawing.picture ?
+                                    <img
+                                        src={`/pics/${drawing.picture}?dim=90x90`}
+                                        alt={"drawing picture " + drawing.title}
+                                        style={{
+                                            borderRadius: 5,
+                                            marginBottom: 10
+                                        }}
+                                        /> : ""}
+                            </Col>
+                            <Col sm={5} xs={6}>{ drawing.description }</Col>
+                            <Col sm={2} xs={2}>
+                                <strong>{ drawing.price } руб.</strong>
+                            </Col>
+                            <Col sm={2} xs={12}>
+                                <button
+                                    className="btn btn-sm btn-danger"
+                                    onClick={() => (
+                                        dispatch(removeFromTheCart(idx))
+                                    )}
+                                    >
+                                    Удалить
+                                </button>
+                            </Col>
+                        </Row>
+                    ))}
+                </Grid>
+                <hr />
+                <p><strong>Всего:</strong> { sumBy(cart, 'price') } рублей</p>
                 <button
                     className="btn btn-success pull-left"
-                    style={{display: 'block', margin: '12px 0', width: 200}}
+                    style={{display: 'block', margin: '12px 0 60px 0', width: 200}}
                     onClick={() => {
                         if (cart.length > 0) {
                             this.onOrderClickHandler()
@@ -90,15 +101,7 @@ const Cart = React.createClass({
                     >
                     Заказать
                 </button>
-                <button
-                    className="btn btn-default pull-right"
-                    style={{margin: '0 15px'}}
-                    onClick={() => (
-                        dispatch(clearTheCart())
-                    )}
-                    >
-                    Очистить корзину
-                </button>
+
             </div>
 
         );

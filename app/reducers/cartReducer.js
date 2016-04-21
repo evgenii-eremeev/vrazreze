@@ -1,4 +1,4 @@
-import { uniq } from 'lodash';
+import { uniqBy } from 'lodash';
 
 import {
     ADD_TO_CART, CLEAR_THE_CART, REMOVE_FROM_THE_CART
@@ -8,7 +8,7 @@ function cartReducer(state = [], action) {
     switch (action.type) {
 
         case ADD_TO_CART:
-            return uniq([...state, action.item])
+            return uniqBy([...state, action.item], '_id')
 
         case CLEAR_THE_CART:
             return [];

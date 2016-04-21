@@ -5,11 +5,14 @@ import { addToCart } from '../../actions/cartActions';
 
 const Drawing = ({
     drawing,
-    dispatch,
-    userAuthSession
+    dispatch
 }) => {
     return (
-        <div id={ drawing._id } className="well" style={{paddingTop: 0, paddingBottom: 0, overflow: 'auto'}}>
+        <div
+            id={ drawing._id }
+            className="well"
+            style={{paddingTop: 0, paddingBottom: 0, overflow: 'auto'}}
+            >
             <div className="pull-left" style={{ margin: '25px 20px 15px 0' }}>
                 {/* show placeholer if picture does't exist */}
                 <img
@@ -29,6 +32,7 @@ const Drawing = ({
                     >
                     Добавить в корзину
                 </button>
+
                 <p><strong>Цена: </strong>{drawing.price} рублей</p>
             </div>
             <div style={{padding: '0 50'}}>
@@ -40,10 +44,5 @@ const Drawing = ({
     );
 };
 
-function mapStateToProps(state) {
-    return {
-        userAuthSession: state.userAuthSession,
-    };
-}
 
-export default connect(mapStateToProps)(Drawing);
+export default connect()(Drawing);
