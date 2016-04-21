@@ -27,6 +27,7 @@
     "express-session": "^1.13.0",
     "isomorphic-fetch": "^2.2.1",
     "jade": "^1.11.0",
+    "lodash": "^4.11.1",
     "mongoose": "^4.4.3",
     "multer": "^1.1.0",
     "nodemailer": "^2.3.0",
