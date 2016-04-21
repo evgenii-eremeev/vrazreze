@@ -1,6 +1,7 @@
 'use strict';
 
 const nodemailer = require('nodemailer');
+const htmlToText = require('nodemailer-html-to-text').htmlToText;
 
 // load auth data
 require('dotenv').load();
@@ -17,4 +18,9 @@ const smtpConfig = {
 };
 
 // create reusable transporter object using the default SMTP transport
-module.exports = nodemailer.createTransport(smtpConfig);
+const transporter = nodemailer.createTransport(smtpConfig);
+
+// attach htmlToText as a 'compile' handler for a nodemailer transport object
+transporter.use('compile', htmlToText());
+
+module.exports = transporter;
