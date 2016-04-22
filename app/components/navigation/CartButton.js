@@ -11,7 +11,7 @@ const CartButton = React.createClass({
     render () {
         return (
             <LinkContainer to='/cart'>
-                <NavItem eventKey={0}>
+                <NavItem eventKey={-1}>
                     Корзина <span className="badge">{this.props.cartLength}</span>
                 </NavItem>
             </LinkContainer>
