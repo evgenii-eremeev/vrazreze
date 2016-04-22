@@ -1,44 +1,32 @@
 import React, { PropTypes } from 'react';
 import { Nav, NavItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { connect } from 'react-redux';
 
-import { attemptLogout } from '../../actions/authActions';
 import AdminDropdown from './AdminDropdown';
 
-const NavRight = React.createClass({
+const CollapseMenu = React.createClass({
 
-    onLogoutClick () {
-        this.props.dispatch(attemptLogout());
+    propTypes: {
+        userAuthSession: PropTypes.object.isRequired,
+        onLogoutClick: PropTypes.func.isRequired
     },
 
     render () {
-        const { userAuthSession, cart } = this.props;
+        const { userAuthSession } = this.props;
         const { userObject } = userAuthSession;
-        const cartButton = (
-            cart.length ?
-                <LinkContainer to='/cart'>
-                    <NavItem eventKey={-1}>Корзина <span className="badge">{cart.length}</span></NavItem>
-                </LinkContainer>
-                :
-                ""
-        );
-        
         return (
             userAuthSession.isLoggedIn ?
                 <Nav pullRight>
                     { userObject.role === 'admin' ? <AdminDropdown /> : "" }
-                    { cartButton }
                     <NavItem eventKey={1}>
                         { userObject.username }
                     </NavItem>
-                    <NavItem eventKey={2} onClick={this.onLogoutClick}>
+                    <NavItem eventKey={2} onClick={this.props.onLogoutClick}>
                         Выйти
                     </NavItem>
                 </Nav>
                 :
                 <Nav pullRight>
-                    { cartButton }
                     <LinkContainer to='/login'>
                         <NavItem eventKey={1}>Вход</NavItem>
                     </LinkContainer>
@@ -50,11 +38,4 @@ const NavRight = React.createClass({
     }
 });
 
-function mapStateToProps(state) {
-    return {
-        userAuthSession: state.userAuthSession,
-        cart: state.cart
-    };
-}
-
-export default connect(mapStateToProps)(NavRight);
+export default CollapseMenu;
