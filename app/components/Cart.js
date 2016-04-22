@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col, Clearfix } from 'react-bootstrap';
 import fetch from 'isomorphic-fetch';
@@ -7,6 +7,12 @@ import { sumBy } from 'lodash';
 import { removeFromTheCart, clearTheCart } from '../actions/cartActions';
 
 const Cart = React.createClass({
+
+    propTypes: {
+        userAuthSession: PropTypes.object.isRequired,
+        cart: PropTypes.array.isRequired,
+        dispatch: PropTypes.func.isRequired
+    },
 
     onOrderClickHandler () {
         const { userAuthSession, cart } = this.props;
@@ -61,7 +67,7 @@ const Cart = React.createClass({
                                 {/* don't show empty picture */}
                                 {drawing.picture ?
                                     <img
-                                        src={`/pics/${drawing.picture}?dim=90x90`}
+                                        src={`/pics/${drawing.picture}?dim=150x150`}
                                         alt={"drawing picture " + drawing.title}
                                         style={{
                                             borderRadius: 5,

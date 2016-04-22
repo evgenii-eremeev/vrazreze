@@ -23,17 +23,22 @@ const Navigation = React.createClass({
 
     render () {
         const { cart } = this.props;
+        const cartButton = (
+            cart.length ?
+            <Nav>
+                <CartButton cartLength={cart.length}/>
+            </Nav> : ""
+        )
         return (
             <Navbar>
                 <Navbar.Header>
                     <Navbar.Brand>
                         <IndexLink to='/'>Чертежи</IndexLink>
                     </Navbar.Brand>
+
                     <Navbar.Toggle />
                 </Navbar.Header>
-                <Nav>
-                    {cart.length ? <CartButton cartLength={cart.length}/> : ""}
-                </Nav>
+                { cartButton }
                 <Navbar.Collapse>
                     <CollapseMenu
                         onLogoutClick={this.handleOnLogoutClick}

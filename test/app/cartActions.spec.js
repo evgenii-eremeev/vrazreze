@@ -18,37 +18,5 @@ describe('cartActions', function () {
         ).toEqual(stateAfter);
     });
 
-    it('does add to cart item', function () {
-        const stateBefore = [];
-        const stateAfter = [{a: 1, b: 2}];
-        const action = addToCart({a: 1, b: 2});
-        deepFreeze(stateBefore);
-
-        expect(
-            cartReducer(stateBefore, action)
-        ).toEqual(stateAfter);
-    });
-
-    it('does clear the cart', function () {
-        const stateBefore = [{a: 1, b: 2}];
-        const stateAfter = [];
-        const action = clearTheCart();
-        deepFreeze(stateBefore);
-
-        expect(
-            cartReducer(stateBefore, action)
-        ).toEqual(stateAfter);
-    });
-
-    it('does remove from the cart', function () {
-        const stateBefore = [{a: 1}, {b: 2}, {c: 3}, {d: 4}, {e: 5}];
-        const stateAfter = [{a: 1}, {b: 2}, {d: 4}, {e: 5}];
-        const action = removeFromTheCart(2);
-        deepFreeze(stateBefore);
-
-        expect(
-            cartReducer(stateBefore, action)
-        ).toEqual(stateAfter);
-    });
 
 });

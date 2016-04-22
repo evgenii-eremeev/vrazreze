@@ -5,6 +5,7 @@ import { fetchCategories } from '../actions/categoriesActions';
 import { checkSessionStatus } from '../actions/authActions';
 
 import Navigation from './navigation/Navigation';
+import Lightbox from './Lightbox';
 
 const App = React.createClass({
 
@@ -19,6 +20,7 @@ const App = React.createClass({
             <div>
                 <Navigation />
                 { this.props.children }
+                <Lightbox />
             </div>
         );
     }

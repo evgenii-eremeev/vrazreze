@@ -1,7 +1,9 @@
 import React, { PropTypes } from 'react';
+import { Thumbnail } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import { addToCart } from '../../actions/cartActions';
+import { showLightbox } from '../../actions/lightboxActions';
 
 const Drawing = ({
     drawing,
@@ -13,19 +15,28 @@ const Drawing = ({
             className="well"
             style={{paddingTop: 0, paddingBottom: 0, overflow: 'auto'}}
             >
-            <div className="pull-left" style={{ margin: '25px 20px 15px 0' }}>
-                {/* show placeholer if picture does't exist */}
-                <img
+            <h2 style={{
+                    textAlign: 'center',
+                    marginBottom: 20
+                }}>
+                {drawing.title}
+            </h2>
+            <div className="pull-left" style={{ marginRight: 20 }}>
+                <Thumbnail
+                    href="#"
                     src={drawing.picture ?
                         `/pics/${drawing.picture}?dim=200x200` :
                         'http://placehold.it/200x200'}
-                    style={{ border: '2px solid lightgrey', borderRadius: 5 }}
                     alt={'picture ' + drawing.title}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        dispatch(showLightbox(`/pics/${drawing.picture}`))
+                    }}
                     />
 
                 <button
                     className="btn btn-success"
-                    style={{display: 'block', margin: '12px 0', width: 200}}
+                    style={{display: 'block', margin: '12px 0', width: 210}}
                     onClick={() => (
                         dispatch(addToCart(drawing))
                     )}
@@ -35,8 +46,7 @@ const Drawing = ({
 
                 <p><strong>Цена: </strong>{drawing.price} рублей</p>
             </div>
-            <div style={{padding: '0 50'}}>
-                <h2>{drawing.title}</h2>
+            <div>
                 <p>{drawing.description}</p>
                 <p><strong>Состав: </strong>{drawing.drawing_composition}</p>
             </div>

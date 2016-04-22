@@ -19,7 +19,6 @@ const NewDrawing = React.createClass({
             contentType: false,
             processData: false,
             success: function (data) {
-                console.log(data);
                 form.reset();
                 dispatch(push('/categories'));
             },
