@@ -3,9 +3,12 @@ import { Thumbnail } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
+// actions
 import { addToCart } from '../../../actions/cartActions.js';
 import { showLightbox } from '../../../actions/lightboxActions.js';
 
+// styles
+import styles from './Drawing.css';
 
 const Drawing = React.createClass({
 
@@ -26,7 +29,11 @@ const Drawing = React.createClass({
                         textAlign: 'center',
                         marginBottom: 20
                     }}>
-                    <Link to={ "/drawing/" + drawing._id }>
+                    <Link
+                        to={ "/drawing/" + drawing._id }
+                        activeClassName={styles.linkClicked}
+                        className={styles.linkNotClicked}
+                        >
                         {drawing.title}
                     </Link>
                 </h2>

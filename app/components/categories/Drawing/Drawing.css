@@ -1,0 +1,15 @@
+/*Drawing styles*/
+
+.linkClicked {
+    pointer-events: none;
+    cursor: default;
+    color: #333333;
+}
+
+.linkNotClicked {
+    color: #333333;
+}
+
+.linkNotClicked:hover {
+    color: #555555;
+}

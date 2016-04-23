@@ -7,9 +7,9 @@ table
       th Ссылка
   tbody
     each drawing in cart
-      tr 
+      tr
         td= drawing.price
         td= drawing.title
-        td /ссылка/
+        td <a href="http://вразрезе.рф/drawing/#{drawing._id}"">Посмотреть</a>
 
 p Ответить: #{user.username}
