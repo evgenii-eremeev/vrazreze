@@ -17,11 +17,19 @@ module.exports = {
     },
 
     module: {
-        loaders: [{
-            test: /\.js$/,
-            exclude: /node_modules/,
-            loaders: ['babel-loader?presets[]=es2015&presets[]=react']
-        }]
+        loaders: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loaders: ['react-hot', 'babel-loader?presets[]=es2015&presets[]=react']
+            },
+            {
+                test: /\.css$/,
+                // css-loader responsible for css modules,
+                // modules quiry parameter we neet to be able to import css in javascript
+                loader: 'style-loader!css-loader?modules&localIdentName=[name]__[local]___[hash:base64:5]'
+            },
+        ]
     },
 
     plugins: [

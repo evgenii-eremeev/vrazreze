@@ -2,15 +2,19 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col, Clearfix } from 'react-bootstrap';
 import fetch from 'isomorphic-fetch';
+import styles from './Cart.css';
 import { sumBy } from 'lodash';
+import { Thumbnail } from 'react-bootstrap';
 
-import { removeFromTheCart, clearTheCart } from '../actions/cartActions';
+import { removeFromTheCart, clearTheCart } from '../../actions/cartActions';
+import { showLightbox } from '../../actions/lightboxActions.js';
 
 const Cart = React.createClass({
 
     propTypes: {
         userAuthSession: PropTypes.object.isRequired,
         cart: PropTypes.array.isRequired,
+        lightbox: PropTypes.object.isRequired,
         dispatch: PropTypes.func.isRequired
     },
 
@@ -39,40 +43,31 @@ const Cart = React.createClass({
         const { dispatch, cart } = this.props;
         return (
             <div>
-                <h1 style={{textAlign: 'center', marginBottom: 20}}>
+                <h1 className={styles.cartHeader}>
                     Корзина
                 </h1>
                 <Grid fluid={true}>
                     {cart.map((drawing, idx) => (
                         <Row
-                            key={idx}
-                            style={{
-                                marginBottom: 10,
-                                padding: "10px 0",
-                                border: "1px solid #aaa",
-                                borderRadius: 7,
-                                boxShadow: "5px 5px 7px #ccc"
-                            }}
+                            eventKey={idx}
+                            className={styles.item}
                             >
                             <Col sm={12} xs={12}>
-                                <h4 style={{
-                                        fontWeight: "bold",
-                                        padding: "10px 0"
-                                    }}>
+                                <h4 className={styles.itemHeader}>
                                     { drawing.title }
                                 </h4>
                             </Col>
 
                             <Col sm={3}>
-                                {/* don't show empty picture */}
                                 {drawing.picture ?
-                                    <img
-                                        src={`/pics/${drawing.picture}?dim=150x150`}
+                                    <Thumbnail
+                                        src={`/pics/${drawing.picture}?dim=200x200`}
                                         alt={"drawing picture " + drawing.title}
-                                        style={{
-                                            borderRadius: 5,
-                                            float: 'left',
-                                            margin: "0 10px 10px 0"
+                                        className={styles.picture}
+                                        onClick={() => {
+                                            dispatch(showLightbox(
+                                                `/pics/${drawing.picture}`
+                                            ))
                                         }}
                                         /> : ""}
                             </Col>
@@ -81,11 +76,7 @@ const Cart = React.createClass({
                             </Col>
                             <Clearfix visibleXsBlock></Clearfix>
                             <Col sm={2} xs={6}>
-                                <p style={{
-                                        fontSize: 16,
-                                        fontWeight: 'bold',
-                                        padding: "5px 0"
-                                    }}>
+                                <p className={styles.price}>
                                     { drawing.price } руб.
                                 </p>
                             </Col>
@@ -103,10 +94,11 @@ const Cart = React.createClass({
                     ))}
                 </Grid>
                 <hr />
-                <p style={{fontSize: 18}}><strong>Всего:</strong> { sumBy(cart, 'price') } рублей</p>
+                <p className={styles.font18}>
+                    <strong>Всего:</strong> { sumBy(cart, 'price') } рублей
+                </p>
                 <button
-                    className="btn btn-success btn-lg"
-                    style={{display: 'block', margin: '12px 0 60px 0', width: 200}}
+                    className={"btn btn-success btn-lg " + styles.orderButton}
                     onClick={() => {
                         if (cart.length > 0) {
                             this.onOrderClickHandler()
@@ -117,9 +109,7 @@ const Cart = React.createClass({
                     >
                     Заказать
                 </button>
-
             </div>
-
         );
     }
 });
@@ -127,7 +117,8 @@ const Cart = React.createClass({
 function mapStateToProps(state) {
     return {
         cart: state.cart,
-        userAuthSession: state.userAuthSession
+        userAuthSession: state.userAuthSession,
+        lightbox: state.lightbox
     };
 }
 

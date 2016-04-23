@@ -2,7 +2,9 @@ import React, { PropTypes } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
-import { showLightbox, hideLightbox } from '../actions/lightboxActions';
+import { showLightbox, hideLightbox } from '../../actions/lightboxActions';
+
+import styles from './Lightbox.css';
 
 const Lightbox = React.createClass({
 
@@ -18,7 +20,11 @@ const Lightbox = React.createClass({
     render() {
         const { lightbox, dispatch } = this.props;
         return (
-            <Modal dialogClassName="ligthbox" show={lightbox.showLightbox} onHide={this.close}>
+            <Modal
+                dialogClassName={styles.width90}
+                show={lightbox.showLightbox}
+                onHide={this.close}
+                >
                 <Modal.Header closeButton>
                     <Modal.Title></Modal.Title>
                 </Modal.Header>
