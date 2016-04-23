@@ -13,7 +13,8 @@ const rootReducer = combineReducers({
     userAuthSession: authReducer,
     cart: cartReducer,
     lightbox: lightboxReducer,
-    routing: routerReducer
+    routing: routerReducer,
+    drawing: singleDrawingReducer
 });
 
 export default rootReducer;
