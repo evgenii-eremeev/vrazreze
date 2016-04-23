@@ -35,7 +35,7 @@ export function fetchSingleDrawing(id) {
 		return fetch('/api/drawing/' + id)
 			.then(response => response.json())
 			.then(json => dispatch(
-				fetchSingleDrawingSuccess(id, json)
+				fetchSingleDrawingSuccess(json)
 			))
 			.catch(error => dispatch(
 				fetchSingleDrawingFail("Ошибка при загрузке чертежа")

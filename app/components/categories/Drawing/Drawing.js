@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Thumbnail } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 import { addToCart } from '../../../actions/cartActions.js';
 import { showLightbox } from '../../../actions/lightboxActions.js';
@@ -25,7 +26,9 @@ const Drawing = React.createClass({
                         textAlign: 'center',
                         marginBottom: 20
                     }}>
-                    {drawing.title}
+                    <Link to={ "/drawing/" + drawing._id }>
+                        {drawing.title}
+                    </Link>
                 </h2>
                 <div className="pull-left" style={{ marginRight: 20 }}>
                     <Thumbnail

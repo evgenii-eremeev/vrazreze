@@ -6,6 +6,7 @@ import categoriesReducer from './categoriesReducer';
 import authReducer from './authReducer';
 import cartReducer from './cartReducer';
 import lightboxReducer from './lightboxReducer';
+import singleDrawingReducer from './singleDrawingReducer';
 
 const rootReducer = combineReducers({
     drawings: drawingsReducer,
@@ -14,7 +15,7 @@ const rootReducer = combineReducers({
     cart: cartReducer,
     lightbox: lightboxReducer,
     routing: routerReducer,
-    drawing: singleDrawingReducer
+    singleDrawing: singleDrawingReducer
 });
 
 export default rootReducer;
