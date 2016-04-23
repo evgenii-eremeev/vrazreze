@@ -20,7 +20,7 @@ function createSuperUser(done) {
         .send(user)
         .expect(200, function _changeRole (err, res) {
             User.update(
-                { username: 'test' }, 
+                { username: 'test' },
                 { $set: { role: 'admin' }},
                 function _updateUser (err, doc) {
                     if (err) { throw err; }
@@ -67,9 +67,54 @@ describe("apiRouter", function () {
 
     }); // describe
 
-    describe('/api/new_drawing (admin)', function () {
+    describe('/api/drawing/:id', function () {
         let lastDrawingId;
-        this.timeout(5000);
+
+        before(createSuperUser);
+
+        after(deleteUser);
+
+        beforeEach(function (done) {
+            server
+                .post('/api/new_drawing')
+                .set('Content-Type', 'multipart/form-data')
+                .field('title', 'Drawing for testing')
+                .field('category', 'Промышленность')
+                .field('description', 'Testing description')
+                .attach('picture', __dirname + '/../testpic.jpg')
+                .accept('json')
+                .expect(200, function(err, res) {
+                    if (err) { throw err; }
+                    lastDrawingId = res.body._id;
+                    done();
+                });
+        })
+
+        afterEach(function (done) {
+            server
+                .del('/api/delete_drawing/' + lastDrawingId)
+                .expect(200, done);
+        });
+
+        it('returns 200 and json object', function (done) {
+            server
+                .get(path.join('/api/drawing/', lastDrawingId))
+                .accept('json')
+                .expect(200, done);
+        });
+
+        it('returns 404 if not found', function (done) {
+            server
+                .get('/api/category/123id123not123found')
+                .accept('json')
+                .expect(404, done);
+        });
+
+    });
+
+    describe('/api/new_drawing (admin)', function () {
+
+        let lastDrawingId;
 
         before(createSuperUser);
 
@@ -174,7 +219,7 @@ describe("apiRouter", function () {
         }); // it
 
     }); // describe
-    
+
     describe('/api/delete_drawing/:drawingId (admin)', function _describeDeleteDrawing () {
         let lastDrawingId;
         let lastDrawingPicture;
@@ -225,9 +270,9 @@ describe("apiRouter", function () {
     }); // describe
 
     describe('Not admin', function () {
-        
+
         this.timeout(5000);
-        
+
         before(function(done) {
             const user = {
                 username: 'test',
@@ -238,9 +283,9 @@ describe("apiRouter", function () {
                 .send(user)
                 .expect(200, done);
         });
-        
+
         after(deleteUser);
-        
+
         it('post to /api/new_drawing responds with 403 Forbidden', function (done) {
             server
                 .post('/api/new_drawing')
@@ -251,8 +296,8 @@ describe("apiRouter", function () {
                 .attach('picture', __dirname + '/../testpic.jpg')
                 .expect(403, done);
         });
-        
-        
+
+
         it('post to /api/add_category responds with 403 Forbidden', function (done) {
             server
                 .post('/api/add_category')
@@ -261,51 +306,51 @@ describe("apiRouter", function () {
                 .send({foo: 'bar'})
                 .expect(403, done);
         });
-        
+
         it('post to /api/update_category/:categoryId responds with 403 Forbidden', function (done) {
             server
                 .post('/api/update_category/id123')
                 .send({foo: 'bar'})
                 .expect(403, done);
         });
-        
+
         it('delete to /api/delete_category/:categoryId responds with 403 Forbidden', function (done) {
             server
                 .del('/api/delete_category/id123')
                 .send({foo: 'bar'})
                 .expect(403, done);
         });
-        
-        
+
+
         it('delete to /api/delete_drawing/:drawingId responds with 403 Forbidden', function (done) {
             server
                 .del('/api/delete_drawing/:id123')
                 .send({foo: 'bar'})
                 .expect(403, done);
         });
-        
-        
+
+
 
     }); // describe
-    
+
     describe('/api/add_category', function () {
         this.timeout(5000);
 
         before(createSuperUser);
 
         after(deleteUser);
-                
+
         const formData = {
             name: 'Power stations',
             url: 'pstations',
             position: 99
         };
-        
+
         afterEach(function (done) {
             Category.findOneAndRemove({ name: formData.name }, done)
         });
 
-        
+
         it('return 200 and json content type', function (done) {
             server
                 .post('/api/add_category')
@@ -314,8 +359,8 @@ describe("apiRouter", function () {
                 .expect('Content-Type', /json/)
                 .expect(200, done);
         });
-        
-        
+
+
         it('returns right category', function (done) {
             server
                 .post('/api/add_category')
@@ -328,21 +373,21 @@ describe("apiRouter", function () {
                     done();
                 });
         });
-        
-            
-          
+
+
+
     });
-    
+
     describe('/api/update_category/:categoryId', function () {
         this.timeout(5000);
-        
+
         let recentCategoryId;
         const formDataBefore = {
             name: 'Power stations',
             url: 'pstations',
             position: 99
         };
-        
+
         const formDataAfter = {
             name: 'Cool Stations',
             url: 'cstations',
@@ -351,7 +396,7 @@ describe("apiRouter", function () {
 
         before(createSuperUser);
         after(deleteUser);
-        
+
         beforeEach(function (done) {
             server
                 .post('/api/add_category')
@@ -363,11 +408,11 @@ describe("apiRouter", function () {
                     done();
                 });
         });
-        
+
         afterEach(function (done) {
             Category.findOneAndRemove({ _id: recentCategoryId }, done)
         });
-        
+
         it('return 200 and json content type', function (done) {
             server
                 .post(path.join('/api/update_category', recentCategoryId))
@@ -376,8 +421,8 @@ describe("apiRouter", function () {
                 .expect('Content-Type', /json/)
                 .expect(200, done);
         });
-        
-        
+
+
         it('returns right category', function (done) {
             server
                 .post(path.join('/api/update_category', recentCategoryId))
@@ -391,24 +436,23 @@ describe("apiRouter", function () {
                     done();
                 });
         });
-        
+
     });
-    
-    
+
     describe('/api/delete_category/:categoryId', function () {
-        
+
         this.timeout(5000);
         let recentCategoryId;
-        
+
         const formData = {
             name: 'Power stations',
             url: 'pstations',
             position: 99
         };
-        
+
         before(createSuperUser);
         after(deleteUser);
-        
+
         beforeEach(function (done) {
             server
                 .post('/api/add_category')
@@ -420,7 +464,7 @@ describe("apiRouter", function () {
                     done();
                 });
         });
-        
+
         afterEach(function (done) {
             if (recentCategoryId) {
                 Category.findOneAndRemove({ _id: recentCategoryId }, done)
@@ -428,19 +472,19 @@ describe("apiRouter", function () {
                 done()
             }
         });
-        
+
         it('returns 200 on success', function (done) {
             server
                 .del(path.join('/api/delete_category', recentCategoryId))
                 .expect(200, done);
         });
-        
+
         it('returns 404 on failure', function (done) {
             server
-                .del(path.join('/api/delete_category', '123')) 
+                .del(path.join('/api/delete_category', '123'))
                 .expect(404, done);
         });
-        
+
         it('no category left in database', function (done) {
             server
                 .del(path.join('/api/delete_category', recentCategoryId))
@@ -454,7 +498,7 @@ describe("apiRouter", function () {
 
                 });
         });
-        
+
     });
-    
+
 });

@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { fetchDrawings } from '../../actions/drawingsActions';
-import { addToCart } from '../../actions/cartActions';
 
 import Drawing from './Drawing';
 

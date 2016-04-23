@@ -1,0 +1,41 @@
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
+// import { fetchDrawings } from '../../actions/drawingsActions';
+
+import Drawing from './Drawing';
+
+const Category = React.createClass({
+
+    componentDidMount() {
+        // const { dispatch, params } = this.props;
+        // dispatch(fetchDrawings(params.categoryUrl));
+    },
+
+    componentWillReceiveProps(nextProps) {
+        // if (nextProps.params.categoryUrl !== this.props.params.categoryUrl) {
+        //     const { dispatch, params } = nextProps
+        //     dispatch(fetchDrawings(params.categoryUrl));
+        // }
+    },
+
+    render () {
+        // const { drawings, dispatch } = this.props;
+
+        return (
+            drawings.isFetching ?
+                <div>
+                    <p>Загружаем...</p>
+                </div>
+                :
+                <Drawing drawing={drawing}/>
+        );
+    }
+});
+
+function mapStateToProps(state) {
+    return {
+        // drawings: state.drawings
+    };
+}
+
+export default connect(mapStateToProps)(Category);

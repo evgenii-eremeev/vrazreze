@@ -14,7 +14,7 @@ const isAdmin = authMiddleware.isAdmin;
 
 
 module.exports = function _moduleExports (app) {
-    
+
     // categories
     app.get('/api/categories', function _categories (req, res) {
         Category
@@ -44,13 +44,26 @@ module.exports = function _moduleExports (app) {
             });
     });
 
+    // get single drawing
+    app.get('/api/drawing/:id', function _getDrawing(req, res) {
+        Drawing
+            .findOne({ _id: req.params.id })
+            .exec(function (err, drawing) {
+                if (err) { throw err; }
+                if (!drawing) {
+                    return res.sendStatus(404);
+                }
+                res.json(drawing);
+            })
+    });
+
     // add_category
     app.post(
-        '/api/add_category', 
-        isLoggedIn, 
-        isAdmin, 
+        '/api/add_category',
+        isLoggedIn,
+        isAdmin,
         function _addCategory(req, res) {
-        
+
             const category = new Category({
                 name: req.body.formData.name,
                 url: req.body.formData.url,
@@ -67,7 +80,7 @@ module.exports = function _moduleExports (app) {
         isLoggedIn,
         isAdmin,
         function updateCategory(req, res) {
-            
+
             Category.findByIdAndUpdate(
                 req.params.categoryId,
                 {
@@ -85,16 +98,16 @@ module.exports = function _moduleExports (app) {
 
     // delete_category
     app.delete(
-        '/api/delete_category/:categoryId', 
-        isLoggedIn, 
-        isAdmin, 
+        '/api/delete_category/:categoryId',
+        isLoggedIn,
+        isAdmin,
         function _deleteCategory(req, res) {
-        
+
             Category.findByIdAndRemove(
                 req.params.categoryId,
                 function(err, category) {
-                    if (err) { 
-                        return res.status(404).end('No such category');   
+                    if (err) {
+                        return res.status(404).end('No such category');
                     }
                     res.status(200).end();
                 }
@@ -103,12 +116,12 @@ module.exports = function _moduleExports (app) {
 
     // new_drawing
     app.post(
-        '/api/new_drawing', 
+        '/api/new_drawing',
         isLoggedIn,
         isAdmin,
-        upload.single('picture'), 
+        upload.single('picture'),
         function _newDrawing (req, res) {
-            
+
             Category
                 .findOne({ name: req.body.category })
                 .exec(function (err, category) {
@@ -134,11 +147,11 @@ module.exports = function _moduleExports (app) {
 
     // delete_drawing
     app.delete(
-        '/api/delete_drawing/:drawingId', 
+        '/api/delete_drawing/:drawingId',
         isLoggedIn,
         isAdmin,
         function _deleteDrawing(req, res) {
-            
+
             Drawing.findByIdAndRemove(
                 req.params.drawingId,
                 function(err, drawing) {
