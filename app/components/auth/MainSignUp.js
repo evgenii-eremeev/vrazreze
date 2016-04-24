@@ -29,7 +29,11 @@ const MainSignUp = React.createClass({
         const { dispatch, userAuthSession } = this.props;
         return (
             <SignUpForm onClickSignUp={(formData) => {
-                    dispatch(attemptSignUp(formData.email, formData.password))
+                    dispatch(attemptSignUp(
+                        formData.email,
+                        formData.password,
+                        formData.displayName
+                    ))
                 }}
                 isFetchingData={userAuthSession.fetchingAuthUpdate}
                 serverError={userAuthSession.error}

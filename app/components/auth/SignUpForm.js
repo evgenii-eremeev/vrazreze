@@ -60,7 +60,8 @@ const SignUpForm = React.createClass({
         var formData = {
             email : this.refs.email.value.trim(),
             password : this.refs.password.value.trim(),
-            confirmedPassword : this.refs.confirmPassword.value.trim()
+            confirmedPassword : this.refs.confirmPassword.value.trim(),
+            displayName: this.refs.displayName.value.trim()
         }
 
         let newState = this.findErrorsInSignupForm(formData);
@@ -96,6 +97,10 @@ const SignUpForm = React.createClass({
         return (
             <div style={{maxWidth: 400, margin: "0 auto"}}>
                 <h1>Регистрация</h1>
+                <div className={this.getInputContainerClass(this.state.isPasswordFieldIncorrect)}>
+                    <label className="control-label">Имя</label>
+                    <input className="form-control" type="text" ref="displayName" />
+                </div>
                 <div className={this.getInputContainerClass(this.state.isEmailFieldIncorrect)}>
                     <label className="control-label">E-mail</label>
                     <input className="form-control" type="text" ref="email"/>

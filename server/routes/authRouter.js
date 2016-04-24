@@ -21,7 +21,10 @@ module.exports = function _moduleExports (app) {
     // signup
     app.post('/signup', userExists, function _signup (req, res) {
         User.register(
-            new User({ username: req.body.username }),
+            new User({
+                username: req.body.username,
+                displayName: req.body.displayName
+            }),
             req.body.password,
             function (err, action) {
                 if (err) { throw err; }

@@ -3,14 +3,14 @@
 const sendOrder = require('../email/sendOrder');
 
 module.exports = function _moduleExports(app) {
-    
+
     // send order with single drawing
     app.post('/mail/order', function (req, res) {
-        if (!req.body.user) {
-            return res.status(400).end("User not specified");
-        }
-
-        sendOrder(req.body.user, req.body.cart)
+        const user = {
+            email: req.body.email,
+            displayName: req.body.displayName
+        };
+        sendOrder(user, req.body.cart)
             .then(info => {
                 console.log('Order is sent');
                 res.status(200).end("Запрос отправлен");

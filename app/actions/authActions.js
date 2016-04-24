@@ -36,14 +36,18 @@ export function signUpFail(error) {
 	return { type: SIGNUP_FAIL, error };
 }
 
-export function attemptSignUp(email, password) {
+export function attemptSignUp(email, password, displayName) {
 	return (dispatch) => {
     	dispatch(clickedSignUp());
 
 	    $.ajax({
 				type: 'POST',
 				url: '/signup',
-				data: {username: email, password}
+				data: {
+					displayName,
+					username: email,
+					password
+				}
 	        })
 			.done(function(data) {
 				if (data.error){

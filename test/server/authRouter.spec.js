@@ -23,71 +23,71 @@ function deleteUser(done) {
 
 
 describe('authRouter', function () {
-    
+
     describe('/check_session (logged in)', function () {
-        
+
         this.timeout(5000); // will not work without it
         before(createUserAndLogin);
-        
+
         after(deleteUser);
-        
+
         it('returns 200 and json', function (done) {
             server
                 .post('/check_session')
                 .expect('Content-Type', /json/)
                 .expect(200, done);
         });
-        
+
         it('returns proper json data', function (done) {
             server
                 .post('/check_session')
                 .accept('json') // same as .expect('Content-Type', /json/)
                 .expect(200, function (err, res) {
                     if (err) { throw err; }
-                    
+
                     expect(res.body).toInclude({isLoggedIn: true});
                     done();
                 });
         })
-        
+
     });
-    
+
     describe('/check_session (logged out)', function () {
-        
+
         this.timeout(5000); // will not work without it
-        
+
         it('returns 200 and json', function (done) {
             server
                 .post('/check_session')
                 .expect('Content-Type', /json/)
                 .expect(200, done);
         });
-        
+
         it('returns proper json data', function (done) {
             server
                 .post('/check_session')
                 .accept('json') // same as .expect('Content-Type', /json/)
                 .expect(200, function (err, res) {
                     if (err) { throw err; }
-                    
+
                     expect(res.body).toInclude({isLoggedIn: false});
                     done();
                 });
         })
-        
+
     });
-    
+
     describe('/signup', function () {
-        
+
         this.timeout(5000);
-        
+
         const user = {
             username: 'test',
             password: '123'
         }
-        
+
         after(deleteUser);
-        
+
         it('returns 200 and json on success. response data is correct.', function (done) {
             server
                 .post('/signup')
@@ -96,15 +96,15 @@ describe('authRouter', function () {
                 .accept('json')
                 .expect(200, function _expect (err, res) {
                     if (err) { throw err; }
-                    
+
                     expect(res.body).toIncludeKeys(
                         // see user model
-                        ['username', '_id', 'role', 'salt', 'hash', 'register_date']
+                        ['username', '_id', 'salt', 'hash']
                     );
                     done();
                 });
         });
-        
+
         it('retuns 409 status code if user exist', function (done) {
             // we already created user 'test'
             server
@@ -113,24 +113,24 @@ describe('authRouter', function () {
                 .send(user)
                 .expect(409, done);
         });
-        
+
     });
-    
+
     describe('/login', function () {
-        
+
         const user = {
             username: 'test',
             password: '123'
         }
-        
+
         before(createUserAndLogin);
-        
+
         after(deleteUser);
-        
+
         beforeEach(function (done) {
             server.post('/logout').expect(200, done);
         });
-        
+
         it('returns 200 and json', function (done) {
             server
                 .post('/login')
@@ -139,7 +139,7 @@ describe('authRouter', function () {
                 .accept('json')
                 .expect(200, done);
         });
-                
+
         it('returns user in json format', function (done) {
             server
                 .post('/login')
@@ -148,16 +148,16 @@ describe('authRouter', function () {
                 .accept('json')
                 .expect(200, function (err, res) {
                     if (err) { throw err; }
-                    
+
                     expect(res.body).toIncludeKeys(
                         // see user model
-                        ['username', '_id', 'role', 'salt', 'hash', 'register_date']
+                        ['username', '_id', 'salt', 'hash']
                     );
                     done();
                 });
         });
-        
-        
+
+
         it('returns 401 Unauthorized if wrong username or password', function (done) {
             server
                 .post('/login')
@@ -165,16 +165,16 @@ describe('authRouter', function () {
                 .send({username: 'wrong', password: 'wrong'})
                 .expect(401, done);
         });
-        
-        
+
+
     });
-    
-    
+
+
     describe('/logout', function () {
-        
+
         before(createUserAndLogin);
         after(deleteUser);
-        
+
         it('returns 200 and proper text output', function (done) {
             server
                 .post('/logout')
@@ -185,7 +185,7 @@ describe('authRouter', function () {
                     done();
                 })
         });
-        
+
     });
-    
+
 });

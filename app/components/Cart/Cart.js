@@ -6,6 +6,8 @@ import styles from './Cart.css';
 import { sumBy } from 'lodash';
 import { Thumbnail } from 'react-bootstrap';
 
+import OrderForm from './OrderForm';
+
 import { removeFromTheCart, clearTheCart } from '../../actions/cartActions';
 import { showLightbox } from '../../actions/lightboxActions.js';
 
@@ -14,29 +16,25 @@ const Cart = React.createClass({
     propTypes: {
         userAuthSession: PropTypes.object.isRequired,
         cart: PropTypes.array.isRequired,
-        lightbox: PropTypes.object.isRequired,
         dispatch: PropTypes.func.isRequired
     },
 
-    onOrderClickHandler () {
-        const { userAuthSession, cart } = this.props;
-        fetch('/mail/order', {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            method: 'POST',
-            body: JSON.stringify({
-                user: userAuthSession.userObject,
-                cart
-            })})
-            .then(response => response.text())
-            .then((text) => {
-                alert(text)
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+    getInitialState () {
+        return {
+            showOrderForm: false
+        };
+    },
+
+    openOrderForm () {
+        this.setState({
+            showOrderForm: true
+        });
+    },
+
+    closeOrderForm () {
+        this.setState({
+            showOrderForm: false
+        });
     },
 
     render () {
@@ -101,7 +99,7 @@ const Cart = React.createClass({
                     className={"btn btn-success btn-lg " + styles.orderButton}
                     onClick={() => {
                         if (cart.length > 0) {
-                            this.onOrderClickHandler()
+                            this.openOrderForm()
                         } else {
                             alert('Корзина пуста');
                         }
@@ -109,6 +107,10 @@ const Cart = React.createClass({
                     >
                     Заказать
                 </button>
+                <OrderForm
+                    show={this.state.showOrderForm}
+                    closeOrderForm={this.closeOrderForm}
+                    />
             </div>
         );
     }
@@ -117,8 +119,7 @@ const Cart = React.createClass({
 function mapStateToProps(state) {
     return {
         cart: state.cart,
-        userAuthSession: state.userAuthSession,
-        lightbox: state.lightbox
+        userAuthSession: state.userAuthSession
     };
 }
 

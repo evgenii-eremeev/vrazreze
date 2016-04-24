@@ -8,8 +8,8 @@ table
   tbody
     each drawing in cart
       tr
-        td= drawing.price
+        td #{drawing.price} руб.
         td= drawing.title
         td <a href="http://вразрезе.рф/drawing/#{drawing._id}"">Посмотреть</a>
 
-p Ответить: #{user.username}
+p Ответить: #{user.email} (#{user.displayName})
