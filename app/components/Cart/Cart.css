@@ -1,21 +1,8 @@
 /* CartStyles */
 
-/* Generic */
-.textCenter {
-    text-align: center;
-}
-
-.marginBottom20 {
-    margin-bottom: 20px;
-}
-
-.font18 {
-    font-size: 18px;
-}
-
-/* Individual styles */
 .cartHeader {
-    composes: textCenter marginBottom20;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 .item {
@@ -46,4 +33,8 @@
 .orderButton {
     margin: 12px 0 60px 0;
     width: 200px;
+}
+
+.priceTotal {
+    font-size: 18px;
 }

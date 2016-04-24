@@ -13,3 +13,16 @@
 .linkNotClicked:hover {
     color: #555555;
 }
+
+.drawing {
+    padding-top: 0;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.addToCartButton {
+    margin-bottom: 10px;   
+}

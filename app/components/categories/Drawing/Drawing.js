@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Thumbnail } from 'react-bootstrap';
+import { Thumbnail, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
@@ -14,7 +14,24 @@ const Drawing = React.createClass({
 
     propTypes: {
         drawing: PropTypes.object.isRequired,
-        dispatch: PropTypes.func.isRequired
+        dispatch: PropTypes.func.isRequired,
+        cart: PropTypes.array.isRequired
+    },
+
+    onPictureClick (event) {
+        event.preventDefault();
+        const { dispatch, drawing } = this.props;
+        dispatch(showLightbox(`/pics/${drawing.picture}`));
+    },
+
+    onAddToCartClick () {
+        const { dispatch, drawing } = this.props;
+        dispatch(addToCart(drawing));
+    },
+
+    isAddedToCart () {
+        const { cart, drawing } = this.props;
+        return cart.some(item => item._id === drawing._id);
     },
 
     render () {
@@ -22,13 +39,9 @@ const Drawing = React.createClass({
         return (
             <div
                 id={ drawing._id }
-                className="well"
-                style={{paddingTop: 0, paddingBottom: 0, overflow: 'auto'}}
+                className={"well " + styles.drawing}
                 >
-                <h2 style={{
-                        textAlign: 'center',
-                        marginBottom: 20
-                    }}>
+                <h2 className={styles.header}>
                     <Link
                         to={ "/drawing/" + drawing._id }
                         activeClassName={styles.linkClicked}
@@ -37,39 +50,48 @@ const Drawing = React.createClass({
                         {drawing.title}
                     </Link>
                 </h2>
-                <div className="pull-left" style={{ marginRight: 20 }}>
-                    <Thumbnail
-                        href="#"
-                        src={drawing.picture ?
-                            `/pics/${drawing.picture}?dim=200x200` :
-                            'http://placehold.it/200x200'}
-                        alt={'picture ' + drawing.title}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            dispatch(showLightbox(`/pics/${drawing.picture}`))
-                        }}
-                        />
-
-                    <button
-                        className="btn btn-success"
-                        style={{display: 'block', margin: '12px 0', width: 210}}
-                        onClick={() => (
-                            dispatch(addToCart(drawing))
-                        )}
-                        >
-                        Добавить в корзину
-                    </button>
-
-                    <p><strong>Цена: </strong>{drawing.price} рублей</p>
-                </div>
+                <Row>
+                    <Col sm={6}>
+                        <Thumbnail
+                            href="#"
+                            src={drawing.picture ?
+                                `/pics/${drawing.picture}?dim=300x300` :
+                                'http://placehold.it/200x200'}
+                            alt={'picture ' + drawing.title}
+                            onClick={this.onPictureClick}
+                            className="img img-responsive"
+                            />
+                    </Col>
+                    <Col sm={6}>
+                        <p><strong>Цена: </strong>{drawing.price} рублей</p>
+                        <p><strong>Состав: </strong>{drawing.drawing_composition}</p>
+                        { this.isAddedToCart() ?
+                            <Link to="/cart" className="btn btn-primary">
+                                Перейти в корзину
+                            </Link> :
+                            <button
+                                className={"btn btn-success " + styles.addToCartButton}
+                                onClick={this.onAddToCartClick}
+                                >
+                                Добавить в корзину
+                            </button>
+                        }
+                    </Col>
+                </Row>
                 <div>
+                    <h4>Описание</h4>
                     <p>{drawing.description}</p>
-                    <p><strong>Состав: </strong>{drawing.drawing_composition}</p>
                 </div>
             </div>
         )
     }
 });
 
+function mapStateToProps(state) {
+    return {
+        cart: state.cart
+    };
+}
 
-export default connect()(Drawing);
+
+export default connect(mapStateToProps)(Drawing);

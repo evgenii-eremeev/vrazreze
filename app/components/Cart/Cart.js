@@ -49,7 +49,7 @@ const Cart = React.createClass({
                 <Grid fluid={true}>
                     {cart.map((drawing, idx) => (
                         <Row
-                            eventKey={idx}
+                            key={idx}
                             className={styles.item}
                             >
                             <Col sm={12} xs={12}>
@@ -94,7 +94,7 @@ const Cart = React.createClass({
                     ))}
                 </Grid>
                 <hr />
-                <p className={styles.font18}>
+                <p className={styles.priceTotal}>
                     <strong>Всего:</strong> { sumBy(cart, 'price') } рублей
                 </p>
                 <button
