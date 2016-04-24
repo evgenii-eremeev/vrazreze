@@ -43,7 +43,7 @@ ReactDOM.render(
     <Provider store={store}>
         <Router history={history}>
             <Route path="/" component={App}>
-                <IndexRoute component={Home}/>
+                <IndexRoute component={Categories}/>
                 <Route path="/admin/new_drawing" component={NewDrawing} />
                 <Route path="/admin/manage_categories" component={ManageCategories} />
                 <Route path="/admin/manage_drawings" component={ManageDrawings} />

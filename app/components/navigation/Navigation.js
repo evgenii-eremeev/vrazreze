@@ -3,58 +3,26 @@ import { Navbar, Nav } from 'react-bootstrap';
 import { IndexLink } from 'react-router';
 
 import CollapseMenu from './CollapseMenu';
-import CartButton from './CartButton';
-
-import { connect } from 'react-redux';
-import { attemptLogout } from '../../actions/authActions';
-
 
 const Navigation = React.createClass({
 
-    propTypes: {
-        cart: PropTypes.array.isRequired,
-        userAuthSession: PropTypes.object.isRequired,
-        dispatch: PropTypes.func.isRequired
-    },
-
-    handleOnLogoutClick () {
-        this.props.dispatch(attemptLogout());
-    },
-
     render () {
-        const { cart } = this.props;
-        const cartButton = (
-            cart.length ?
-            <Nav>
-                <CartButton cartLength={cart.length}/>
-            </Nav> : ""
-        )
         return (
             <Navbar>
                 <Navbar.Header>
                     <Navbar.Brand>
-                        <IndexLink to='/'>Чертежи</IndexLink>
+                        <IndexLink to='/'>ВРАЗРЕЗЕ.РФ</IndexLink>
                     </Navbar.Brand>
-
                     <Navbar.Toggle />
                 </Navbar.Header>
-                { cartButton }
+
                 <Navbar.Collapse>
-                    <CollapseMenu
-                        onLogoutClick={this.handleOnLogoutClick}
-                        userAuthSession={this.props.userAuthSession}
-                        />
+                    <CollapseMenu />
                 </Navbar.Collapse>
             </Navbar>
         );
     }
 });
 
-function mapStateToProps(state) {
-    return {
-        cart: state.cart,
-        userAuthSession: state.userAuthSession
-    };
-}
 
-export default connect(mapStateToProps)(Navigation);
+export default Navigation;
