@@ -33,10 +33,6 @@ const LoginForm = React.createClass({
             newState.errorMessage = "Пожалуйста введите правильный e-mail.";
             newState.isEmailFieldIncorrect = true;
         }
-        else if (formData.password === "") {
-            newState.errorMessage = "Пароль не может быть пустым.";
-            newState.isPasswordFieldIncorrect = true;
-        }
         return newState;
     },
 
