@@ -25,8 +25,8 @@ function sendOrder(user, cart) {
             .then(results => {                      // resolves with results object
                 // console.log('result:', results);
                 return transporter.sendMail({
-                    from: `вразрезе.рф <${process.env.MAIL_ADDRESS}>`,
-                    to: 'e.i.eremeev@gmail.com',
+                    from: `вразрезе.рф <${process.env.EMAIL_ADDRESS}>`,
+                    to: process.env.RECEIVER_EMAIL,
                     subject: results.subject,
                     html: results.html
                 })
