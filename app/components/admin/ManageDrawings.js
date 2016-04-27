@@ -5,10 +5,24 @@ import { fetchDrawings, deleteDrawing } from '../../actions/drawingsActions';
 
 const MangageDrawings = React.createClass({
 
+    PropTypes: {
+        dispatch: PropTypes.func.isRequired,
+        categories: PropTypes.array.isRequired,
+        drawings: PropTypes.array.isRequired
+    },
+
     getInitialState () {
         return {
             active: null
         };
+    },
+
+    deleteDrawing (drawingId, categoryUrl) {
+        const { dispatch } = this.props;
+        let confirmed = confirm("Подтвердить удаление чертежа?");
+        if (confirmed) {
+            dispatch(deleteDrawing(drawingId, categoryUrl))
+        }
     },
 
     render () {
@@ -65,7 +79,9 @@ const MangageDrawings = React.createClass({
                                         <button
                                             className="btn btn-danger btn-small"
                                             onClick={() => {
-                                                dispatch(deleteDrawing(drawing._id, drawings.categoryUrl))
+                                                this.deleteDrawing(
+                                                    drawing._id, drawings.categoryUrl
+                                                );
                                             }}
                                             >
                                             Del

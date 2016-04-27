@@ -45,7 +45,7 @@ module.exports = function _moduleExports (app) {
     });
 
     // get single drawing
-    app.get('/api/drawing/:id', function _getDrawing(req, res) {
+    app.get('/api/drawing/:id', function _getDrawing (req, res) {
         Drawing
             .findOne({ _id: req.params.id })
             .exec(function (err, drawing) {

@@ -14,6 +14,24 @@ var drawingSchema = new Schema({
     tags: [String],
     picture: String,
     views: { type: Number, default: 0 }
+}, {
+    autoIndex: false
+});
+
+drawingSchema.index({
+    title: 'text',
+    description: 'text',
+    tags: 'text',
+    drawing_composition: 'text'
+}, {
+    name: 'textIndex',
+    default_language: 'russian',
+    weights: {
+        title: 10,
+        description: 5,
+        tags: 7,
+        drawing_composition: 1
+    }
 });
 
 var Drawing = mongoose.model('Drawing', drawingSchema);
