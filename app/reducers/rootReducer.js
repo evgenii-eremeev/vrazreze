@@ -7,10 +7,12 @@ import authReducer from './authReducer';
 import cartReducer from './cartReducer';
 import lightboxReducer from './lightboxReducer';
 import singleDrawingReducer from './singleDrawingReducer';
+import searchReducer from './searchReducer';
 
 const rootReducer = combineReducers({
     drawings: drawingsReducer,
     categories: categoriesReducer,
+    searchData: searchReducer,
     userAuthSession: authReducer,
     cart: cartReducer,
     lightbox: lightboxReducer,

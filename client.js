@@ -14,7 +14,6 @@ import rootReducer from './app/reducers/rootReducer';
 
 // Components
 import App from './app/components/App';
-import Home from './app/components/Home';
 import Cart from './app/components/Cart';
 import NewDrawing from './app/components/admin/NewDrawing';
 import ManageCategories from './app/components/admin/ManageCategories';

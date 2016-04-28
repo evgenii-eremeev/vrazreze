@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 
 import { Grid, Row, Col } from 'react-bootstrap';
 import SideNav from './SideNav';
-import Home from '../Home';
+import Search from '../Search';
 
 
 const Categories = React.createClass({
@@ -15,7 +15,7 @@ const Categories = React.createClass({
                     <Col sm={9}>
                         { this.props.children ?
                             this.props.children :
-                            <Home />
+                            <Search />
                         }
                     </Col>
                 </Row>
