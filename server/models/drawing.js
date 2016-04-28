@@ -14,8 +14,6 @@ var drawingSchema = new Schema({
     tags: [String],
     picture: String,
     views: { type: Number, default: 0 }
-}, {
-    autoIndex: false
 });
 
 drawingSchema.index({

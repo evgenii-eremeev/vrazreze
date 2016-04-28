@@ -41,10 +41,10 @@ describe('apiSearchRouter', function () {
         server
             .post('/api/new_drawing')
             .set('Content-Type', 'multipart/form-data')
-            .field('title', 'ЗИЛ-131')
+            .field('title', 'Дом')
             .field('category', 'Промышленность')
-            .field('description', 'Стол рация арфа роза руль рапан')
-            .field('tags', 'ручка, рак, радио, рога')
+            .field('description', 'утюг диод духи')
+            .field('tags', 'дичь, топор, душ, клей')
             .field('price', 99999)
             .expect('Content-Type', /json/)
             .expect(200, done);
@@ -54,10 +54,10 @@ describe('apiSearchRouter', function () {
         server
             .post('/api/new_drawing')
             .set('Content-Type', 'multipart/form-data')
-            .field('title', 'КрАЗ')
+            .field('title', 'Икона')
             .field('category', 'Промышленность')
-            .field('description', 'Рюмка фара вафля весы вилы вобла')
-            .field('tags', 'ручка, рак, овощ, вакса')
+            .field('description', 'кожа кит кекс')
+            .field('tags', 'качан, куб, клей, душ')
             .field('price', 99999)
             .expect('Content-Type', /json/)
             .expect(200, done);
@@ -74,6 +74,161 @@ describe('apiSearchRouter', function () {
                 .get('/api/search')
                 .accept('json')
                 .expect(200, done);
+        });
+
+        it('empty query. respons with 200 and json', function (done) {
+            server
+                .get('/api/search?q=')
+                .accept('json')
+                .expect(200, done);
+        });
+
+        it('should respond with empty array', function (done) {
+            server
+                .get('/api/search?q=abaracadabra')
+                .accept('json')
+                .expect(200, function (err, res) {
+                    if (err) { throw err; }
+                    expect(res.body.length).toBe(0);
+                    done();
+                });
+        });
+
+        it('title search "дом". should respond with array of length 1', function (done) {
+            server
+                .get('/api/search?q=' + encodeURIComponent('дом'))
+                .accept('json')
+                .expect(200, function (err, res) {
+                    if (err) { throw err; }
+                    expect(res.body.length).toBe(1);
+                    done();
+                });
+        });
+
+        it('title search "дом икона". should respond with array of length 2', function (done) {
+            server
+                .get('/api/search?q=' + encodeURIComponent('дом икона'))
+                .accept('json')
+                .expect(200, function (err, res) {
+                    if (err) { throw err; }
+                    expect(res.body.length).toBe(2);
+                    done();
+                });
+        });
+
+        it('description search "утюг диод". should respond with array of length 1', function (done) {
+            server
+                .get('/api/search?q=' + encodeURIComponent('утюг диод'))
+                .accept('json')
+                .expect(200, function (err, res) {
+                    if (err) { throw err; }
+                    expect(res.body.length).toBe(1);
+                    done();
+                });
+        });
+
+        it('description search "кит кожа". should respond with array of length 1', function (done) {
+            server
+                .get('/api/search?q=' + encodeURIComponent('кит кожа'))
+                .accept('json')
+                .expect(200, function (err, res) {
+                    if (err) { throw err; }
+                    expect(res.body.length).toBe(1);
+                    done();
+                });
+        });
+
+        it('description search "кит кожа утюг диод". should respond with array of length 1', function (done) {
+            server
+                .get('/api/search?q=' + encodeURIComponent('кит кожа утюг диод'))
+                .accept('json')
+                .expect(200, function (err, res) {
+                    if (err) { throw err; }
+                    expect(res.body.length).toBe(2);
+                    done();
+                });
+        });
+
+        it('tags search "дичь". should respond with array of length 1', function (done) {
+            server
+                .get('/api/search?q=' + encodeURIComponent('дичь'))
+                .accept('json')
+                .expect(200, function (err, res) {
+                    if (err) { throw err; }
+                    expect(res.body.length).toBe(1);
+                    done();
+                });
+        });
+
+        it('tags search "качан". should respond with array of length 1', function (done) {
+            server
+                .get('/api/search?q=' + encodeURIComponent('качан'))
+                .accept('json')
+                .expect(200, function (err, res) {
+                    if (err) { throw err; }
+                    expect(res.body.length).toBe(1);
+                    done();
+                });
+        });
+
+        it('tags search "качан дичь". should respond with array of length 2', function (done) {
+            server
+                .get('/api/search?q=' + encodeURIComponent('качан дичь'))
+                .accept('json')
+                .expect(200, function (err, res) {
+                    if (err) { throw err; }
+                    expect(res.body.length).toBe(2);
+                    done();
+                });
+        });
+
+        it('tags search "клей". should respond with array of length 2', function (done) {
+            server
+                .get('/api/search?q=' + encodeURIComponent('клей'))
+                .accept('json')
+                .expect(200, function (err, res) {
+                    if (err) { throw err; }
+                    expect(res.body.length).toBe(2);
+                    done();
+                });
+        });
+
+        it('mixed search "дом кожа". should respond with array of length 2', function (done) {
+            server
+                .get('/api/search?q=' + encodeURIComponent('дом кожа'))
+                .accept('json')
+                .expect(200, function (err, res) {
+                    if (err) { throw err; }
+                    expect(res.body.length).toBe(2);
+                    done();
+                });
+        });
+
+        it('mixed search "икона утюг". should return most relevant results first', function (done) {
+            server
+                .get('/api/search?q=' + encodeURIComponent('икона утюг'))
+                .accept('json')
+                .expect(200, function (err, res) {
+                    if (err) { throw err; }
+
+                    expect(res.body.length).toBe(2);
+
+                    expect(
+                        res.body[0].score
+                    ).toBeGreaterThan(
+                        res.body[1].score
+                    );
+
+                    expect(
+                        res.body[0].title
+                    ).toMatch(/икона/i);
+
+                    expect(
+                        res.body[1].description
+                    ).toMatch(/утюг/i);
+
+                    done();
+                });
         });
 
 

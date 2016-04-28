@@ -7,6 +7,7 @@ module.exports = function _apiSearchRouter(app) {
     // search
     app.get('/api/search', function _apiSearch(req, res) {
         const query = req.query.q || "";
+
         Drawing
             .find(
                 { $text: { $search: query } },

@@ -7,6 +7,7 @@ const Category = require('../models/category');
 const Drawing = require('../models/drawing');
 const authMiddleware = require('../middleware/authMiddleware');
 const upload = require('../utils/multer');
+const stringToArray = require('../utils/misc').stringToArray;
 
 // from authMiddleware
 const isLoggedIn = authMiddleware.isLoggedIn;
@@ -122,6 +123,11 @@ module.exports = function _moduleExports (app) {
         upload.single('picture'),
         function _newDrawing (req, res) {
 
+            const drawing_composition = req.body.drawing_composition ?
+                stringToArray(req.body.drawing_composition, ',') : [];
+            const tags = req.body.tags ?
+                stringToArray(req.body.tags, ',') : [];
+
             Category
                 .findOne({ name: req.body.category })
                 .exec(function (err, category) {
@@ -131,10 +137,8 @@ module.exports = function _moduleExports (app) {
                         author: req.user.username,
                         description: req.body.description,
                         category: category._id,
-                        drawing_composition: req.body.drawing_composition ?
-                            req.body.drawing_composition.split(',') : [],
-                        tags: req.body.tags ?
-                            req.body.tags.split(',') : [],
+                        drawing_composition: drawing_composition,
+                        tags: tags,
                         price: req.body.price,
                         picture: req.file ? req.file.filename : ''
                     });
