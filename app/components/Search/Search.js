@@ -2,6 +2,8 @@ import React, { PropTypes } from 'react';
 import { Row, Col, Clearfix } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
+import Drawing from '../categories/Drawing';
+
 import { search } from '../../actions/searchActions';
 
 class Search extends React.Component {
@@ -15,13 +17,14 @@ class Search extends React.Component {
         e.preventDefault();
         const { dispatch, searchData } = this.props;
         const query = this.refs.search.value.trim();
-        console.log('query', query)
-        dispatch(search(query)).then(() => {
-            console.log(searchData);
-        });
+        if (query.length) {
+            dispatch(search(query));
+        }
     }
 
     render () {
+        const { searchData } = this.props;
+
         return (
             <div>
                 <h1 className="text-center">Поиск чертежей</h1>
@@ -44,6 +47,11 @@ class Search extends React.Component {
                         <Clearfix visibleMdBlock visibleSmBlock visibleXsBlock visibleLgBlock/>
                     </Row>
                 </form>
+                <hr />
+                { searchData.isSearching ? <p>Загружаем...</p> : "" }
+                { searchData.results.map(drawing => (
+                    <Drawing drawing={drawing} />
+                ))}
             </div>
         );
     }

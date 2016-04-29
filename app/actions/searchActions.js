@@ -33,10 +33,10 @@ export function searchFail(error) {
 export function search(query) {
     return (dispatch) => {
 		dispatch(startSearch());
-		return fetch('/api/search/?=' + query)
+		return fetch('/api/search/?q=' + encodeURIComponent(query))
 			.then(response => response.json())
-			.then(json => dispatch(
-				searchSuccess(query, json)
+			.then(json => (
+				dispatch(searchSuccess(json))
 			))
 			.catch(error => dispatch(
 				searchFail("Ошибка при поиске")
