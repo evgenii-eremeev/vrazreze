@@ -14,4 +14,4 @@ function randomBase64(length) {
 
 randomBase64.base64Url = base64Url;
 
-module.export = randomBase64;
+module.exports = randomBase64;

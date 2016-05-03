@@ -8,7 +8,7 @@ const server = supertest.agent("http://localhost:5000");
 
 function createUserAndLogin(done) {
     const user = {
-        username: 'test',
+        username: 'test@example.com',
         password: '123'
     }
     server
@@ -18,7 +18,7 @@ function createUserAndLogin(done) {
 }
 
 function deleteUser(done) {
-    User.findOneAndRemove({username: 'test'}, done);
+    User.findOneAndRemove({username: 'test@example.com'}, done);
 }
 
 
@@ -82,7 +82,7 @@ describe('authRouter', function () {
         this.timeout(5000);
 
         const user = {
-            username: 'test',
+            username: 'test@example.com',
             password: '123'
         }
 
@@ -119,7 +119,7 @@ describe('authRouter', function () {
     describe('/login', function () {
 
         const user = {
-            username: 'test',
+            username: 'test@example.com',
             password: '123'
         }
 
@@ -162,13 +162,11 @@ describe('authRouter', function () {
             server
                 .post('/login')
                 .type('json')
-                .send({username: 'wrong', password: 'wrong'})
+                .send({username: 'wrong@example.com', password: 'wrong'})
                 .expect(401, done);
         });
 
-
     });
-
 
     describe('/logout', function () {
 
@@ -187,5 +185,32 @@ describe('authRouter', function () {
         });
 
     });
+
+    describe('/forgot', function () {
+
+        before(createUserAndLogin);
+        after(deleteUser);
+
+        it("returns 200", function (done) {
+
+            server
+                .post('/forgot')
+                .type('json')
+                .send({ email: "test@example.com" })
+                .expect(200, done);
+
+        });
+
+        it("returns 404, if email not found", function (done) {
+
+            server
+                .post('/forgot')
+                .type('json')
+                .send({ email: "wrong@example.com" })
+                .expect(404, done);
+
+        });
+
+    })
 
 });

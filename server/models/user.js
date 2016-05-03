@@ -9,7 +9,9 @@ var userSchema = new Schema({
     displayName: { type: String, maxlength: 140 },
     registerDate: { type: Date, default: Date.now },
     role: { type: String, maxlength: 140, default: 'user' },
-    about: { type: String, maxlength: 2000 }
+    about: { type: String, maxlength: 2000 },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
 });
 
 userSchema.plugin(passportLocalMongoose);
