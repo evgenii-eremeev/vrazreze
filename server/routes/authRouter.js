@@ -60,9 +60,7 @@ module.exports = function _moduleExports (app) {
         async.waterfall([
 
             function _findUser(done) {
-                User
-                    .findByUsername(email)
-                    .exec(done);
+                User.findByUsername(email, done);
             },
 
             function _modifyUser(user, done) {
@@ -79,22 +77,52 @@ module.exports = function _moduleExports (app) {
             function _sendResetPasswordEmail(user, done) {
                 sendResetPasswordEmail(email, token)
                     .then(info => {
-                        res.send("Запрос на сброс пароля отправлен");
-                        done(null, info);
+                        return res.send("Запрос на сброс пароля отправлен");
                     })
                     .catch(done);
             },
 
-        ], function(err, info) {
+        ], function (err) {
             if (err) { throw err; }
-            console.log(info);
-        })
+        });
 
     }); // _forgot
 
-    app.get("/reset/:token", function _reset (req, res) {
-        const token = req.params.token;
-        console.log(token);
+    app.post("/reset/:token", function _reset (req, res) {
+
+        async.waterfall([
+
+            function _findByToken(done) {
+                User.findOne({
+                    resetPasswordToken: req.params.token,
+                    resetPasswordExpires: { $gt: Date.now() }
+                }, function (err, user) {
+                    if (err) { done(err); };
+                    if (!user) {
+                        return res.status(404).send("Ваша ссылка на сброс пароля устарела");
+                    }
+                    done(err, user);
+                });
+            },
+            // findByUsername is passport-local-mongoose method that enjects user.setPassword
+            function _findByUsername(user, done) {
+                User.findByUsername(user.username, done);
+            },
+
+            function _setNewPassword(user, done) {
+                user.setPassword(req.body.password, done)
+            },
+
+            function _saveNewPassword(user, done) {
+                user.save(function (err, user) {
+                    if (err) { done(err); };
+                    return res.send("Ваш пароль успешно изменен");
+                });
+            }
+
+        ], function(err) {
+            if (err) { throw err; }
+        });
     })
 
 }; // module.exports
