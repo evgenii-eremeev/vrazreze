@@ -20,9 +20,10 @@ import ManageCategories from './app/components/admin/ManageCategories';
 import ManageDrawings from './app/components/admin/ManageDrawings';
 import MainLogin from './app/components/auth/MainLogin';
 import MainSignUp from './app/components/auth/MainSignUp';
+import Forgot from './app/components/auth/Forgot';
 import Categories from './app/components/categories/Categories';
 import Category from './app/components/categories/Category';
-import SingleDrawing from './app/components/categories/SingleDrawing'
+import SingleDrawing from './app/components/categories/SingleDrawing';
 
 
 // Set up store
@@ -49,6 +50,7 @@ ReactDOM.render(
                 <Route path="/cart" component={Cart} />
                 <Route path="/login" component={MainLogin} />
                 <Route path="/signup" component={MainSignUp} />
+                <Route path="/forgot" component={Forgot} />
                 <Route path="/categories" component={Categories} >
                     <Route path=":categoryUrl" component={Category} />
                 </Route>
