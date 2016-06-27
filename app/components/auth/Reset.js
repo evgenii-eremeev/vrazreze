@@ -1,22 +1,23 @@
 import React, { PropTypes } from 'react';
 
-class Forgot extends React.Component {
+class Reset extends React.Component {
 
     constructor(props) {
         super(props);
-        this._reset = this._reset.bind(this);
+        this._change = this._change.bind(this);
         this.state = {
             message: ""
         };
     }
 
-    _reset() {
-        const email = this.refs.email.value.trim();
+    _change() {
+        const password = this.refs.password.value;
+        const { token } = this.props.params;
 
         $.ajax({
-            url: '/forgot',
+            url: '/reset/' + token,
             type: "POST",
-            data: { email },
+            data: { password },
             success: (message) => {
                 this.setState({ message });
             },
@@ -28,22 +29,21 @@ class Forgot extends React.Component {
                 }
             }
         });
-
     }
 
     render() {
         return(
             <div style={{maxWidth: 400, margin: "0 auto"}}>
-                <h1>Сброс пароля</h1>
+                <h1>Новый пароль</h1>
                 <div className="form-group">
-                    <label className="control-label">E-mail</label>
-                    <input className="form-control" type="text" ref="email"/>
+                    <label className="control-label">Пароль</label>
+                    <input className="form-control" type="password" ref="password"/>
                 </div>
                 <button
                     className="btn btn-primary"
-                    onClick={this._reset}
+                    onClick={this._change}
                     >
-                    Сбросить
+                    Изменить
                 </button>
                 <br />
                 {this.state.message}
@@ -52,4 +52,4 @@ class Forgot extends React.Component {
     }
 }
 
-export default Forgot;
+export default Reset;

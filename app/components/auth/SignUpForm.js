@@ -59,8 +59,8 @@ const SignUpForm = React.createClass({
     handleOnClickSignUp(){
         var formData = {
             email : this.refs.email.value.trim(),
-            password : this.refs.password.value.trim(),
-            confirmedPassword : this.refs.confirmPassword.value.trim(),
+            password : this.refs.password.value,
+            confirmedPassword : this.refs.confirmPassword.value,
             displayName: this.refs.displayName.value.trim()
         }
 

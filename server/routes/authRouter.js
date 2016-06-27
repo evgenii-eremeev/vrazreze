@@ -77,7 +77,7 @@ module.exports = function _moduleExports (app) {
             function _sendResetPasswordEmail(user, done) {
                 sendResetPasswordEmail(email, token)
                     .then(info => {
-                        return res.send("Запрос на сброс пароля отправлен");
+                        return res.send("Вам выслано письмо на указанный адрес");
                     })
                     .catch(done);
             },

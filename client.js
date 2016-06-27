@@ -21,6 +21,7 @@ import ManageDrawings from './app/components/admin/ManageDrawings';
 import MainLogin from './app/components/auth/MainLogin';
 import MainSignUp from './app/components/auth/MainSignUp';
 import Forgot from './app/components/auth/Forgot';
+import Reset from './app/components/auth/Reset';
 import Categories from './app/components/categories/Categories';
 import Category from './app/components/categories/Category';
 import SingleDrawing from './app/components/categories/SingleDrawing';
@@ -51,6 +52,7 @@ ReactDOM.render(
                 <Route path="/login" component={MainLogin} />
                 <Route path="/signup" component={MainSignUp} />
                 <Route path="/forgot" component={Forgot} />
+                <Route path="/reset/:token" component={Reset} />
                 <Route path="/categories" component={Categories} >
                     <Route path=":categoryUrl" component={Category} />
                 </Route>

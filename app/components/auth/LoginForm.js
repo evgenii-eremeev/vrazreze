@@ -41,7 +41,7 @@ const LoginForm = React.createClass({
     handleOnLoginClick() {
         const formData = {
             email : this.refs.email.value.trim(),
-            password : this.refs.password.value.trim()
+            password : this.refs.password.value
         };
 
         let newState = this.findErrorsInLoginForm(formData);
