@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import { Thumbnail, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
@@ -13,18 +12,18 @@ import styles from './Drawing.css';
 const Drawing = React.createClass({
 
     propTypes: {
-        drawing: PropTypes.object.isRequired,
+        drawing: PropTypes.object.isRequired, // as parameter
         dispatch: PropTypes.func.isRequired,
         cart: PropTypes.array.isRequired
     },
 
-    onPictureClick (event) {
-        event.preventDefault();
+    onPictureClick () {
         const { dispatch, drawing } = this.props;
         dispatch(showLightbox(`/pics/${drawing.picture}`));
     },
 
-    onAddToCartClick () {
+    onAddToCartClick (e) {
+        e.preventDefault();
         const { dispatch, drawing } = this.props;
         dispatch(addToCart(drawing));
     },
@@ -35,52 +34,49 @@ const Drawing = React.createClass({
     },
 
     render () {
+        const cartButton = this.isAddedToCart() ?
+            <Link to="/cart"
+                className={styles['drawing__button'] + " " + styles['lightblue']}
+                >
+                Перейти в корзину
+            </Link> :
+            <a href="#"
+                className={styles['drawing__button']}
+                onClick={this.onAddToCartClick}
+                >
+                Добавить в корзину
+            </a>
         const { drawing, dispatch } = this.props
         return (
-            <div
-                id={ drawing._id }
-                className={"well " + styles.drawing}
-                >
-                <h2 className={styles.header}>
+            <div className={styles['drawing']}>
+                <h3 className={styles['header']}>
                     <Link
                         to={ "/drawing/" + drawing._id }
-                        activeClassName={styles.linkClicked}
-                        className={styles.linkNotClicked}
+                        activeClassName={styles['header__link--clicked']}
+                        className={styles['header__link']}
                         >
                         {drawing.title}
                     </Link>
-                </h2>
-                <Row>
-                    <Col sm={6}>
-                        <Thumbnail
+                </h3>
+                <div className={styles['drawing-row']}>
+                    <div className={styles['drawing-col'] + " " + styles['drawing-col-1']}>
+                        <img
                             href="#"
                             src={drawing.picture ?
                                 `/pics/${drawing.picture}?dim=300x300` :
                                 'http://placehold.it/200x200'}
                             alt={'picture ' + drawing.title}
                             onClick={this.onPictureClick}
-                            className="img img-responsive"
+                            className={styles['drawing__image']}
                             />
-                    </Col>
-                    <Col sm={6}>
+
+                    </div>
+                    <div className={styles['drawing-col'] + " " + styles['drawing-col-2']}>
                         <p><strong>Цена: </strong>{drawing.price} рублей</p>
                         <p><strong>Состав: </strong>{drawing.drawing_composition}</p>
-                        { this.isAddedToCart() ?
-                            <Link to="/cart" className="btn btn-primary">
-                                Перейти в корзину
-                            </Link> :
-                            <button
-                                className={"btn btn-success " + styles.addToCartButton}
-                                onClick={this.onAddToCartClick}
-                                >
-                                Добавить в корзину
-                            </button>
-                        }
-                    </Col>
-                </Row>
-                <div>
-                    <h4>Описание</h4>
-                    <p>{drawing.description}</p>
+                        <p><strong>Описание: </strong>{drawing.description}</p>
+                        { cartButton }
+                    </div>
                 </div>
             </div>
         )

@@ -1,28 +1,83 @@
 /*Drawing styles*/
 
-.linkClicked {
+.drawing {
+    padding: 0.5em;
+    margin-bottom: 1em;
+    background-color: #E7EAE7;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.header {
+    margin: 0;
+    padding: 0.6em 0;
+    text-align: center;
+}
+
+.header__link {
+    color: #333333;
+}
+
+.header__link:hover {
+    color: #555555;
+}
+
+.header__link--clicked {
     pointer-events: none;
     cursor: default;
     color: #333333;
 }
 
-.linkNotClicked {
-    color: #333333;
+.drawing-row {
+    display: flex;
 }
 
-.linkNotClicked:hover {
-    color: #555555;
+.drawing-col {
+    padding: 0 0.5em 0.5em 0.5em;
 }
 
-.drawing {
-    padding-top: 0;
+.drawing-col-1 {
+    flex-basis: 40%;
 }
 
-.header {
-    text-align: center;
-    margin-bottom: 20px;
+.drawing-col-2 {
+    flex-basis: 60%;
+    display: flex;
+    flex-direction: column;
 }
 
-.addToCartButton {
-    margin-bottom: 10px;   
+.drawing__image {
+    margin: 0;
+    cursor: pointer;
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    /*border: 1px solid #1F3262;*/
+    box-shadow: 1px 1px 5px 0 #1F3262;
+}
+
+.drawing__button {
+    color: #ddd;
+	text-align: center;
+	padding: .625em 1.25em;
+	background: #1F3262;
+	border-radius: 3px;
+    margin-top: auto; /* stick button to buttom */
+    align-self: flex-start;
+}
+
+.lightblue {
+    background-color: #5F82a2;
+    color: #eee;
+}
+
+.drawing__button:hover {
+    text-decoration: none;
+    color: white;
+}
+
+@media screen and (min-width: 1025px) {
+    .drawing-col {
+        padding: 0 1em 1em 1em;
+    }
 }
