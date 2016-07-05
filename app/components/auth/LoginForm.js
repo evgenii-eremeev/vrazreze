@@ -81,17 +81,19 @@ const LoginForm = React.createClass({
                     <label className="control-label">E-mail</label>
                     <input className="form-control" type="text" ref="email" />
                 </div>
-                <Link to='/forgot' className="pull-right">Забыли пароль?</Link>
                 <div className={this.getInputContainerClass(this.state.isPasswordFieldIncorrect)}>
                     <label className="control-label">Пароль</label>
                     <input className="form-control" type="password" ref="password" />
                 </div>
-                <button
-                    onClick={this.handleOnLoginClick}
-                    className="btn btn-primary"
-                    >
-                    Войти
-                </button>
+                <div>
+                  <button
+                      onClick={this.handleOnLoginClick}
+                      className="btn btn-primary"
+                      >
+                      Войти
+                  </button>
+                  <Link to='/forgot' className="pull-right">Забыли пароль?</Link>
+                </div>
                 <br />
                 { errorLabel }
                 { loader }
